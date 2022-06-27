@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.financial.mapper.FinancialCostBillLineMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.financial.entity.FinancialCostBillLine">
+        <id column="id" property="id"/>
+        <result column="cost_bill_id" property="costBillId"/>
+        <result column="cost_summary" property="costSummary"/>
+        <result column="cost_type" property="costType"/>
+        <result column="cost_reason" property="costReason"/>
+        <result column="cost_name" property="costName"/>
+        <result column="erp_line_id" property="erpLineId"/>
+        <result column="tax_rate" property="taxRate"/>
+        <result column="tax_included_unit_price" property="taxIncludedUnitPrice"/>
+        <result column="valuation_num" property="valuationNum"/>
+        <result column="tax_included_amount" property="taxIncludedAmount"/>
+        <result column="not_tax_amount" property="notTaxAmount"/>
+        <result column="tax_amount" property="taxAmount"/>
+        <result column="erp_cost_id" property="erpCostId"/>
+        <result column="have_tax" property="haveTax"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_financial_cost_bill_line
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                -- and (
+                -- (t1.supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.purchase_order_code like CONCAT('%',#{pageParam.searchValue},'%'))
+                -- )
+            </if>
+            <if test="pageParam.param.costSummary != null ">and cost_summary like
+                CONCAT('%',#{pageParam.param.costSummary},'%')
+            </if>
+            <if test="pageParam.param.costType != null ">and cost_type like
+                CONCAT('%',#{pageParam.param.costType},'%')
+            </if>
+            <if test="pageParam.param.costReason != null ">and cost_reason like
+                CONCAT('%',#{pageParam.param.costReason},'%')
+            </if>
+            <if test="pageParam.param.costAmount != null ">and cost_amount = #{pageParam.param.costAmount}</if>
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+
+        </where>
+
+    </select>
+
+
+</mapper>

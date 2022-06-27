@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryPlanDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryPlanDetail">
+        <id column="id" property="id" />
+        <result column="delivery_plan_id" property="deliveryPlanId" />
+        <result column="product_code" property="productCode" />
+        <result column="product_name" property="productName" />
+        <result column="product_specification" property="productSpecification" />
+        <result column="supplier_code" property="supplierCode" />
+        <result column="supplier_name" property="supplierName" />
+        <result column="purchase_order_no" property="purchaseOrderNo" />
+        <result column="bill_no" property="billNo"/>
+        <result column="delivery_address" property="deliveryAddress" />
+        <result column="plan_unit" property="planUnit" />
+        <result column="plan_quantity" property="planQuantity" />
+        <result column="confirm_quantity" property="confirmQuantity" />
+        <result column="latest_delivery_date" property="latestDeliveryDate" />
+        <result column="latest_plan_quantity" property="latestPlanQuantity" />
+        <result column="latest_confirm_quantity" property="latestConfirmQuantity" />
+        <result column="source_id" property="sourceId" />
+        <result column="detail_status" property="detailStatus"/>
+        <result column="previous_edition_plan_quantity" property="previousEditionPlanQuantity"/>
+        <result column="mrp_plan_quantity" property="mrpPlanQuantity"/>
+        <result column="transit_quantity" property="transitQuantity"/>
+        <result column="source_type" property="sourceType"/>
+    </resultMap>
+<!--适应计划排程-->
+    <resultMap id="selectListPageMap" type="net.bncloud.delivery.vo.PlanSchedulingDetailVo">
+        <id column="id" property="id" />
+        <result column="delivery_plan_id" property="deliveryPlanId" />
+        <result column="product_code" property="productCode" />
+        <result column="product_name" property="productName" />
+        <result column="product_specification" property="productSpecification" />
+        <result column="supplier_code" property="supplierCode" />
+        <result column="supplier_name" property="supplierName" />
+        <result column="purchase_order_no" property="purchaseOrderNo" />
+        <result column="bill_no" property="billNo"/>
+        <result column="delivery_address" property="deliveryAddress" />
+        <result column="plan_unit" property="planUnit" />
+        <result column="plan_quantity" property="planQuantity" />
+        <result column="confirm_quantity" property="confirmQuantity" />
+        <result column="latest_delivery_date" property="latestDeliveryDate" />
+        <result column="latest_plan_quantity" property="latestPlanQuantity" />
+        <result column="latest_confirm_quantity" property="latestConfirmQuantity" />
+        <result column="source_id" property="sourceId" />
+        <result column="detail_status" property="detailStatus"/>
+        <result column="previous_edition_plan_quantity" property="previousEditionPlanQuantity"/>
+        <result column="mrp_plan_quantity" property="mrpPlanQuantity"/>
+        <result column="transit_quantity" property="transitQuantity"/>
+        <result column="source_type" property="sourceType"/>
+    </resultMap>
+
+    <select id="selectListPage" resultMap="selectListPageMap">
+        select tdpd.*
+        from t_delivery_plan_detail tdpd
+        left join t_delivery_plan tdp on tdp.id=tdpd.delivery_plan_id
+        <where>
+            tdpd.is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                and (
+                        (tdpd.supplier_name like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                        (tdpd.supplier_code like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                        (tdpd.bill_no like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                        (tdpd.purchase_order_no like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                        (tdpd.product_code like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                        (tdpd.product_name like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                        (tdp.purchase_code like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                        (tdp.purchase_name like CONCAT('%', #{pageParam.searchValue}, '%'))
+                        )
+            </if>
+            <if test="pageParam.param.deliveryPlanId != null">
+                and tdpd.delivery_plan_id = #{pageParam.param.deliveryPlanId}
+            </if>
+            <if test="pageParam.param.productCode != null">
+                and tdpd.product_code like CONCAT('%', #{pageParam.param.productCode}, '%')
+            </if>
+            <if test="pageParam.param.productName != null">
+                and tdpd.product_name like CONCAT('%', #{pageParam.param.productName}, '%')
+            </if>
+            <if test="pageParam.param.productSpecification != null">
+                and tdpd.product_specification like CONCAT('%', #{pageParam.param.productSpecification}, '%')
+            </if>
+            <if test="pageParam.param.supplierCode != null">
+                and tdpd.supplier_code like CONCAT('%', #{pageParam.param.supplierCode}, '%')
+            </if>
+            <if test="pageParam.param.supplierName != null">
+                and tdpd.supplier_name like CONCAT('%', #{pageParam.param.supplierName}, '%')
+            </if>
+            <if test="pageParam.param.billNo != null">
+                and tdpd.bill_no like CONCAT('%', #{pageParam.param.billNo}, '%')
+            </if>
+            <if test="pageParam.param.deliveryAddress != null">
+                and tdpd.delivery_address like CONCAT('%', #{pageParam.param.deliveryAddress}, '%')
+            </if>
+            <if test="pageParam.param.planUnit != null">
+                and tdpd.plan_unit like CONCAT('%', #{pageParam.param.planUnit}, '%')
+            </if>
+            <if test="pageParam.param.planQuantity != null">
+                and tdpd.plan_quantity like CONCAT('%', #{pageParam.param.planQuantity}, '%')
+            </if>
+            <if test="pageParam.param.confirmQuantity != null">
+                and tdpd.confirm_quantity like CONCAT('%', #{pageParam.param.confirmQuantity}, '%')
+            </if>
+            <if test="pageParam.param.status != null">
+                and tdpd.status like CONCAT('%', #{pageParam.param.status}, '%')
+            </if>
+
+            <if test="pageParam.param.latestPlanQuantity != null">
+                and tdpd.latest_plan_quantity like CONCAT('%', #{pageParam.param.latestPlanQuantity}, '%')
+            </if>
+            <if test="pageParam.param.latestConfirmQuantity != null">
+                and tdpd.latest_confirm_quantity like CONCAT('%', #{pageParam.param.latestConfirmQuantity}, '%')
+            </if>
+            <if test="pageParam.param.createdBy != null">
+                and tdpd.created_by = #{pageParam.param.createdBy}
+            </if>
+
+            <if test="pageParam.param.lastModifiedBy != null">
+                and tdpd.last_modified_by = #{pageParam.param.lastModifiedBy}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryOneBySourceId" resultMap="BaseResultMap">
+        select * from t_delivery_plan_detail
+        <where>
+                is_deleted = '0'
+            <if test=" sourceId != null and sourceId != '' " >
+                and source_id = #{sourceId}
+            </if>
+        </where>
+    </select>
+    <select id="listAllGroupByProductCodeAndMerchantCode"
+            resultType="net.bncloud.delivery.entity.DeliveryPlanDetail">
+        select
+            merchant_code,product_code
+        from
+            t_delivery_plan_detail
+        where
+            is_deleted = 0
+        GROUP BY merchant_code,product_code
+    </select>
+
+    <!--采购-计划排程的看板-->
+    <resultMap id="selectPlanSchedulingBoardPageMap" type="net.bncloud.delivery.vo.PlanSchedulingBoardVo">
+        <result property="planDetailId" column="detailId"/>
+        <result property="planId" column="planId"/>
+        <result property="transitQuantity" column="transit_quantity"/>
+        <result property="mrpPlanQuantity" column="mrp_plan_quantity"/>
+        <result property="supplierCode" column="supplier_code"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="merchantCode" column="merchant_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="productCode" column="product_code"/>
+        <result property="netDemand" column="net_demand"/>
+        <result property="planNo" column="plan_no"/>
+        <result property="detailStatus" column="detail_status"/>
+        <result property="purchaseRemark" column="purchase_remark"/>
+        <result property="supplierRemark" column="supplier_remark"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="purchaseCode" column="purchase_code"/>
+        <result property="purchaseName" column="purchase_name"/>
+        <result property="mrpComputerNo" column="mrpComputerNo"/>
+        <result property="varianceNumber" column="variance_number"/>
+        <result property="netDemand" column="plan_quantity"/>
+    </resultMap>
+    <select id="selectZcPlanSchedulingBoardPage" resultMap="selectPlanSchedulingBoardPageMap">
+        with newTable as (
+        select
+        tdc.value as mrpComputerNo
+        from t_data_config tdc where tdc.is_deleted=0 and tdc.code='currentPlanOrderComputerNo'
+        )
+        select tdpd.id as detailId,
+               tdpd.transit_quantity,
+               tdpd.mrp_plan_quantity,
+               tdp.supplier_code,
+               tdp.supplier_name,
+               tdpd.merchant_code,
+               tdpd.product_name,
+               tdpd.product_code,
+               tdpd.net_demand,
+               tdpd.purchase_remark,
+               tdpd.supplier_remark,
+               tdpd.source_type,
+               tdp.plan_no,
+               tdpd.detail_status,
+        tdpd.plan_quantity,
+        tdpd.variance_number,
+        tdp.purchase_code,
+        tdp.purchase_name,
+        tdp.mrp_computer_no,
+        tdp.id as planId
+        from t_delivery_plan_detail tdpd
+        left join t_delivery_plan tdp on tdp.id=tdpd.delivery_plan_id
+        inner join newTable nt on nt.mrpComputerNo=tdp.mrp_computer_no
+        where tdpd.is_deleted=0 and tdp.source_type='mrp' and tdpd.source_type='mrp'
+        <if test="queryParam.searchValue !=null and queryParam.searchValue!=''">
+            and (
+            (tdp.supplier_code like concat('%',#{queryParam.searchValue},'%')) or
+            (tdp.supplier_name like concat('%',#{queryParam.searchValue},'%')) or
+            (tdp.purchase_code like concat('%',#{queryParam.searchValue},'%')) or
+            (tdp.purchase_name like concat('%',#{queryParam.searchValue},'%')) or
+            (tdpd.product_code like concat('%',#{queryParam.searchValue},'%')) or
+            (tdpd.product_name like concat('%',#{queryParam.searchValue},'%'))
+            )
+        </if>
+        <if test="queryParam.param !=null ">
+            <if test="queryParam.param.status !=null and queryParam.param.status !='' ">
+                and tdpd.detail_status in
+                <foreach collection="queryParam.param.stateList" item="state" open="(" separator="," close=")">
+                    #{state}
+                </foreach>
+            </if>
+            <if test="queryParam.param.supplier !=null and queryParam.param.supplier !=''">
+                and (
+                (tdp.supplier_code like concat('%',#{queryParam.param.supplier},'%')) or
+                (tdp.supplier_name like concat('%',#{queryParam.param.supplier},'%'))
+                )
+            </if>
+            <if test="queryParam.param.product !=null and queryParam.param.product!=''">
+                and (
+                (tdpd.product_code like concat('%',#{queryParam.param.product},'%')) or
+                (tdpd.product_name like concat('%',#{queryParam.param.product},'%'))
+                )
+            </if>
+            <if test="queryParam.param.purchase!=null and queryParam.param.purchase !=''">
+                and (
+                (tdp.purchase_code like concat('%',#{queryParam.param.purchase},'%')) or
+                (tdp.purchase_name like concat('%',#{queryParam.param.purchase},'%'))
+                )
+            </if>
+
+        </if>
+    </select>
+<!--销售计划排程-看板-->
+    <select id="selectZyPlanSchedulingBoardPage" resultMap="selectPlanSchedulingBoardPageMap">
+        with newTable as (
+        select
+        tdc.value as mrpComputerNo
+        from t_data_config tdc where tdc.is_deleted=0 and tdc.code='currentPlanOrderComputerNo'
+        )
+        select tdpd.id as detailId,
+        tdpd.transit_quantity,
+        tdpd.mrp_plan_quantity,
+        tdp.supplier_code,
+        tdp.supplier_name,
+        tdpd.merchant_code,
+        tdpd.product_name,
+        tdpd.product_code,
+        tdpd.net_demand,
+        tdpd.purchase_remark,
+        tdpd.supplier_remark,
+        tdpd.source_type,
+        tdp.plan_no,
+        tdpd.detail_status,
+        tdp.purchase_code,
+        tdp.purchase_name,
+        tdp.mrp_computer_no,
+        tdp.id as planId
+        from t_delivery_plan_detail tdpd
+        left join t_delivery_plan tdp on tdp.id=tdpd.delivery_plan_id
+        inner join newTable nt on nt.mrpComputerNo=tdp.mrp_computer_no
+        where tdpd.is_deleted=0 and tdp.source_type='mrp' and tdpd.source_type='mrp' and tdpd.detail_status !='1'
+        <if test="queryParam.searchValue !=null and queryParam.searchValue!=''">
+            and (
+            (tdp.supplier_code like concat('%',#{queryParam.searchValue},'%')) or
+            (tdp.supplier_name like concat('%',#{queryParam.searchValue},'%')) or
+            (tdp.purchase_code like concat('%',#{queryParam.searchValue},'%')) or
+            (tdp.purchase_name like concat('%',#{queryParam.searchValue},'%')) or
+            (tdpd.product_code like concat('%',#{queryParam.searchValue},'%')) or
+            (tdpd.product_name like concat('%',#{queryParam.searchValue},'%'))
+            )
+        </if>
+        <if test="queryParam.param !=null ">
+            <if test="queryParam.param.status !=null and queryParam.param.status !=''">
+                and tdpd.detail_status in
+                <foreach collection="queryParam.param.stateList" item="state" open="(" separator="," close=")">
+                    #{state}
+                </foreach>
+            </if>
+            <if test="queryParam.param.supplier !=null and queryParam.param.supplier !=''">
+                and (
+                (tdp.supplier_code like concat('%',#{queryParam.param.supplier},'%')) or
+                (tdp.supplier_name like concat('%',#{queryParam.param.supplier},'%'))
+                )
+            </if>
+            <if test="queryParam.param.product !=null and queryParam.param.product!=''">
+                and (
+                (tdpd.product_code like concat('%',#{queryParam.param.product},'%')) or
+                (tdpd.product_name like concat('%',#{queryParam.param.product},'%'))
+                )
+            </if>
+            <if test="queryParam.param.purchase!=null and queryParam.param.purchase !=''">
+                and (
+                (tdp.purchase_code like concat('%',#{queryParam.param.purchase},'%')) or
+                (tdp.purchase_name like concat('%',#{queryParam.param.purchase},'%'))
+                )
+            </if>
+
+        </if>
+    </select>
+</mapper>

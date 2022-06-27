@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.FactoryVacationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.FactoryVacation">
+        <id column="id" property="id"/>
+        <result column="belong_type" property="belongType"/>
+        <result column="belong_code" property="belongCode"/>
+        <result column="factory_number" property="factoryNumber"/>
+        <result column="factory_name" property="factoryName"/>
+        <result column="vacation_type" property="vacationType"/>
+        <result column="source_type" property="sourceType"/>
+        <result column="vacation_date" property="vacationDate"/>
+        <result column="day_in_week_num" property="dayInWeekNum"/>
+        <result column="remark" property="remark"/>
+        <result column="status" property="status"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select fv.* from t_factory_vacation fv
+        <where>  fv.is_deleted = 0
+              <if test="queryParam.searchValue != null and queryParam.searchValue!= '' ">
+                  and (
+                  (fv.factory_number like CONCAT('%',#{queryParam.searchValue},'%'))or
+                  ( fv.factory_name like CONCAT('%',#{queryParam.searchValue},'%')) or
+                  ( fv.belong_name like CONCAT('%',#{queryParam.searchValue},'%')) or
+                  ( fv.belong_code like CONCAT('%',#{queryParam.searchValue},'%'))
+                  )
+            </if>
+
+             <if test="queryParam.param!=null">
+                 <if test="queryParam.param.belongType != null and queryParam.param.belongType != '' ">
+                     and fv.belong_type = #{queryParam.param.belongType}
+                 </if>
+
+                 <if test="queryParam.param.startDate != null and queryParam.param.startDate != '' and queryParam.param.endDate != null and queryParam.param.endDate != '' ">
+                     and fv.vacation_date between #{queryParam.param.startDate} and #{queryParam.param.endDate}
+                 </if>
+                 <if test="queryParam.param.belongCode !=null and queryParam.param.belongCode !=''">
+                     and fv.belong_code like CONCAT('%',#{queryParam.param.belongCode},'%')
+                 </if>
+                 and fv.status != 2
+
+             </if>
+         </where>
+         order by vacation_date desc
+
+     </select>
+    <select id="listVacationByFactoryIdAndDateList" resultType="net.bncloud.delivery.entity.FactoryVacation">
+        SELECT * FROM t_factory_vacation
+        WHERE is_deleted = 0
+	    AND factory_id = #{factoryId}
+	    AND vacation_date IN
+
+        <foreach collection="dateList" item="date" open="(" close=")" separator=",">
+            #{date}
+        </foreach>
+
+    </select>
+
+    <delete id="deleteAllVacationFromFactoryId">
+        delete from t_factory_vacation
+        where factory_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteInFactoryId">
+        delete from t_factory_vacation
+        where source_type='2'
+        and factory_id in
+        <foreach collection="factoryIdList" separator="," open="(" close=")" item="item">
+            #{item}
+        </foreach>
+
+    </delete>
+
+    <delete id="deleteAddManuallyInFactoryId">
+        delete from t_factory_vacation
+        where source_type='0'
+        and factory_id in
+        <foreach collection="factoryIdList" separator="," open="(" close=")" item="item">
+            #{item}
+        </foreach>
+
+    </delete>
+
+    <delete id="deleteByVacationDate">
+        delete from t_factory_vacation
+        where id=#{id}
+    </delete>
+
+    <delete id="deleteByVacationIds">
+        delete from t_factory_vacation
+        where id
+        in
+        <foreach collection="ids" separator="," open="(" close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>

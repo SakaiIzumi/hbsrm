@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.oem.mapper.ReceivingAddressMapper">
+  <resultMap id="BaseResultMap" type="net.bncloud.oem.domain.entity.ReceivingAddress">
+    <!--@mbg.generated-->
+    <!--@Table t_oem_receiving_address-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="supplier_code" jdbcType="VARCHAR" property="supplierCode" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="source_type" jdbcType="VARCHAR" property="sourceType" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="created_by" jdbcType="BIGINT" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy" />
+    <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, code, address, supplier_code, supplier_name, source_type, `status`, created_by, 
+    created_date, last_modified_by, last_modified_date, is_deleted
+  </sql>
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_oem_receiving_address
+      <where>
+        and is_deleted = 0
+        <if test="pageParam.searchValue != null and pageParam.searchValue != '' ">
+          and (
+          ( address like CONCAT('%',#{pageParam.searchValue},'%'))or
+          ( code like CONCAT('%',#{pageParam.searchValue},'%')) or
+          ( supplier_code like CONCAT('%',#{pageParam.searchValue},'%')) or
+          ( supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))
+          )
+        </if>
+        <!--<if test="pageParam.param.address != null and pageParam.param.address != '' ">
+          and  address like CONCAT('%',#{pageParam.param.address},'%'))
+        </if>-->
+        <if test="pageParam.param.address != null and pageParam.param.address != '' ">
+          and (
+           address like CONCAT('%',#{pageParam.param.address},'%') or
+           code like CONCAT('%',#{pageParam.param.address},'%')
+          )
+        </if>
+        <if test="pageParam.param.supplierName != null and pageParam.param.supplierName != '' ">
+          and (
+          supplier_name like CONCAT('%',#{pageParam.param.supplierName},'%') or
+          supplier_code like CONCAT('%',#{pageParam.param.supplierName},'%')
+          )
+        </if>
+        <if test="pageParam.param.status != null and pageParam.param.status != '' ">
+          and status like CONCAT('%',#{pageParam.param.status},'%')
+        </if>
+      </where>
+    </select>
+</mapper>

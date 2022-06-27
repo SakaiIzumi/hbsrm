@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.quotation.mapper.MaterialInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.quotation.entity.MaterialInfo">
+        <id column="id" property="id"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_name" property="materialName"/>
+        <result column="bar_code" property="barCode"/>
+        <result column="genre_code_id" property="genreCodeId"/>
+        <result column="genre_code" property="genreCode"/>
+        <result column="genre_name" property="genreName"/>
+        <result column="special" property="special"/>
+        <result column="description" property="description"/>
+        <result column="unit" property="unit"/>
+        <result column="source_type" property="sourceType"/>
+        <result column="source_name" property="sourceName"/>
+        <result column="source_id" property="sourceId"/>
+        <result column="brand" property="brand"/>
+        <result column="property" property="property"/>
+        <result column="material_group_name" property="materialGroupName" />
+        <result column="material_group_id" property="materialGroupId" />
+        <result column="issue_type" property="issueType" />
+        <result column="suite" property="suite" />
+        <result column="tax_type" property="taxType" />
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_material_info t1
+        <where>
+            1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                 and (
+                     ( t1.material_code like CONCAT('%',#{pageParam.searchValue},'%'))    or
+                     ( t1.material_name like CONCAT('%',#{pageParam.searchValue},'%'))
+                 )
+            </if>
+
+
+        </where>
+
+    </select>
+
+    <select id="selectOneByMaterialCode" resultMap="BaseResultMap">
+        select * from t_material_info t1 where t1.material_code = #{materialCode}
+    </select>
+
+
+</mapper>

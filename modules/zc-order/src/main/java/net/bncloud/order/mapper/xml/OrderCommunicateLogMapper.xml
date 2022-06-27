@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.order.mapper.OrderCommunicateLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.order.entity.OrderCommunicateLog">
+        <id column="id" property="id"/>
+        <result column="order_product_details_id" property="orderProductDetailsId"/>
+        <result column="purchase_order_code" property="purchaseOrderCode"/>
+        <result column="item_code" property="itemCode"/>
+        <result column="delivery_time" property="deliveryTime"/>
+        <result column="delivery_time_type" property="deliveryTimeType"/>
+        <result column="purchase_num" property="purchaseNum"/>
+        <result column="purchase_num_type" property="purchaseNumType"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="unit_price_type" property="unitPriceType"/>
+        <result column="brand_remarks" property="brandRemarks"/>
+        <result column="files" property="files"/>
+        <result column="type" property="type"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+    </resultMap>
+
+
+    <update id="addProductStock">
+        UPDATE t_order_communicate_log
+        SET send_num - #{sendNum}
+        WHERE id = #{communicateId}
+    </update>
+
+
+    <update id="subtractionProductStock">
+        UPDATE t_order_communicate_log
+        SET send_num + #{sendNum}
+        WHERE id = #{communicateId}
+    </update>
+
+    <select id="getMaxBatch" resultType="Integer">
+        SELECT
+	 IF(max(batch) IS NULL,0, max(batch)) as batch
+FROM
+	t_order_communicate_log
+WHERE
+	order_product_details_id = #{productDetailsId}
+	and purchase_order_code = #{purchaseOrderCode}
+    </select>
+
+</mapper>

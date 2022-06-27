@@ -1,0 +1,1 @@
+INSERT INTO `ss_tenant_company` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `code`, `credit_code`, `name`, `register_by_id`, `register_by_name`, `status`, `tax_id`) VALUES (2, b'0', 1, '2021-03-26 10:16:22.737000', 1, '2021-03-26 10:16:22.737000', '020-1234', 'sklfjs21342rwjle', '商网云科技(深圳)有限公司', 1, '武书静', 'AUDIT', NULL);

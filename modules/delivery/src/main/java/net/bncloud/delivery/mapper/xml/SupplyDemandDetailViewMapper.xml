@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.SupplyDemandDetailViewMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.SupplyDemandDetailView">
+            <result column="product_code" property="productCode"/>
+            <result column="product_name" property="productName"/>
+            <result column="merchant_code" property="merchantCode"/>
+            <result column="date" property="date"/>
+            <result column="bill_type" property="billType"/>
+            <result column="bill_code" property="billCode"/>
+            <result column="bill_status" property="billStatus"/>
+            <result column="purchase_order_code" property="purchaseOrderCode"/>
+            <result column="supplier_code" property="supplierCode"/>
+            <result column="supplier_name" property="supplierName"/>
+            <result column="quantity" property="quantity"/>
+        </resultMap>
+
+        <select id="selectPageList" resultMap="BaseResultMap">
+            select *
+            from supply_demand_detail_view
+            <where>
+                <if test="queryParam.searchValue !=null and queryParam.searchValue !=''">
+                    and (
+                    (supplier_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (supplier_name like CONCAT('%', #{queryParam.searchValue}, '%'))
+                    )
+                </if>
+                <if test="queryParam.param !=null ">
+                    <if test="queryParam.param.supplier !=null and queryParam.param.supplier !=''">
+                        and (
+                        (supplier_code like CONCAT('%', #{queryParam.param.supplier}, '%')) or
+                        (supplier_name like CONCAT('%', #{queryParam.param.supplier}, '%'))
+                        )
+                    </if>
+                    <if test="queryParam.param.startDate !=null and queryParam.param.startDate !='' and queryParam.param.endDate !='' and queryParam.param.endDate !=null ">
+                        and date between #{queryParam.param.startDate} and #{queryParam.param.endDate}
+                    </if>
+                    <if test="queryParam.param.billType !=null and queryParam.param.billType !=''">
+                        and bill_type like CONCAT('%', #{queryParam.param.billType}, '%')
+                    </if>
+                    <if test="queryParam.param.date !=null and queryParam.param.date !=''">
+                        and date like CONCAT('%', #{queryParam.param.date}, '%')
+                    </if>
+                    <if test="queryParam.param.productCode !=null and queryParam.param.productCode !=''">
+                        and product_code like CONCAT('%', #{queryParam.param.productCode}, '%')
+                    </if>
+                </if>
+            </where>
+            order by product_code asc,date asc,purchase_order_code asc
+        </select>
+
+    <select id="getProductCodeByCondition" resultType="java.lang.String">
+        select distinct product_code
+        from delivery.supply_demand_detail_view
+                where 1 = 1
+        <if test="supplier != null and supplier != ''">
+            and (
+                    (supplier_code like CONCAT('%', #{supplier}, '%')) or
+                    (supplier_name like CONCAT('%', #{supplier}, '%'))
+                    )
+        </if>
+        order by product_code asc
+    </select>
+
+        <select id="getDetailsByCode" resultMap="BaseResultMap">
+            select *
+            from delivery.supply_demand_detail_view
+            where 1=1
+        <if test="productCode != null and productCode != ''">
+            and product_code = #{productCode}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,2 @@
+INSERT INTO `t_tag_config` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `group_name`, `org_id`, `company_id`) VALUES (18, b'0', 1, '2021-05-12 03:39:49.631000', 1, '2021-05-17 02:58:40.754000', '地域', NULL, NULL);
+INSERT INTO `t_tag_config` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `group_name`, `org_id`, `company_id`) VALUES (43, b'0', 1, '2021-05-14 06:10:15.093000', 1, '2021-05-14 06:10:15.093000', '类型', NULL, NULL);

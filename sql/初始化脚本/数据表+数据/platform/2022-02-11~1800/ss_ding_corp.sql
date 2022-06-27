@@ -1,0 +1,1 @@
+INSERT INTO `ss_ding_corp` (`corp_id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `org_id`, `org_name`) VALUES ('ding83f476065b3bbd05ee0f45d8e4f7c288', b'0', -1, NULL, -1, NULL, 3, 'xxx');

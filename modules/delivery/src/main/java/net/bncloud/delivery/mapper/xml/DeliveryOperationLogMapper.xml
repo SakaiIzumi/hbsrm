@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryOperationLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryOperationLog">
+        <id column="id" property="id"/>
+        <result column="delivery_id" property="deliveryId"/>
+        <result column="operator_no" property="operatorNo"/>
+        <result column="operator_name" property="operatorName"/>
+        <result column="operator_content" property="operatorContent"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="undefined" resultMap="BaseResultMap">
+        select * from t_delivery_operation_log
+        <where>1=1 and is_deleted = 0
+            <if test="deliveryId != null ">and delivery_id = #{param.deliveryId}</if>
+            <if test="operatorNo != null ">and operator_no like CONCAT('%',#{param.operatorNo},'%')</if>
+            <if test="operatorName != null ">and operator_name like CONCAT('%',#{param.operatorName},'%')</if>
+            <if test="operatorContent != null ">and operator_content like CONCAT('%',#{param.operatorContent},'%')</if>
+            <if test="remark != null ">and remark like CONCAT('%',#{param.remark},'%')</if>
+            <if test="createdBy != null ">and created_by = #{param.createdBy}</if>
+            <if test="lastModifiedBy != null ">and last_modified_by = #{param.lastModifiedBy}</if>
+        </where>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,1 @@
+select * from ss_tenant_organization;

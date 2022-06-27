@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.order.mapper.OrderChangeLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.order.entity.OrderChangeLog">
+        <id column="id" property="id" />
+        <result column="update_types" property="updateTypes" />
+        <result column="purchase_order_code" property="purchaseOrderCode" />
+        <result column="order_communicate_log_id" property="orderCommunicateLogId" />
+        <result column="source" property="source" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="change_reason" property="changeReason" />
+    </resultMap>
+
+</mapper>

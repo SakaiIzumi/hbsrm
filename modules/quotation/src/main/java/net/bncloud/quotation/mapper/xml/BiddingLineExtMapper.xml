@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.quotation.mapper.BiddingLineExtMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.quotation.entity.BiddingLineExt">
+        <id column="id" property="id"/>
+        <result column="quotation_base_id" property="quotationBaseId"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="field" property="field"/>
+        <result column="value" property="value"/>
+        <result column="required" property="required"/>
+        <result column="order_value" property="orderValue"/>
+        <result column="quotation_record_id" property="quotationRecordId"/>
+        <result column="supplier_id" property="supplierId"/>
+        <result column="quote_round" property="quoteRound"/>
+        <result column="biz_type" property="bizType"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_rfq_bidding_line_ext
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                -- and (
+                -- (t1.supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.purchase_order_code like CONCAT('%',#{pageParam.searchValue},'%'))
+                -- )
+            </if>
+            <if test="pageParam.param.quotationBaseId != null ">and quotation_base_id =
+                #{pageParam.param.quotationBaseId}
+            </if>
+            <if test="pageParam.param.type != null ">and type like CONCAT('%',#{pageParam.param.type},'%')</if>
+            <if test="pageParam.param.title != null ">and title like CONCAT('%',#{pageParam.param.title},'%')</if>
+            <if test="pageParam.param.field != null ">and field like CONCAT('%',#{pageParam.param.field},'%')</if>
+            <if test="pageParam.param.value != null ">and value like CONCAT('%',#{pageParam.param.value},'%')</if>
+            <if test="pageParam.param.required != null ">and required like CONCAT('%',#{pageParam.param.required},'%')
+            </if>
+            <if test="pageParam.param.orderValue != null ">and order_value like
+                CONCAT('%',#{pageParam.param.orderValue},'%')
+            </if>
+            <if test="pageParam.param.quotationRecordId != null ">and quotation_record_id like
+                CONCAT('%',#{pageParam.param.quotationRecordId},'%')
+            </if>
+            <if test="pageParam.param.supplierId != null ">and supplier_id = #{pageParam.param.supplierId}</if>
+            <if test="pageParam.param.quoteRound != null ">and quote_round like
+                CONCAT('%',#{pageParam.param.quoteRound},'%')
+            </if>
+            <if test="pageParam.param.bizType != null ">and biz_type like CONCAT('%',#{pageParam.param.bizType},'%')
+            </if>
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+
+        </where>
+
+    </select>
+
+    <select id="selectBiddingLineList" resultType="net.bncloud.quotation.vo.BiddingLineExtVo">
+        SELECT
+        quotation_base_id,
+        `VALUE`,
+        order_value,
+        data_type
+        FROM
+        t_rfq_bidding_line_ext
+        <where>
+            is_deleted = 0
+            <if test="biddingLineExt.quotationRecordId != null">
+                and quotation_record_id = #{biddingLineExt.quotationRecordId}
+            </if>
+        </where>
+
+
+    </select>
+    <select id="selectLastRoundNum" resultType="java.lang.Integer">
+        SELECT quote_round FROM t_rfq_bidding_line_ext
+        <where>
+            is_deleted = 0 AND supplier_id = #{supplierId} AND quotation_base_id = #{quotationId} AND biz_type =
+            #{bizType} AND quote_round &lt; #{currentRoundNumber}
+        </where>
+        ORDER BY quote_round DESC LIMIT 1
+    </select>
+
+    <select id="queryCheapest" resultType="net.bncloud.quotation.vo.BiddingLineExtVo">
+        SELECT
+        order_value,
+        quotation_base_id,
+        `VALUE`,
+        data_type,
+        quotation_record_id,
+        field,
+        title
+        FROM
+        t_rfq_bidding_line_ext ble
+        WHERE
+        ble.quotation_record_id IN
+        <foreach collection="tRfqQuotationRecords" item="record" index="index" open="(" close=")" separator=",">
+            #{record.id}
+        </foreach>
+        AND NOT EXISTS (
+        SELECT
+        quotation_base_id,
+        `VALUE`,
+        order_value,
+        data_type,
+        quotation_record_id
+        FROM
+        t_rfq_bidding_line_ext
+        WHERE
+        quotation_record_id IN
+        <foreach collection="tRfqQuotationRecords" item="record" index="index" open="(" close=")" separator=",">
+            #{record.id}
+        </foreach>
+        AND order_value = ble.order_value
+        <![CDATA[    AND `value` < ble.`value` ]]>
+        )
+        GROUP BY
+        order_value
+    </select>
+
+    <select id="queryMinAmount" resultType="net.bncloud.quotation.vo.QuotationMinAmount">
+        SELECT
+            field,
+            MIN( `value` ) AS minAmount
+        FROM
+            t_rfq_bidding_line_ext
+        WHERE
+            quotation_record_id IN
+        <foreach collection="quotationRecordIdList" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+            AND is_amount ='1'
+        GROUP BY
+            field
+    </select>
+
+
+</mapper>

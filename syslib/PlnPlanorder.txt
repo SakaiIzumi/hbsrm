@@ -1,0 +1,544 @@
+PLN_PLANORDER
+计划订单
+{
+    "FormId": "PLN_PLANORDER",
+    "FieldKeys": "FID,FBillNo,F_ABC_TEST,FSpecification,FMaterialIdChild,FBillTypeID.fnumber,FMaterialName,FUnitId,FPlanFinishDate ,FSupplyOrgId.fnumber,FOrderQty,FDocumentStatus",
+    "FilterString": "FBillNo=''",
+    "OrderString": "",
+    "TopRowCount": 100,
+    "StartRow": 0,
+    "Limit": 100,
+    "SubSystemId": ""
+}
+
+{
+    "FormId": "PLN_PLANORDER",
+    "FieldKeys": "FBillNo,FReleaseBillType.fnumber,F_ABC_TEST.fnumber,FMaterialId.fnumber,FMaterialName,FDocumentStatus,FSpecification,FUnitId.fnumber,FOrderQty,FComputerNo",
+    "FilterString": "FDocumentStatus = 'C' AND FReleaseBillType.fnumber = 'CGSQD01_SYS' AND F_ABC_TEST.fnumber IN ('00013','OEM0009','OEM0024','01619','OEM0040','01261','PKG0021','PKG0023','01216') AND FApproveDate > '2022-01-01 00:00:00'",
+    "StartRow": 0,
+    "Limit": 1999,
+    "TopRowCount": 1999
+}
+
+
+
+{
+    "NeedUpDateFields": [],
+    "NeedReturnFields": [],
+    "IsDeleteEntry": "true",
+    "SubSystemId": "",
+    "IsVerifyBaseDataField": "false",
+    "IsEntryBatchFill": "true",
+    "ValidateFlag": "true",
+    "NumberSearch": "true",
+    "IsAutoAdjustField": "false",
+    "InterationFlags": "",
+    "IgnoreInterationFlag": "",
+    "Model": {
+        "FID": 0,
+        "FBillTypeID": {
+            "FNUMBER": ""
+        },
+        "FBillNo": "",
+        "FSupplyOrgId": {
+            "FNumber": ""
+        },
+        "FDemandOrgId": {
+            "FNumber": ""
+        },
+        "FMaterialId": {
+            "FNumber": ""
+        },
+        "FAuxPropId": {},
+        "FReleaseType": "",
+        "FSupplyMaterialId": {
+            "FNumber": ""
+        },
+        "FBomId": {
+            "FNumber": ""
+        },
+        "FUnitId": {
+            "FNumber": ""
+        },
+        "FSugQty": 0,
+        "FPlanStartDate": "1900-01-01",
+        "FPlanFinishDate": "1900-01-01",
+        "FPurDeptId": {
+            "FNumber": ""
+        },
+        "FFirmQty": 0,
+        "FFirmStartDate": "1900-01-01",
+        "FFirmFinishDate": "1900-01-01",
+        "FPrdDeptId": {
+            "FNumber": ""
+        },
+        "FPlanerId": {
+            "FNumber": ""
+        },
+        "FSupplierId": {
+            "FNumber": ""
+        },
+        "FInStockOrgId": {
+            "FNumber": ""
+        },
+        "FOwnerTypeId": "",
+        "FOwnerId": {
+            "FNumber": ""
+        },
+        "FComputerNo": "",
+        "FDemandQty": 0,
+        "FOrderQty": 0,
+        "FDemandDate": "1900-01-01",
+        "FMtoNo": "",
+        "FDataSource": "",
+        "FProjectNo": "",
+        "FReleaseStatus": "",
+        "FSaleOrderNo": "",
+        "FSaleOrderEntrySeq": 0,
+        "FDescription": "",
+        "FModifierId": {
+            "FUserID": ""
+        },
+        "FModifyDate": "1900-01-01",
+        "FApproveDate": "1900-01-01",
+        "FApproverId": {
+            "FUserID": ""
+        },
+        "FBaseUnitId": {
+            "FNumber": ""
+        },
+        "FBaseOrderQty": 0,
+        "FBaseSugQty": 0,
+        "FBaseDemandQty": 0,
+        "FBaseFirmQty": 0,
+        "FBeforeClose": "",
+        "FComputeId": "",
+        "FDemandType": "",
+        "FSaleOrderId": 0,
+        "FSaleOrderEntryId": 0,
+        "FEntrustOrgId": {
+            "FNumber": ""
+        },
+        "FBuyerId": {
+            "FNUMBER": ""
+        },
+        "FIsMRP": "false",
+        "F_abc_Base": {
+            "FNUMBER": ""
+        },
+        "F_abc_tt": "",
+        "F_abc_test": {
+            "FNUMBER": ""
+        },
+        "FSubEntity": {
+            "FEntryId": 0,
+            "FReleaseBillType": {
+                "FNUMBER": ""
+            },
+            "FYieldRate": 0,
+            "FMrpNote": "",
+            "FBaseYieldQty": 0,
+            "FIsSkip2": "false"
+        },
+        "FEntity": [
+            {
+                "FEntryID": 0,
+                "FMaterialIdChild": {
+                    "FNumber": ""
+                },
+                "FAuxPropIdChild": {},
+                "FMaterialTypeChild": "",
+                "FSupplyType": "",
+                "FDosageType": "",
+                "FUseRate": 0,
+                "FDemandDateChild": "1900-01-01",
+                "FUnitIDChild": {
+                    "FNumber": ""
+                },
+                "FNumerator": 0,
+                "FDenominator": 0,
+                "FSTDQty": 0,
+                "FNeedQty": 0,
+                "FMustQty": 0,
+                "FFixScrap": 0,
+                "FScrapRate": 0,
+                "FChildSupplyOrgId": {
+                    "FNumber": ""
+                },
+                "FIssueOrgId": {
+                    "FNumber": ""
+                },
+                "FIsGetScrap": "false",
+                "FIsKitting": "false",
+                "FBOMIdChild": {
+                    "FNumber": ""
+                },
+                "FOptQueue": "",
+                "FOwnerTypeIdChild": "",
+                "FMTONoChild": "",
+                "FOwnerIdChild": {
+                    "FNumber": ""
+                },
+                "FOperId": 0,
+                "FLotNoChild": {
+                    "FNumber": ""
+                },
+                "FPositionNo": "",
+                "FOffSetTime": 0,
+                "FOffSetTimeType": "",
+                "FProcessId": {
+                    "FNumber": ""
+                },
+                "FDescriptionChild": "",
+                "FIssueType": "",
+                "FBKFLTime": "",
+                "FStockId": {
+                    "FNumber": ""
+                },
+                "FStockLocId": {
+                    "FSTOCKLOCID__FF100002": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100005": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100006": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100007": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100008": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100010": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100012": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100013": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100014": {
+                        "FNumber": ""
+                    },
+                    "FSTOCKLOCID__FF100015": {
+                        "FNumber": ""
+                    }
+                },
+                "FSrcTransOrgId": {
+                    "FNumber": ""
+                },
+                "FSrcTransStockId": {
+                    "FNumber": ""
+                },
+                "FSrcTransLocId": {
+                    "FSRCTRANSLOCID__FF100002": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100005": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100006": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100007": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100008": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100010": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100012": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100013": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100014": {
+                        "FNumber": ""
+                    },
+                    "FSRCTRANSLOCID__FF100015": {
+                        "FNumber": ""
+                    }
+                },
+                "FReserveType": "",
+                "FProjectNoChild": "",
+                "FPriority": 0,
+                "FBaseNumerator": 0,
+                "FBASEDENOMINATOR": 0,
+                "FWorkCalIdChild": {
+                    "FNumber": ""
+                },
+                "FBOMEntryID": 0,
+                "FReplacePolicy": "",
+                "FReplaceType": "",
+                "FBaseUnitIdChild": {
+                    "FNumber": ""
+                },
+                "FIsKeyItem": "false",
+                "FReplacePriority": 0,
+                "FBaseNeedQty": 0,
+                "FReplaceGroup": 0,
+                "FBaseMustQty1": 0,
+                "FBaseStdQty": 0,
+                "FOverType": "",
+                "FSupplyGroup": 0,
+                "FSMId": {
+                    "FNUMBER": ""
+                },
+                "FSMEntryId": 0,
+                "FBaseFixScrapQTY": 0,
+                "FISSkip": "false",
+                "FISMinIssueQty": "false",
+                "FSUPPLYMODE": "",
+                "F_abc_Text": "",
+                "FChildExtendControl": 0,
+                "FIsManual": "false",
+                "FPATHENTRYID": "",
+                "FUPDATERID": {
+                    "FUserID": ""
+                },
+                "FIsMrpRun": "false",
+                "FUPDateDate": "1900-01-01"
+            }
+        ],
+        "FEntityCoby": [
+            {
+                "FEntryID": 0,
+                "FCopyType": "",
+                "FMaterialIdCoby": {
+                    "FNumber": ""
+                },
+                "FAuxPropIdCoby": {},
+                "FUnitIDCoby": {
+                    "FNumber": ""
+                },
+                "FBOMIDCopy": {
+                    "FNUMBER": ""
+                },
+                "FDemandQtyCoby": 0,
+                "FDemandDateCoby": "1900-01-01",
+                "FOrderQtyCoby": 0,
+                "FFirmQtyCoby": 0,
+                "FFirmStartDateCoby": "1900-01-01",
+                "FFirmFinishDateCoby": "1900-01-01",
+                "FBaseUnitIDCoby": {
+                    "FNumber": ""
+                },
+                "FBaseDemandQtyCoby": 0,
+                "FBaseOrderQtyCoby": 0,
+                "FBaseFirmQtyCoby": 0,
+                "FOutPutOptQueue": "",
+                "FISBACKFLUSH": "false",
+                "FCobyEntryId": 0,
+                "FKeyBaseQty": 0,
+                "FCobyBaseQty": 0,
+                "FCopyBaseYieldQty": 0
+            }
+        ]
+    }
+}
+
+单据头：FBillHead
+	 实体主键：FID
+	 单据编号：FBillNo
+	 单据状态：FDocumentStatus
+	 创建人：FCreatorId
+	 创建日期：FCreateDate
+	 修改人：FModifierId
+	 修改日期：FModifyDate
+	 审核日期：FApproveDate
+	 审核人：FApproverId
+	 备注：FDescription
+	 单据类型：FBillTypeID  (必填项)
+	 物料编码：FMaterialId  (必填项)
+	 物料名称：FMaterialName
+	 规格型号：FSpecification
+	 BOM版本：FBomId
+	 净需求：FDemandQty
+	 计划订单量：FOrderQty
+	 建议订单量：FSugQty
+	 确认订单量：FFirmQty
+	 需求日期：FDemandDate
+	 建议采购/生产日期：FPlanStartDate  (必填项)
+	 建议到货/完工日期：FPlanFinishDate  (必填项)
+	 确认采购/生产日期：FFirmStartDate  (必填项)
+	 确认到货/完工日期：FFirmFinishDate  (必填项)
+	 需求组织：FDemandOrgId  (必填项)
+	 采购/生产组织：FSupplyOrgId  (必填项)
+	 投放类型：FReleaseType
+	 供应商：FSupplierId
+	 计划员：FPlanerId
+	 货主类型：FOwnerTypeId  (必填项)
+	 货主：FOwnerId  (必填项)
+	 计划跟踪号：FMtoNo
+	 项目号：FProjectNo
+	 数据来源：FDataSource  (必填项)
+	 运算编号：FComputerNo
+	 入库组织：FInStockOrgId  (必填项)
+	 生产车间：FPrdDeptId
+	 采购申请部门：FPurDeptId
+	 基本计量单位：FBaseUnitId
+	 基本单位计划订单数量：FBaseOrderQty
+	 基本单位建议订单数量：FBaseSugQty
+	 基本单位净需求数量：FBaseDemandQty
+	 原始携带量：FBaseFirmQty
+	 单位：FUnitId  (必填项)
+	 业务状态：FReleaseStatus  (必填项)
+	 供应组织物料：FSupplyMaterialId
+	 关闭前状态：FBeforeClose
+	 辅助属性：FAuxPropId
+	 运算Id：FComputeId
+	 需求单据编号：FSaleOrderNo
+	 需求单据行号：FSaleOrderEntrySeq
+	 需求来源：FDemandType
+	 需求单据内码：FSaleOrderId
+	 需求单据分录内码：FSaleOrderEntryId
+	 委托组织：FEntrustOrgId
+	 采购员：FBuyerId
+	 已计划运算：FIsMRP
+	 客户：F_abc_Base
+	 物料分组：F_abc_BaseProperty
+	 文本：F_abc_tt
+	 供应商：F_abc_test
+计划BOM：FEntity
+	 实体主键：FEntryID
+	 子项物料编码：FMaterialIdChild  (必填项)
+	 子项物料名称：FMaterialNameChild
+	 规格型号：FSpecificationChild
+	 子项类型：FMaterialTypeChild  (必填项)
+	 用量类型：FDosageType  (必填项)
+	 使用比例：FUseRate
+	 子项单位：FUnitIDChild  (必填项)
+	 需求日期：FDemandDateChild
+	 标准用量：FSTDQty
+	 计划投料数量：FNeedQty
+	 应发数量：FMustQty
+	 固定损耗：FFixScrap
+	 变动损耗率：FScrapRate
+	 BOM版本：FBOMIdChild
+	 发料组织：FIssueOrgId
+	 发料方式：FIssueType  (必填项)
+	 是否发损耗：FIsGetScrap
+	 倒冲时机：FBKFLTime
+	 是否关键件：FIsKitting
+	 货主类型：FOwnerTypeIdChild  (必填项)
+	 货主：FOwnerIdChild
+	 批号：FLotNoChild
+	 仓库：FStockId
+	 预留类型：FReserveType  (必填项)
+	 计划跟踪号：FMTONoChild
+	 项目编号：FProjectNoChild
+	 位置号：FPositionNo
+	 偏置时间单位：FOffSetTimeType  (必填项)
+	 备注：FDescriptionChild
+	 作业：FProcessId
+	 子项工作日历：FWorkCalIdChild
+	 拨出组织：FSrcTransOrgId
+	 拨出仓库：FSrcTransStockId
+	 BOM分录内码：FBOMEntryID
+	 子项基本单位：FBaseUnitIdChild
+	 子项基本单位标准数量：FBaseStdQty
+	 子项基本单位计划数量：FBaseNeedQty
+	 子项基本单位应发数量：FBaseMustQty1
+	 子项基本单位固定损耗数量：FBaseFixScrapQTY
+	 基本单位分子：FBaseNumerator
+	 基本单位分母：FBASEDENOMINATOR
+	 需求优先级：FPriority
+	 工序：FOperId
+	 分子：FNumerator
+	 分母：FDenominator
+	 子项辅助属性：FAuxPropIdChild
+	 仓位：FStockLocId
+	 3楼包材仓：FF100002
+	 4栋2楼料体仓：FF100005
+	 原料仓：FF100006
+	 危险品仓：FF100007
+	 5栋一楼成品仓：FF100008
+	 5栋3楼包材仓：FF100010
+	 4栋二楼半成品仓：FF100012
+	 4栋三楼半成品仓：FF100013
+	 4栋四楼半成品：FF100014
+	 4栋三楼料体仓：FF100015
+	 拨出仓位：FSrcTransLocId
+	 3楼包材仓：FF100002
+	 4栋2楼料体仓：FF100005
+	 原料仓：FF100006
+	 危险品仓：FF100007
+	 5栋一楼成品仓：FF100008
+	 5栋3楼包材仓：FF100010
+	 4栋二楼半成品仓：FF100012
+	 4栋三楼半成品仓：FF100013
+	 4栋四楼半成品：FF100014
+	 4栋三楼料体仓：FF100015
+	 偏置提前期时间：FOffSetTime
+	 供应来源分组：FSupplyGroup
+	 替代策略：FReplacePolicy
+	 替代方式：FReplaceType
+	 是否替代主料：FIsKeyItem
+	 替代优先级：FReplacePriority
+	 项次：FReplaceGroup
+	 货源：FSMId
+	 货源分录：FSMEntryId
+	 超发控制方式：FOverType  (必填项)
+	 供应组织：FChildSupplyOrgId
+	 工序序列：FOptQueue
+	 跳层：FISSkip
+	 扩展属性：FChildExtendControl
+	 领料考虑最小发料批量：FISMinIssueQty
+	 供料方式：FSUPPLYMODE
+	 是否手工新增行：FIsManual
+	 BOM展开路径：FPATHENTRYID
+	 MRP运算：FIsMrpRun
+	 最后更新人：FUPDATERID
+	 最后更新时间：FUPDateDate
+	 供应类型：FSupplyType
+	 项系：F_abc_Text
+联副产品：FEntityCoby
+	 实体主键：FEntryID
+	 物料编码：FMaterialIdCoby  (必填项)
+	 物料名称：FMaterialNameCoby
+	 规格型号：FSpectionCoby
+	 基本计量单位：FBaseUnitIDCoby
+	 单位：FUnitIDCoby  (必填项)
+	 净需求：FDemandQtyCoby
+	 基本单位净需求数量：FBaseDemandQtyCoby
+	 计划订单量：FOrderQtyCoby
+	 基本单位计划订单量：FBaseOrderQtyCoby
+	 需求日期：FDemandDateCoby
+	 确认订单量：FFirmQtyCoby
+	 基本单位确认订单量：FBaseFirmQtyCoby
+	 确认采购/生产日期：FFirmStartDateCoby
+	 确认到货/完工日期：FFirmFinishDateCoby
+	 产品类型：FCopyType  (必填项)
+	 联副产品分录内码：FCobyEntryId
+	 主产品基本单位数量：FKeyBaseQty
+	 联副产品基本单位数量：FCobyBaseQty
+	 辅助属性：FAuxPropIdCoby
+	 产出工序序列：FOutPutOptQueue
+	 基本单位成品数量：FCopyBaseYieldQty
+	 BOM版本：FBOMIDCopy
+	 倒冲领料：FISBACKFLUSH
+计划信息：FSubEntity
+	 实体主键：FEntryId
+	 计划标签：FMrpNote
+	 成品率：FYieldRate
+	 基本单位成品数量：FBaseYieldQty
+	 投放单据类型：FReleaseBillType
+	 跳层件：FIsSkip2
+关联关系表：FBillHead_Link
+	 实体主键：FLinkId
+	 业务流程图：FBillHead_Link_FFlowId
+	 推进路线：FBillHead_Link_FFlowLineId
+	 转换规则：FBillHead_Link_FRuleId
+	 源单表内码：FBillHead_Link_FSTableId
+	 源单表：FBillHead_Link_FSTableName
+	 源单内码：FBillHead_Link_FSBillId
+	 源单分录内码：FBillHead_Link_FSId
+	 原始携带量：FBillHead_Link_FBaseFirmQtyOld
+	 修改携带量：FBillHead_Link_FBaseFirmQty
+

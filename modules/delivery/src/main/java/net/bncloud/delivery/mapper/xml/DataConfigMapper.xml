@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DataConfigMapper">
+  <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DataConfig">
+    <!--@mbg.generated-->
+    <!--@Table t_big_data_param-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_by" jdbcType="BIGINT" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy" />
+    <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="value" jdbcType="LONGVARCHAR" property="value" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, created_by, created_date, last_modified_by, last_modified_date, is_deleted, `key`, 
+    `value`
+  </sql>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryHarborMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryHarbor">
+        <id column="id" property="id"/>
+        <result column="harbor_code" property="harborCode"/>
+        <result column="harbor_name" property="harborName"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="undefined" resultMap="BaseResultMap">
+        select * from t_delivery_harbor
+        <where>1=1 and is_deleted = 0
+            <if test="harborCode != null ">and harbor_code like CONCAT('%',#{param.harborCode},'%')</if>
+            <if test="harborName != null ">and harbor_name like CONCAT('%',#{param.harborName},'%')</if>
+            <if test="createdBy != null ">and created_by = #{param.createdBy}</if>
+            <if test="lastModifiedBy != null ">and last_modified_by = #{param.lastModifiedBy}</if>
+        </where>
+
+    </select>
+
+
+</mapper>

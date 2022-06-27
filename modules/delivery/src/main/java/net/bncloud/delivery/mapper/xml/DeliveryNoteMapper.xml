@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryNoteMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryNote">
+        <result column="customer_code" property="customerCode"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="receipt" property="receipt"/>
+        <result column="delivery_date" property="deliveryDate"/>
+        <result column="estimated_time" property="estimatedTime"/>
+        <result column="barcode_version" property="barcodeVersion"/>
+        <result column="delivery_no" property="deliveryNo"/>
+        <result column="receipt_dept_code" property="receiptDeptCode"/>
+        <result column="receipt_dept_name" property="receiptDeptName"/>
+        <result column="purchase_remark" property="purchaseRemark"/>
+        <result column="inner_order_no" property="innerOrderNo"/>
+        <result column="delivery_method" property="deliveryMethod"/>
+        <result column="delivery_car_no" property="deliveryCarNo"/>
+        <result column="self_mention_address" property="selfMentionAddress"/>
+        <result column="delivery_address" property="deliveryAddress"/>
+        <result column="shipment_number" property="shipmentNumber"/>
+        <result column="delivery_remark" property="deliveryRemark"/>
+        <result column="transport_method" property="transportMethod"/>
+        <result column="driver_name" property="driverName"/>
+        <result column="driver_telephone" property="driverTelephone"/>
+        <result column="receiving_contact" property="receivingContact"/>
+        <result column="gross_weight" property="grossWeight"/>
+        <result column="package_method" property="packageMethod"/>
+        <result column="package_num" property="packageNum"/>
+        <result column="net_weight" property="netWeight"/>
+        <result column="weight_unit_code" property="weightUnitCode"/>
+        <result column="package_total" property="packageTotal"/>
+        <result column="real_delivery_num" property="realDeliveryNum"/>
+        <result column="delivery_amount" property="deliveryAmount"/>
+        <result column="delivery_status_code" property="deliveryStatusCode"/>
+        <result column="delivery_check_status" property="deliveryCheckStatus"/>
+        <result column="delivery_purchase_type" property="deliveryPurchaseType"/>
+        <result column="delivery_type_code" property="deliveryTypeCode"/>
+        <result column="delivery_ticket" property="deliveryTicket"/>
+        <result column="delivery_application" property="deliveryApplication"/>
+        <result column="priority_check" property="priorityCheck"/>
+        <result column="logistics_status" property="logisticsStatus"/>
+        <result column="arrival_time" property="arrivalTime"/>
+        <result column="erp_signing_status" property="erpSigningStatus"/>
+        <result column="sign_in_discrepancy" property="signInDiscrepancy"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_by_name" property="createdByName"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="org_id" property="orgId"/>
+        <result column="bill_no" property="billNo"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select distinct
+        note.*
+        from t_delivery_note note
+        left join t_delivery_detail tdd on tdd.delivery_id=note.id
+        <where>
+            1=1 and note.is_deleted = 0
+            <if test="queryParam.param !=null">
+                <if test="queryParam.param.orgId != null ">
+                      and note.org_id = #{queryParam.param.orgId}
+                </if>
+                <if test="queryParam.param.orderType != null ">
+                      and note.order_type like CONCAT('%', #{queryParam.param.orderType}, '%')
+                </if>
+                <if test="queryParam.param.erpSigningStatus != null  ">
+                      and note.erp_signing_status = #{queryParam.param.erpSigningStatus}
+                </if>
+
+                <if test="queryParam.param.customerCode != null and queryParam.param.customerCode !='' ">
+                      and note.customer_code = #{queryParam.param.customerCode}
+                </if>
+                <if test="queryParam.param.customerName != null and queryParam.param.customerName !='' ">
+                      and  (note.customer_name like CONCAT('%', #{queryParam.param.customerName}, '%')
+                        or note.customer_code like CONCAT('%', #{queryParam.param.customerName}, '%')
+                        )
+                </if>
+                <if test="queryParam.param.supplierCode != null and queryParam.param.supplierCode !='' ">
+                      and note.supplier_code = #{queryParam.param.supplierCode}
+                </if>
+                <if test="queryParam.param.estimatedTime != null">
+                      and note.estimated_time = #{queryParam.param.estimatedTime}
+                </if>
+                <if test="queryParam.param.supplierName != null and queryParam.param.supplierName !='' ">
+                      and  (note.supplier_name like CONCAT('%', #{queryParam.param.supplierName}, '%')
+                        or note.supplier_code like CONCAT('%', #{queryParam.param.supplierName}, '%')
+                        )
+                </if>
+
+                <if test="queryParam.param.estimatedTime != null  ">
+                      and date_format(note.estimated_time, '%Y-%m-%d') =
+                          date_format(#{queryParam.param.estimatedTime}, '%Y-%m-%d')
+                </if>
+                <if test="queryParam.param.deliveryDate != null  ">
+                      and date_format(note.delivery_date, '%Y-%m-%d') =
+                          date_format(#{queryParam.param.deliveryDate}, '%Y-%m-%d')
+                </if>
+                <if test="queryParam.param.deliveryDateMin != null and queryParam.param.deliveryDateMin !=''  ">
+                    <![CDATA[
+                      and note.delivery_date >= date_format(#{queryParam.param.deliveryDateMin}, '%Y-%m-%d')
+                    ]]>
+                </if>
+                <if test="queryParam.param.deliveryDateMax != null  and queryParam.param.deliveryDateMax !='' ">
+                    <![CDATA[
+                      and note.delivery_date <= date_format(#{queryParam.param.deliveryDateMax}, '%Y-%m-%d')
+                    ]]>
+                </if>
+                <if test="queryParam.param.barcodeVersion != null and queryParam.param.barcodeVersion !='' ">
+                      and note.barcode_version like CONCAT('%', #{queryParam.param.barcodeVersion}, '%')
+                </if>
+                <if test="queryParam.param.deliveryNo != null and queryParam.param.deliveryNo !='' ">
+                      and note.delivery_no like CONCAT('%', #{queryParam.param.deliveryNo}, '%')
+                </if>
+                <if test="queryParam.param.receiptDeptCode != null and queryParam.param.receiptDeptCode !='' ">
+                      and note.receipt_dept_code like CONCAT('%', #{queryParam.param.receiptDeptCode}, '%')
+                </if>
+                <if test="queryParam.param.receiptDeptName != null and queryParam.param.receiptDeptName !='' ">
+                      and note.receipt_dept_name like CONCAT('%', #{queryParam.param.receiptDeptName}, '%')
+                </if>
+                <if test="queryParam.param.purchaseRemark != null  and queryParam.param.purchaseRemark !='' ">
+                      and note.purchase_remark like CONCAT('%', #{queryParam.param.purchaseRemark}, '%')
+                </if>
+                <if test="queryParam.param.innerOrderNo != null and queryParam.param.innerOrderNo !='' ">
+                      and note.inner_order_no like CONCAT('%', #{queryParam.param.innerOrderNo}, '%')
+                </if>
+                <if test="queryParam.param.deliveryMethod != null and queryParam.param.deliveryMethod !='' ">
+                      and note.delivery_method = #{queryParam.param.deliveryMethod}
+                </if>
+                <if test="queryParam.param.deliveryCarNo != null and queryParam.param.deliveryCarNo !='' ">
+                      and note.delivery_car_no like CONCAT('%', #{queryParam.param.deliveryCarNo}, '%')
+                </if>
+                <if test="queryParam.param.selfMentionAddress != null and queryParam.param.selfMentionAddress !='' ">
+                      and note.self_mention_address like
+                          CONCAT('%', #{queryParam.param.selfMentionAddress}, '%')
+                </if>
+                <if test="queryParam.param.deliveryAddress != null and queryParam.param.deliveryAddress !='' ">
+                      and note.delivery_address like CONCAT('%', #{queryParam.param.deliveryAddress}, '%')
+                </if>
+                <if test="queryParam.param.shipmentNumber != null and queryParam.param.shipmentNumber !='' ">
+                      and note.shipment_number like CONCAT('%', #{queryParam.param.shipmentNumber}, '%')
+                </if>
+                <if test="queryParam.param.deliveryRemark != null and queryParam.param.deliveryRemark !='' ">
+                      and note.delivery_remark like CONCAT('%', #{queryParam.param.deliveryRemark}, '%')
+                </if>
+                <if test="queryParam.param.transportMethod != null and queryParam.param.transportMethod !='' ">
+                      and note.transport_method like CONCAT('%', #{queryParam.param.transportMethod}, '%')
+                </if>
+                <if test="queryParam.param.driverName != null and queryParam.param.driverName !='' ">
+                      and note.driver_name like CONCAT('%', #{queryParam.param.driverName}, '%')
+                </if>
+                <if test="queryParam.param.driverTelephone != null and queryParam.param.driverTelephone !='' ">
+                      and note.driver_telephone like CONCAT('%', #{queryParam.param.driverTelephone}, '%')
+                </if>
+                <if test="queryParam.param.receivingContact != null and queryParam.param.receivingContact !='' ">
+                      and note.receiving_contact like CONCAT('%', #{queryParam.param.receivingContact}, '%')
+                </if>
+                <if test="queryParam.param.grossWeight != null and queryParam.param.grossWeight !='' ">
+                      and note.gross_weight = #{queryParam.param.grossWeight}
+                </if>
+                <if test="queryParam.param.packageMethod != null and queryParam.param.packageMethod !='' ">
+                      and note.package_method like CONCAT('%', #{queryParam.param.packageMethod}, '%')
+                </if>
+                <if test="queryParam.param.packageNum != null and queryParam.param.packageNum !='' ">
+                      and note.package_num = #{queryParam.param.packageNum}
+                </if>
+                <if test="queryParam.param.netWeight != null and queryParam.param.netWeight !='' ">
+                      and note.net_weight = #{queryParam.param.netWeight}
+                </if>
+                <if test="queryParam.param.weightUnitCode != null and queryParam.param.weightUnitCode !='' ">
+                      and note.weight_unit_code like CONCAT('%', #{queryParam.param.weightUnitCode}, '%')
+                </if>
+                <if test="queryParam.param.packageTotal != null and queryParam.param.packageTotal !='' ">
+                      and note.package_total like CONCAT('%', #{queryParam.param.packageTotal}, '%')
+                </if>
+                <if test="queryParam.param.realDeliveryNum != null and queryParam.param.realDeliveryNum !='' ">
+                      and note.real_delivery_num = #{queryParam.param.realDeliveryNum}
+                </if>
+                <if test="queryParam.param.deliveryAmount != null and queryParam.param.deliveryAmount !='' ">
+                      and note.delivery_amount = #{queryParam.param.deliveryAmount}
+                </if>
+                <!--<if test='queryParam.param.deliveryStatusCode !=null  and queryParam.param.deliveryStatusCode =="0" ' >
+                    and note.delivery_status_code != '1'
+                </if>-->
+                <if test="queryParam.param.deliveryStatusCode !=null and queryParam.param.deliveryStatusCode !='' ">
+                      and note.delivery_status_code = #{queryParam.param.deliveryStatusCode,jdbcType=VARCHAR}
+                </if>
+                <if test="queryParam.param.orgTrue !=null and queryParam.param.orgTrue !=''">
+                      and note.delivery_status_code != '1'
+                </if>
+
+
+                <if test="queryParam.param.deliveryCheckStatus != null and queryParam.param.deliveryCheckStatus !='' ">
+                      and note.delivery_check_status like CONCAT('%', #{queryParam.param.deliveryCheckStatus}, '%')
+                </if>
+                <if test="queryParam.param.deliveryPurchaseType != null and queryParam.param.deliveryPurchaseType !='' ">
+                      and note.delivery_purchase_type = #{queryParam.param.deliveryPurchaseType}
+                </if>
+                <if test="queryParam.param.deliveryTypeCode != null and queryParam.param.deliveryTypeCode !='' ">
+                      and note.delivery_type_code = #{queryParam.param.deliveryTypeCode}
+                </if>
+                <if test="queryParam.param.deliveryTicket != null and queryParam.param.deliveryTicket !='' ">
+                      and note.delivery_ticket like CONCAT('%', #{queryParam.param.deliveryTicket}, '%')
+                </if>
+                <if test="queryParam.param.deliveryApplication != null and queryParam.param.deliveryApplication !='' ">
+                      and note.delivery_application like CONCAT('%', #{queryParam.param.deliveryApplication}, '%')
+                </if>
+                <if test="queryParam.param.priorityCheck != null and queryParam.param.priorityCheck !='' ">
+                      and note.priority_check like CONCAT('%', #{queryParam.param.priorityCheck}, '%')
+                </if>
+                <if test="queryParam.param.logisticsStatus != null and queryParam.param.logisticsStatus !='' ">
+                      and note.logistics_status like CONCAT('%', #{queryParam.param.logisticsStatus}, '%')
+                </if>
+                <if test="queryParam.param.signInDiscrepancy != null and queryParam.param.signInDiscrepancy !='' ">
+                      and note.sign_in_discrepancy = #{queryParam.param.signInDiscrepancy}
+                </if>
+
+                <if test="queryParam.param.attachment !=null and queryParam.param.attachment !=''">
+                    <choose>
+                        <when test="queryParam.param.attachment=='Y'.toString() ">
+                            and note.have_attachment in (1,2)
+                        </when>
+                        <when test="queryParam.param.attachment=='N'.toString() ">
+                            and note.have_attachment in (0,1)
+                        </when>
+                    </choose>
+                </if>
+
+                <if test="queryParam.param.productCondition !=null and queryParam.param.productCondition !=''">
+                    and (
+                    (tdd.product_code like CONCAT('%', #{queryParam.param.productCondition}, '%')) or
+                    (tdd.product_name like CONCAT('%', #{queryParam.param.productCondition}, '%'))
+                    )
+                </if>
+            </if>
+            <!--客户名称/编码/送货通知单号/产品名称/编码/规格-->
+            <if test="queryParam.searchValue != null and queryParam.searchValue !='' ">
+                  and (
+                        note.customer_code like CONCAT('%', #{queryParam.searchValue}, '%')
+                        OR note.customer_name like CONCAT('%', #{queryParam.searchValue}, '%')
+                        OR note.supplier_name like CONCAT('%', #{queryParam.searchValue}, '%')
+                        OR note.supplier_code like CONCAT('%', #{queryParam.searchValue}, '%')
+                        OR note.delivery_no like CONCAT('%', #{queryParam.searchValue}, '%')
+                        OR note.order_type like CONCAT('%', #{queryParam.searchValue}, '%')
+                    )
+            </if>
+
+
+        </where>
+        order by note.created_date desc
+    </select>
+
+    <select id="selectByNotSign" resultType="int">
+        select count(id)
+        from t_delivery_note note
+        WHERE note.delivery_status_code = '9'
+    </select>
+
+    <update id="updateErpId">
+        update t_delivery_note
+        SET erp_id            =#{erpId},
+            f_number=#{fNumber},
+            erp_signing_status=#{code}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE t_delivery_note
+        SET delivery_status_code='9'
+        where id = #{id}
+    </update>
+    <update id="updateSync">
+        UPDATE t_delivery_note
+        SET delivery_status_code=#{deliveryStatusCode},
+            erp_signing_status=#{erpSigningStatus},
+            signing_time=#{signingTime}
+        where id = #{id}
+    </update>
+
+
+</mapper>

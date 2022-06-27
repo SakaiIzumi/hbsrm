@@ -1,0 +1,9 @@
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (10, '一级', 9);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (11, '二级', 9);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (12, '三级', 9);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (16, '实力低', 5);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (22, '不可信', 1);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (24, '一般可信', 1);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (25, '非常可信', 1);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (26, '实力中', 5);
+INSERT INTO `t_type_config_item` (`id`, `item`, `type_config_id`) VALUES (27, '实力高', 5);

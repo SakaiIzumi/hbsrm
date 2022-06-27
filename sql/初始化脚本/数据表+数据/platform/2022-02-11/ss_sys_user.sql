@@ -1,0 +1,3 @@
+INSERT INTO `ss_sys_user` (`user_id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `name`) VALUES (1, b'0', -1, '2021-04-25 14:19:06.000000', -1, '2021-04-25 14:19:13.000000', '管理员');
+INSERT INTO `ss_sys_user` (`user_id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `name`) VALUES (751, b'0', 1, '2022-01-24 10:40:07.162000', 1, '2022-01-24 10:40:18.865000', '协作组织管理员');
+INSERT INTO `ss_sys_user` (`user_id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `name`) VALUES (1205, b'0', 751, '2022-01-24 12:55:52.800000', 751, '2022-01-24 12:55:52.800000', '组织管理员子账号');

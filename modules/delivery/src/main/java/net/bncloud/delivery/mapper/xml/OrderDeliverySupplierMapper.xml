@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.OrderDeliverySupplierMapper">
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.OrderDeliverySupplier">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy"/>
+        <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate"/>
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted"/>
+    </resultMap>
+
+
+    <!--<resultMap id="selectPageListMap" type="net.bncloud.delivery.vo.OrderDeliverySupplierVo">
+        <id column="id" property="orderDeliverySupplierId"/>
+        <result column="supplier_id" property="supplierId"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="status" property="status"/>
+        <result column="material_type" property="materialType"/>
+    </resultMap>-->
+    <select id="selectPageList" resultType="net.bncloud.delivery.vo.OrderDeliverySupplierVo">
+        select * from t_order_delivery_supplier
+        <where>
+            is_deleted=0
+            <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+                and (
+                material_erp_number like concat('%', #{queryParam.searchValue}, '%') or
+                material_erp_name like concat('%', #{queryParam.searchValue}, '%') or
+                parent_erp_number like concat('%', #{queryParam.searchValue}, '%') or
+                parent_name like concat('%', #{queryParam.searchValue}, '%') or
+                supplier_name like concat('%', #{queryParam.searchValue}, '%') or
+                supplier_code like concat('%', #{queryParam.searchValue}, '%')
+                )
+            </if>
+            <if test="queryParam.param != null">
+                <if test="queryParam.param.materialErpNumber != null and queryParam.param.materialErpNumber != ''">
+                    and material_erp_number = #{queryParam.param.materialErpNumber}
+                </if>
+                <if test="queryParam.param.materialErpName != null and queryParam.param.materialErpName != ''">
+                    and material_erp_name = #{queryParam.param.materialErpName}
+                </if>
+                <if test="queryParam.param.parentErpNumber != null and queryParam.param.parentErpNumber != ''">
+                    and parent_erp_number = #{queryParam.param.parentErpNumber}
+                </if>
+                <if test="queryParam.param.parentName != null and queryParam.param.parentName != ''">
+                    and parent_name = #{queryParam.param.parentName}
+                </if>
+            </if>
+        </where>
+    </select>
+    <select id="selectNoPageList" resultType="net.bncloud.delivery.vo.OrderDeliverySupplierVo">
+        select * from t_order_delivery_supplier
+        <where>
+            is_deleted=0
+            <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+                and (
+                material_erp_number like concat('%', #{queryParam.searchValue}, '%') or
+                material_erp_name like concat('%', #{queryParam.searchValue}, '%') or
+                parent_erp_number like concat('%', #{queryParam.searchValue}, '%') or
+                parent_name like concat('%', #{queryParam.searchValue}, '%') or
+                supplier_name like concat('%', #{queryParam.searchValue}, '%') or
+                supplier_code like concat('%', #{queryParam.searchValue}, '%')
+                )
+            </if>
+            <if test="queryParam.param != null">
+                <if test="queryParam.param.materialErpNumber != null and queryParam.param.materialErpNumber != ''">
+                    and material_erp_number = #{queryParam.param.materialErpNumber}
+                </if>
+                <if test="queryParam.param.materialErpName != null and queryParam.param.materialErpName != ''">
+                    and material_erp_name = #{queryParam.param.materialErpName}
+                </if>
+                <if test="queryParam.param.parentErpNumber != null and queryParam.param.parentErpNumber != ''">
+                    and parent_erp_number = #{queryParam.param.parentErpNumber}
+                </if>
+                <if test="queryParam.param.parentName != null and queryParam.param.parentName != ''">
+                    and parent_name = #{queryParam.param.parentName}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageListNotToUse" resultType="net.bncloud.delivery.vo.OrderDeliverySupplierVo">
+        with newTable as (
+                SELECT tods.*,
+                       ttc.item as tag_item,
+                       tpc.item as type_item
+                FROM t_order_delivery_supplier tods
+                             LEFT JOIN bncloud_platform.ss_supplier_tag_item_ref sstir
+                        ON sstir.supplier_id = tods.supplier_id
+                             LEFT JOIN bncloud_platform.t_tag_config_item ttc ON ttc.id = sstir.tag_item_id
+                             LEFT JOIN bncloud_platform.ss_supplier_type_item_ref sspir
+                        ON sspir.supplier_id = tods.supplier_id
+                             LEFT JOIN bncloud_platform.t_type_config_item tpc ON tpc.id = sspir.type_item_id
+                )
+        SELECT distinct *
+        FROM newTable nt
+                where nt.is_deleted = 0
+        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+            and (
+                    (nt.supplier_name like concat('%', #{queryParam.searchValue}, '%')) or
+                    (nt.tag_item like concat('%', #{queryParam.searchValue}, '%')) or
+                    (nt.type_item like concat('%', #{queryParam.searchValue}, '%'))
+                    )
+        </if>
+        <if test="queryParam.param != null">
+            <if test="queryParam.param.materialType != null and queryParam.param.materialType != ''">
+                and nt.material_type = #{queryParam.param.materialType}
+            </if>
+        </if>
+    </select>
+
+    <resultMap id="itemMap" type="net.bncloud.delivery.vo.SupplierItem">
+        <id column="id" property="id"/>
+        <result column="item" property="item"/>
+    </resultMap>
+    <select id="selectTagItemListBySupplierId" resultType="net.bncloud.delivery.vo.SupplierItem">
+        select ttc.id,
+               ttc.item
+        from bncloud_platform.ss_supplier_tag_item_ref sstir
+                     INNER JOIN bncloud_platform.t_tag_config_item ttc ON ttc.id = sstir.tag_item_id
+        <where>
+            <if test="id != null">
+                sstir.supplier_id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectTypeItemListBySupplierId" resultType="net.bncloud.delivery.vo.SupplierItem">
+        select tpc.id,
+               tpc.item
+        from bncloud_platform.ss_supplier_type_item_ref sspir
+        INNER JOIN bncloud_platform.t_type_config_item tpc ON tpc.id = sspir.type_item_id
+        <where>
+            <if test="id != null">
+                sspir.supplier_id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>

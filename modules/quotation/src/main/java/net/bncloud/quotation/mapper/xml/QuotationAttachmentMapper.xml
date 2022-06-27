@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.quotation.mapper.QuotationAttachmentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.quotation.entity.QuotationAttachment">
+        <id column="id" property="id"/>
+        <result column="file_id" property="fileId"/>
+        <result column="file_type" property="fileType"/>
+        <result column="file_name" property="fileName"/>
+        <result column="file_url" property="fileUrl"/>
+        <result column="business_form_id" property="businessFormId"/>
+        <result column="business_type" property="businessType"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_rfq_quotation_attachment
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                -- and (
+                -- (t1.supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.purchase_order_code like CONCAT('%',#{pageParam.searchValue},'%'))
+                -- )
+            </if>
+            <if test="pageParam.param.fileId != null ">and file_id like CONCAT('%',#{pageParam.param.fileId},'%')</if>
+            <if test="pageParam.param.fileType != null ">and file_type like
+                CONCAT('%',#{pageParam.param.fileType},'%')
+            </if>
+            <if test="pageParam.param.fileName != null ">and file_name like
+                CONCAT('%',#{pageParam.param.fileName},'%')
+            </if>
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+
+        </where>
+
+    </select>
+
+
+</mapper>

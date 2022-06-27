@@ -1,0 +1,3 @@
+INSERT INTO `ss_tenant_position` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `disabled`, `name`, `order_num`) VALUES (8, b'0', 1, '2021-04-29 02:36:09.612000', 1, '2022-01-05 07:14:04.693000', b'1', '测试1', 2);
+INSERT INTO `ss_tenant_position` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `disabled`, `name`, `order_num`) VALUES (9, b'0', 1, '2021-05-07 05:38:30.123000', 1, '2021-07-27 06:48:52.138000', b'1', '采购', 1);
+INSERT INTO `ss_tenant_position` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `disabled`, `name`, `order_num`) VALUES (10, b'0', 1, '2021-05-15 03:38:30.845000', 1, '2021-05-15 03:38:34.115000', b'1', '职位', 123);

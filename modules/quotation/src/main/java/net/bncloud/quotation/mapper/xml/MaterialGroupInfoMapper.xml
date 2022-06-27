@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.quotation.mapper.MaterialGroupInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.quotation.entity.MaterialGroupInfo">
+        <id column="id" property="id"/>
+
+        <result column="erp_id" property="erpId"/>
+        <result column="erp_left" property="erpLeft"/>
+        <result column="erp_parent_id" property="erpParentId"/>
+        <result column="erp_null_parent_id" property="erpNullParentId"/>
+        <result column="erp_number" property="erpName"/>
+        <result column="erp_group_id" property="erpGroupId"/>
+        <result column="erp_right" property="erpRight"/>
+        <result column="erp_name" property="erpName"/>
+
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectByERPGroupId" resultMap="BaseResultMap">
+        SELECT * FROM t_material_group_info WHERE erp_id = #{erpGroupId}
+    </select>
+    <select id="getGroupMaterCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_material_info
+        WHERE material_group_id IN (select erp_id
+                                    from (
+                                             select t1.erp_id,
+                                                    if(find_in_set(erp_parent_id, @pids) > 0,
+                                                       @pids := concat(@pids, ',', erp_id),
+                                                       0) as ischild
+                                             from (
+                                                      select erp_id, erp_parent_id
+                                                      from t_material_group_info t
+                                                      where t.is_deleted = 0
+                                                      order by erp_parent_id, erp_id
+                                                  ) t1,
+                                                  (select @pids := #{erpId}) t2
+                                         ) t3
+                                    where ischild != 0
+        UNION ALL
+        SELECT #{erpId})
+    </select>
+
+    <select id="getGroupMaterCountRe" resultType="net.bncloud.quotation.vo.GroupMaterCountReVo">
+        select material_group_id,material_group_name , count(material_group_id) as materialCount
+        from t_material_info
+        where is_deleted=0
+        group By material_group_id
+    </select>
+
+    <select id="getLastGroupTree" resultType="net.bncloud.quotation.param.GetLastGroupTreeParam">
+        <!--查询子为空的父母-->
+        SELECT
+            a.id,
+            a.erp_id as erpId ,
+            a.erp_parent_id as erpParentId,
+            a.erp_number as erpNumber,
+            a.erp_name as erpName,
+            a.id AS parentId,
+            a.erp_id AS parentErpId,
+            a.erp_number AS parentErpNumber,
+            a.erp_name AS parentName
+        FROM
+            t_material_group_info a
+            LEFT JOIN t_material_group_info b ON a.erp_parent_id = b.erp_id
+        <where>
+            a.erp_id NOT IN ( SELECT erp_parent_id FROM t_material_group_info WHERE erp_parent_id != 0 )
+            AND a.erp_parent_id = 0 and a.is_deleted=0
+            <if test="pageParam.searchValue != null and pageParam.searchValue !=''  ">
+                and ( a.erp_name like concat('%',#{pageParam.searchValue},'%') or
+                a.erp_number like concat('%',#{pageParam.searchValue},'%') or
+                b.erp_number like concat('%',#{pageParam.searchValue},'%') or
+                b.erp_name like concat('%',#{pageParam.searchValue},'%')
+                )
+            </if>
+        </where>
+            UNION
+
+            <!--查询子-->
+            SELECT
+                a.id,
+                a.erp_id as erpId ,
+                a.erp_parent_id as erpParentId,
+                a.erp_number as erpNumber,
+                a.erp_name as erpName,
+                b.id AS parentId,
+                b.erp_id AS parentErpId,
+                b.erp_number AS parentErpNumber,
+                b.erp_name AS parentName
+            FROM
+                t_material_group_info a
+                LEFT JOIN t_material_group_info b ON a.erp_parent_id = b.erp_id
+            <where>
+                a.erp_parent_id != 0 and a.is_deleted=0
+                <if test="pageParam.searchValue != null and pageParam.searchValue !=''">
+                    and ( a.erp_name like concat('%',#{pageParam.searchValue},'%') or
+                    a.erp_number like concat('%',#{pageParam.searchValue},'%') or
+                    b.erp_number like concat('%',#{pageParam.searchValue},'%') or
+                    b.erp_name like concat('%',#{pageParam.searchValue},'%')
+                    )
+                </if>
+            </where>
+
+    </select>
+
+
+</mapper>

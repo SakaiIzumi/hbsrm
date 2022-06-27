@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  net.bncloud.service.api.file.config.FileFeignConfiguration

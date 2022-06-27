@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>apis</artifactId>
+        <groupId>net.bncloud</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>bnc-service-api</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>platform-service-api</module>
+        <module>bis-service-api</module>
+        <module>delivery-service-api</module>
+        <module>order-service-api</module>
+        <module>quotation-service-api</module>
+        <module>file-center-service-api</module>
+        <module>financial-service-api</module>
+        <module>contract-service-api</module>
+        <module>zc-information-api</module>
+        <module>oem-service-api</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+</project>

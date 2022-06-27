@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryNoteSupplierDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryNoteSupplier" >
+        <result column="id" property="id" />
+       <!-- <result column="plan_no" property="planNo" />
+        <result column="erp_no" property="erpNo" />
+        &lt;!&ndash;<result column="org_id" property="" />&ndash;&gt;
+        <result column="purchase_order_no" property="purchaseOrderNo" />
+        <result column="customer_code" property="customerCode" />
+        <result column="customer_name" property="customerName" />
+        <result column="publisher" property="publisher" />
+        <result column="publish_date" property="publishDate" />
+        <result column="plan_start_date" property="planStartDate" />
+        <result column="plan_end_date" property="planEndDate" />
+        <result column="plan_status" property="planStatus" />
+        <result column="plan_description" property="planDescription" />
+        <result column="source_id" property="sourceId" />-->
+        <result column="created_by" property="createdBy" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="is_deleted" property="isDeleted" />
+
+       <!-- <collection property="deliveryPlanDetail" columnPrefix="pd_" ofType="net.bncloud.delivery.entity.DeliveryPlanDetail">
+            <result column="id" property="id" />
+            <result column="delivery_plan_id" property="deliveryPlanId" />
+            <result column="product_code" property="productCode" />
+            <result column="product_name" property="productName" />
+            <result column="product_specification" property="productSpecification" />
+            <result column="supplier_code" property="supplierCode" />
+            <result column="supplier_name" property="supplierName" />
+            <result column="purchase_order_no" property="purchaseOrderNo" />
+            <result column="delivery_address" property="deliveryAddress" />
+            <result column="plan_unit" property="planUnit" />
+            <result column="plan_quantity" property="planQuantity" />
+            <result column="confirm_quantity" property="confirmQuantity" />
+            <result column="status" property="status" />
+            <result column="latest_delivery_date" property="latestDeliveryDate" />
+            <result column="latest_plan_quantity" property="latestPlanQuantity" />
+            <result column="latest_confirm_quantity" property="latestConfirmQuantity" />
+            <result column="source_id" property="sourceId" />
+            <result column="created_by" property="createdBy" />
+            <result column="created_date" property="createdDate" />
+            <result column="last_modified_by" property="lastModifiedBy" />
+            <result column="last_modified_date" property="lastModifiedDate" />
+            <result column="is_deleted" property="isDeleted" />
+        </collection>
+        <collection property="deliveryPlanDetailItem" columnPrefix="pdt_" ofType="net.bncloud.delivery.entity.DeliveryPlanDetailItem">
+            <result column="id" property="id" />
+            <result column="delivery_plan_detail_id" property="deliveryPlanDetailId" />
+            <result column="delivery_plan_status" property="deliveryPlanStatus" />
+            <result column="product_code" property="productCode" />
+            <result column="product_name" property="productName" />
+            <result column="product_specifications" property="productSpecifications" />
+            <result column="supplier_code" property="supplierCode" />
+            <result column="supplier_name" property="supplierName" />
+            <result column="customer_code" property="customerCode" />
+            <result column="customer_name" property="customerName" />
+            <result column="delivery_note_id" property="deliveryNoteId" />
+            <result column="delivery_note_no" property="deliveryNoteNo" />
+            <result column="delivery_status" property="deliveryStatus" />
+            <result column="delivery_date" property="deliveryDate" />
+            <result column="delivery_quantity" property="deliveryQuantity" />
+            <result column="confirm_date" property="confirmDate" />
+            <result column="confirm_quantity" property="confirmQuantity" />
+            <result column="source_id" property="sourceId" />
+            <result column="created_by" property="createdBy" />
+            <result column="created_date" property="createdDate" />
+            <result column="last_modified_by" property="lastModifiedBy" />
+            <result column="last_modified_date" property="lastModifiedDate" />
+            <result column="is_deleted" property="isDeleted" />
+        </collection>-->
+    </resultMap>
+
+    <select id="selectListPage" resultType="net.bncloud.delivery.entity.DeliveryNoteSupplierDetail">
+        select *
+        from t_delivery_detail
+        <where>
+            <if test="pageParam.param.deliveryId!=null ">
+                and delivery_id =#{pageParam.param.deliveryId}
+            </if>
+        </where>
+    </select>
+</mapper>

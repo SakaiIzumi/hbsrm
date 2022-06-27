@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.FactoryTransportationDurationMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.vo.FactoryTransportationDurationVo">
+        <id column="id" property="id"/>
+        <result column="deliveryFactoryId" property="deliveryFactoryId"/>
+        <result column="receiptFactoryId" property="receiptFactoryId"/>
+        <result column="purchaseCode" property="purchaseCode"/>
+        <result column="purchaseName" property="purchaseName"/>
+        <result column="receiptFactoryNumber" property="receiptFactoryNumber"/>
+        <result column="receiptFactoryName" property="receiptFactoryName"/>
+        <result column="receiptFactoryDetailAddress" property="receiptFactoryDetailAddress"/>
+        <result column="supplierCode" property="supplierCode"/>
+        <result column="supplierName" property="supplierName"/>
+        <result column="deliveryFactoryNumber" property="deliveryFactoryNumber"/>
+        <result column="deliveryFactoryName" property="deliveryFactoryName"/>
+        <result column="deliveryFactoryProvince" property="deliveryFactoryProvince"/>
+        <result column="deliveryFactoryCity" property="deliveryFactoryCity"/>
+        <result column="deliveryFactoryDistrict" property="deliveryFactoryDistrict"/>
+        <result column="deliveryFactoryStreet" property="deliveryFactoryStreet"/>
+        <result column="deliveryFactoryDetailAddress" property="deliveryFactoryDetailAddress"/>
+        <result column="transport_way" property="transportWay"/>
+        <result column="transport_duration" property="transportDuration"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select tftd.id,
+        tfi1.id as deliveryFactoryId,
+        tfi2.id as receiptFactoryId,
+        tfi2.number as receiptFactoryNumber,
+        tfi2.name as receiptFactoryName,
+        tfi2.belong_code as purchaseCode,
+        tfi2.belong_name as purchaseName,
+        tfi2.detailed_address as receiptFactoryDetailAddress,
+        tfi1.belong_code as supplierCode,
+        tfi1.belong_name as supplierName,
+        tfi1.number as deliveryFactoryNumber,
+        tfi1.name as deliveryFactoryName,
+        tfi1.province as deliveryFactoryProvince,
+        tfi1.city as deliveryFactoryCity,
+        tfi1.district as deliveryFactoryDistrict,
+        tfi1.street as deliveryFactoryStreet,
+        tfi1.detailed_address as deliveryFactoryDetailAddress,
+        tftd.transport_way,
+        tftd.transport_duration,
+        tftd.remark
+        from t_factory_transportation_duration tftd
+        <!--供应商-->
+        left join t_factory_info tfi1 on tfi1.id = tftd.delivery_factory_id
+        <!--采购方-->
+        left join t_factory_info tfi2 on tfi2.id = tftd.receipt_factory_id
+        where tftd.is_deleted = 0
+        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+            and     (
+                    (tfi1.number like concat('%', #{queryParam.searchValue}, '%')) or
+                    (tfi1.name like concat('%', #{queryParam.searchValue}, '%')) or
+                    (concat(tfi1.province,tfi1.city,tfi1.district,tfi1.street) like concat('%', #{queryParam.searchValue}, '%') ) or
+                    <!--供应商编码和名称-->
+                    (tfi1.belong_code like concat('%', #{queryParam.searchValue}, '%')) or
+                    (tfi1.belong_name like concat('%', #{queryParam.searchValue}, '%')) or
+                    <!--采购方编码和名称-->
+                    (tfi2.belong_code like concat('%', #{queryParam.searchValue}, '%')) or
+                    (tfi2.belong_name like concat('%', #{queryParam.searchValue}, '%'))
+                    )
+        </if>
+        <if test="queryParam.param!=null ">
+            <if test="queryParam.param.supplierCode !=null and queryParam.param.supplierCode !=''">
+                and tfi1.belong_code like concat('%', #{queryParam.param.supplierCode}, '%')
+            </if>
+        </if>
+    </select>
+</mapper>

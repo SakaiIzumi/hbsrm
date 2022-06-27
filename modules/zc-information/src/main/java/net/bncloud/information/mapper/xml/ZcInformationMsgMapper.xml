@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.information.mapper.ZcInformationMsgMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.information.entity.ZcInformationMsg">
+        <id column="id" property="id"/>
+        <result column="tag" property="tag"/>
+        <result column="client_id" property="clientId"/>
+        <result column="msg_id" property="msgId"/>
+        <result column="add_time" property="addTime"/>
+        <result column="msg" property="msg"/>
+        <result column="msg_value" property="msgValue"/>
+        <result column="get_uid" property="getUid"/>
+        <result column="get_mobile" property="getMobile"/>
+        <result column="get_supplier_no" property="getSupplierNo"/>
+        <result column="get_supplier_name" property="getSupplierName"/>
+        <result column="send_uid" property="sendUid"/>
+        <result column="send_mobile" property="sendMobile"/>
+        <result column="send_supplier_no" property="sendSupplierNo"/>
+        <result column="send_supplier_name" property="sendSupplierName"/>
+        <result column="terminal_type" property="terminalType"/>
+        <result column="oper_status" property="operStatus"/>
+        <result column="is_read" property="isRead"/>
+        <result column="is_deleted" property="isDeleted" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="send_name" property="sendName"/>
+        <result column="get_name" property="getName"/>
+        <result column="msg_title" property="msgTitle"/>
+        <result column="data_json" property="dataJson"/>
+        <result column="module_type" property="moduleType"/>
+        <result column="system_type" property="systemType"/>
+        <result column="send_type" property="sendType"/>
+        <result column="receiver_type" property="receiverType"/>
+        <result column="business_id" property="businessId"/>
+        <result column="send_subject_name" property="sendSubjectName"/>
+        <result column="send_subject_code" property="sendSubjectCode"/>
+        <result column="receiver_subject_name" property="receiverSubjectName"/>
+        <result column="receiver_subject_code" property="receiverSubjectCode"/>
+
+    </resultMap>
+
+
+
+    <resultMap id="BaseResultMapVo" extends="BaseResultMap" type="net.bncloud.information.vo.ZcInformationMsgVo">
+        <result column="name" property="tagName"/>
+        <result column="RtagId" property="tagId"/>
+        <collection property="routeList" ofType="net.bncloud.information.entity.ZcInformationRoute"   column="RtagId" >
+                <!--<id column="id" property="id" />-->
+                <result column="tag_id" property="tagId"/>
+                <result column="route_type" property="routeType" />
+                <result column="route_url" property="routeUrl" />
+                <result column="template_id" property="templateId" />
+                <result column="disabled" property="disabled" />
+                <result column="parameter_template" property="parameterTemplate" />
+                <result column="rid" property="id" />
+    </collection>
+
+
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMapVo">
+        select msg.id,msg.send_type,msg.receiver_type,msg.tag,msg.client_id,msg.msg_id,msg.client_id,msg.msg_title,msg.add_time,msg.msg,msg.get_uid,msg.get_name,msg.is_read,msg.msg_value,
+        msg.get_mobile,msg.get_supplier_no,msg.get_supplier_name,msg.send_uid,msg.send_name,msg.send_mobile,msg.send_supplier_no,msg.send_supplier_name,msg.terminal_type,
+        t.name,t.id as RtagId,t.module_type as moduleType
+        from zc_information_msg msg
+        left join zc_information_tag t on msg.tag=t.tag
+
+
+
+        <where>1=1 and msg.is_deleted = 0
+            <if test="queryParam.param.tagName != null and queryParam.param.tagName !='' ">and msg.msg_title like
+                CONCAT('%',#{queryParam.param.tagName},'%')
+            </if>
+            <if test="queryParam.param.moduleType != null and queryParam.param.moduleType != '' ">and msg.module_type = #{queryParam.param.moduleType}</if>
+            <if test="queryParam.param.tag != null and queryParam.param.tag !='' ">and msg.tag = #{queryParam.param.tag}</if>
+            <if test="queryParam.param.sendType != null and queryParam.param.sendType != '' ">and msg.send_type = #{queryParam.param.sendType}</if>
+            <if test="queryParam.param.receiverType != null and queryParam.param.receiverType != ''">and msg.receiver_type = #{queryParam.param.receiverType}</if>
+            <if test="queryParam.param.msgId != null and queryParam.param.msgId != '' ">and msg.msg_id = #{queryParam.param.msgId}</if>
+            <if test="queryParam.param.getTimeStart  != null and queryParam.param.getTimeStart  != ''">
+                and msg.add_time  &gt;=   #{queryParam.param.getTimeStart}
+            </if>
+
+            <if test="queryParam.param.getTimeEnd != null  and queryParam.param.getTimeEnd !=''">
+                and msg.add_time  &lt;= #{queryParam.param.getTimeEnd}
+            </if>
+
+            <if test="queryParam.param.msg != null and queryParam.param.msg != ''">and msg.`msg` like CONCAT('%',#{queryParam.param.msg},'%')</if>
+            <if test="queryParam.param.getUid != null and queryParam.param.getUid !='' ">and msg.get_uid = #{queryParam.param.getUid}</if>
+            <if test="queryParam.param.getName != null ">and msg.get_name like
+                CONCAT('%',#{queryParam.param.getName},'%')
+            </if>
+            <if test="queryParam.param.getMobile != null and queryParam.param.getMobile !='' ">and msg.get_mobile = #{queryParam.param.getMobile}</if>
+            <if test="queryParam.param.getSupplierNo != null and queryParam.param.getSupplierNo !=''">and msg.get_supplier_no = #{queryParam.param.getSupplierNo}</if>
+            <if test="queryParam.param.getSupplierName != null and queryParam.param.getSupplierName !=''">
+            and msg.get_supplier_name like CONCAT('%',#{queryParam.param.getSupplierName},'%')
+            </if>
+            <if test="queryParam.param.sendUid != null  and queryParam.param.sendUid !=''">and msg.send_uid = #{queryParam.param.sendUid}</if>
+            <if test="queryParam.param.sendName != null and queryParam.param.sendName !=''">and msg.send_name like
+                CONCAT('%',#{queryParam.param.sendName},'%')
+            </if>
+            <if test="queryParam.param.sendMobile != null  and queryParam.param.sendMobile !='' ">and msg.send_mobile = #{queryParam.param.sendMobile}</if>
+            <if test="queryParam.param.sendSupplierNo != null  and queryParam.param.sendSupplierNo !=''">and msg.send_supplier_no = #{queryParam.param.sendSupplierNo}</if>
+            <if test="queryParam.param.sendSupplierName != null  and queryParam.param.sendSupplierName !=''">and msg.send_supplier_name like
+                CONCAT('%',#{queryParam.param.sendSupplierName},'%')
+            </if>
+
+            <if test="queryParam.param.terminalType != null and queryParam.param.terminalType !=''">and msg.terminal_type = #{queryParam.param.terminalType}</if>
+
+            <if test="queryParam.param.receiverSubjectCode != null  and queryParam.param.receiverSubjectCode !=''  ">and msg.receiver_subject_code = #{queryParam.param.receiverSubjectCode}</if>
+            <if test="queryParam.param.operStatus != null and queryParam.param.operStatus !=''   ">and msg.oper_status = #{queryParam.param.operStatus}</if>
+            <if test="queryParam.param.isRead != null   and queryParam.param.isRead !=''  ">and msg.is_read = #{queryParam.param.isRead}</if>
+            <if test="queryParam.param.msgType != null and queryParam.param.msgType !=''   ">and t.msg_type = #{queryParam.param.msgType}</if>
+            <if test="queryParam.param.msgTitle != null and queryParam.param.msgTitle !=''   ">and msg.msg_title like
+                CONCAT('%',#{queryParam.param.msgTitle},'%')
+            </if>
+            <if test="queryParam.searchValue != null and queryParam.searchValue != '' ">
+                and (
+                        msg.send_supplier_name like
+                        CONCAT('%',#{queryParam.searchValue},'%')
+                or
+                        msg.msg_title like
+                        CONCAT('%',#{queryParam.searchValue},'%')
+                or
+                        msg.msg_value like
+                        CONCAT('%',#{queryParam.searchValue},'%')
+                )
+            </if>
+        </where>
+
+        <choose>
+            <when test="queryParam.param.msgType != '1' ">
+                order by msg.add_time
+            </when>
+            <when test="queryParam.param.msgType != '0'">
+                order by field(msg.is_read,0,1),msg.add_time
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+
+
+        desc
+    </select>
+
+
+
+    <select id="selectMsgOnce" resultMap="BaseResultMapVo">
+        SELECT
+        *
+        FROM
+        zc_information_msg msg
+
+        <where>1=1 and msg.is_deleted = 0 and (is_read = 0 and oper_status = 0)
+            <if test="tag != null ">and msg.tag = #{tag}</if>
+            <if test="getUid != null ">and msg.get_uid = #{getUid}</if>
+            <if test="sendUid != null ">and msg.send_uid = #{sendUid}</if>
+            <if test="terminalType != null ">and msg.terminal_type = #{terminalType}</if>
+
+        </where>
+
+    </select>
+
+</mapper>

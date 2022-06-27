@@ -1,0 +1,1 @@
+INSERT INTO `ss_tenant_org_manager_record` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `code`, `enabled`, `manager_type`, `mobile`, `user_id`, `name`) VALUES (28, b'0', 1, '2022-01-24 10:40:18.798000', 1, '2022-01-24 10:40:18.798000', 'xiezuozuzhiguanliyuan2720', b'1', 'ORG', '15920483336', 751, '协作组织管理员');

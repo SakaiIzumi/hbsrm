@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.contract.mapper.ContractMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.contract.entity.Contract">
+        <id column="id" property="id" />
+        <result column="supplier_code" property="supplierCode" />
+        <result column="supplier_name" property="supplierName" />
+        <result column="customer_code" property="customerCode" />
+        <result column="customer_name" property="customerName" />
+        <result column="contract_type_id" property="contractTypeId" />
+        <result column="contract_type_name" property="contractTypeName" />
+        <result column="contract_code" property="contractCode" />
+        <result column="contract_title" property="contractTitle" />
+        <result column="signed_time" property="signedTime" />
+        <result column="tax_included_amount" property="taxIncludedAmount" />
+        <result column="excluding_tax_amount" property="excludingTaxAmount" />
+        <result column="necessary" property="necessary" />
+        <result column="valid_period_type" property="validPeriodType" />
+        <result column="expiry_date" property="expiryDate" />
+        <result column="contract_status_code" property="contractStatusCode" />
+        <result column="contract_status_name" property="contractStatusName" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_by_name" property="createdByName" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="operator_by_name" property="operatorByName" />
+        <result column="operator_by_id" property="operatorById" />
+        <result column="org_id" property="orgId" />
+    </resultMap>
+
+    <sql id="whereCondition">
+        <where>
+            1=1 and contract.is_deleted = 0
+            <if test="queryParam.param !=null">
+                <if test="queryParam.param.supplierCode != null  and queryParam.param.supplierCode !='' ">
+                    and
+                    (
+                    contract.supplier_code like CONCAT('%',#{queryParam.param.supplierCode},'%')
+                    or
+                    contract.supplier_name like CONCAT('%',#{queryParam.param.supplierCode},'%')
+                    )
+                </if>
+                <!--orgId过滤-->
+                <if test="queryParam.param.orgId != null  and queryParam.param.orgId !='' ">
+                    and contract.org_id = #{queryParam.param.orgId}
+                </if>
+                <if test="queryParam.param.customerCode != null  and queryParam.param.customerCode !=''  ">
+                    and
+                    (
+                    contract.customer_code like CONCAT('%',#{queryParam.param.customerCode},'%')
+                    or
+                    contract.customer_name like CONCAT('%',#{queryParam.param.customerCode},'%')
+                    )
+                </if>
+                <if test="queryParam.param.supplierName != null and queryParam.param.supplierName !=''   ">
+                    and
+                    (
+                    contract.supplier_code like CONCAT('%',#{queryParam.param.supplierName},'%')
+                    or
+                    contract.supplier_name like CONCAT('%',#{queryParam.param.supplierName},'%')
+                    )
+                </if>
+                <if test="queryParam.param.customerName != null  and queryParam.param.customerName !='' ">
+                    and
+                    (
+                    contract.customer_code like CONCAT('%',#{queryParam.param.customerName},'%')
+                    or
+                    contract.customer_name like CONCAT('%',#{queryParam.param.customerName},'%')
+                    )
+                </if>
+                <if test="queryParam.param.contractStatusCode != null  and queryParam.param.contractStatusCode !='' ">
+                    and contract.contract_status_code = #{queryParam.param.contractStatusCode}
+                    <!--and contract.contract_status_code like CONCAT('%',#{queryParam.param.contractStatusCode},'%')-->
+                </if>
+                <if test="queryParam.param.processNumber != null  and queryParam.param.processNumber !='' ">
+                    and contract.process_number = #{queryParam.param.processNumber}
+                    <!--and contract.contract_status_code like CONCAT('%',#{queryParam.param.contractStatusCode},'%')-->
+                </if>
+                <if test="queryParam.param.tabCategory != null  and queryParam.param.tabCategory !='' ">
+                    and contract.contract_status_code = #{queryParam.param.tabCategory}
+                    <!--and contract.contract_status_code like CONCAT('%',#{queryParam.param.contractStatusCode},'%')-->
+                </if>
+
+                <!--合同状态字段待定-->
+
+
+                <if test="queryParam.param.taxIncludedAmountMin !=null and queryParam.param.taxIncludedAmountMin !='' and queryParam.param.taxIncludedAmountMax !=null and queryParam.param.taxIncludedAmountMax !=''">
+                    and contract.tax_included_amount between #{queryParam.param.taxIncludedAmountMin} and #{queryParam.param.taxIncludedAmountMax}
+                </if>
+                <if test="queryParam.param.excludingTaxAmountMin !=null and queryParam.param.excludingTaxAmountMin !='' and queryParam.param.excludingTaxAmountMax !=null and queryParam.param.excludingTaxAmountMax !=''">
+                    and contract.excluding_tax_amount between #{queryParam.param.excludingTaxAmountMin} and #{queryParam.param.excludingTaxAmountMax}
+                </if>
+                <if test="queryParam.param.orgId !=null and queryParam.param.orgId !='' ">
+                    and contract.org_id = #{queryParam.param.orgId}
+                </if>
+                <!--<if test="queryParam.param.contractStatusCode != null  ">
+                    and contract.contract_status_code like CONCAT('%',#{queryParam.param.contractStatusCode},'%')
+                </if>-->
+            </if>
+            <if test="queryParam.searchValue != null and queryParam.searchValue !='' ">
+                and (
+                contract.supplier_code like CONCAT('%',#{queryParam.searchValue},'%')
+                OR contract.supplier_name like CONCAT('%',#{queryParam.searchValue},'%')
+                OR contract.contract_code like CONCAT('%',#{queryParam.searchValue},'%')
+                OR contract.contract_title like CONCAT('%',#{queryParam.searchValue},'%')
+                OR contract.process_number like CONCAT('%',#{queryParam.searchValue},'%')
+                )
+            </if>
+            order by contract.created_date desc
+        </where>
+    </sql>
+
+
+    <select id="selectListPage" resultType="net.bncloud.contract.entity.Contract">
+        select * from
+    t_purchase_contract contract
+        <include refid="whereCondition"></include>
+    </select>
+    <select id="getByContractCode" resultType="net.bncloud.contract.entity.Contract">
+        select * from
+        t_purchase_contract
+        where request_id = #{requestId}
+    </select>
+
+
+</mapper>

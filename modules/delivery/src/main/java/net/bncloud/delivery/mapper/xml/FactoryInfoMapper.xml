@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.FactoryInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.vo.FactoryInfoVo">
+        <id column="id" property="id"/>
+        <result column="number" property="number"/>
+        <result column="name" property="name"/>
+        <result column="area" property="area"/>
+        <result column="detailed_address" property="detailedAddress"/>
+        <result column="address_longitude_latitude" property="addressLongitudeLatitude"/>
+        <result column="belong_code" property="belongCode"/>
+        <result column="belong_name" property="belongName"/>
+        <result column="belong_type" property="belongType"/>
+        <result column="type" property="type"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="district" property="district"/>
+        <result column="street" property="street"/>
+    </resultMap>
+    <delete id="deleteAllByIds">
+        delete from t_factory_info
+        where id in
+        <foreach collection="ids" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+
+    </delete>
+
+    <select id="selectPlantListPage" resultMap="BaseResultMap">
+        select
+        tfi.id,
+        tfi.number,
+        tfi.name,
+        tfi.area,
+        tfi.detailed_address,
+        tfi.address_longitude_latitude,
+        tfi.belong_code,
+        tfi.belong_name,
+        tfi.belong_type,
+        tfi.type,
+        tfi.province,
+        tfi.city,
+        tfi.district,
+        tfi.street
+        from t_factory_info tfi
+        where tfi.is_deleted = 0
+        <if test="queryParam.searchValue !=null and queryParam.searchValue!=''">
+            and (
+            (tfi.number like concat('%',#{queryParam.searchValue},'%')) or
+            (tfi.name like concat('%',#{queryParam.searchValue},'%')) or
+<!--            (tfi.province like concat('%',#{queryParam.searchValue},'%')) or-->
+<!--            (tfi.city like concat('%',#{queryParam.searchValue},'%')) or-->
+<!--            (tfi.district like concat('%',#{queryParam.searchValue},'%')) or-->
+<!--            (tfi.street like concat('%',#{queryParam.searchValue},'%')) or-->
+            (tfi.belong_code like concat('%',#{queryParam.searchValue},'%')) or
+            (tfi.belong_name like concat('%',#{queryParam.searchValue},'%'))
+            )
+        </if>
+        <if test="queryParam.param !=null ">
+            <if test="queryParam.param.type != null and queryParam.param.type != ''">
+                and tfi.type = #{queryParam.param.type}
+            </if>
+            <if test="queryParam.param.belongType != null and queryParam.param.belongType != ''">
+                and tfi.belong_type like concat('%', #{queryParam.param.belongType}, '%')
+            </if>
+            <if test="queryParam.param.belongCode != null and queryParam.param.belongCode != ''">
+                and tfi.belong_code like concat('%', #{queryParam.param.belongCode}, '%')
+            </if>
+            <if test="queryParam.param.belongName != null and queryParam.param.belongName != ''">
+                and tfi.belong_name like concat('%', #{queryParam.param.belongName}, '%')
+            </if>
+            <if test="queryParam.param.number !=null and queryParam.param.number !=''">
+                and tfi.number like concat('%', #{queryParam.param.number}, '%')
+            </if>
+            <if test="queryParam.param.name !=null and queryParam.param.name !=''">
+                and tfi.name like concat('%', #{queryParam.param.name}, '%')
+            </if>
+        </if>
+
+     </select>
+
+
+ </mapper>

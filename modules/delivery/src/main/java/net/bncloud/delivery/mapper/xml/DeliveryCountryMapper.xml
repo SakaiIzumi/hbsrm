@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryCountryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryCountry">
+        <id column="id" property="id"/>
+        <result column="country_code" property="countryCode"/>
+        <result column="country_name" property="countryName"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_delivery_country
+        <where>1=1 and is_deleted = 0
+            <if test="queryParam.param.countryCode != null ">and country_code like
+                CONCAT('%',#{queryParam.param.countryCode},'%')
+            </if>
+            <if test="queryParam.param.countryName != null ">and country_name like
+                CONCAT('%',#{queryParam.param.countryName},'%')
+            </if>
+            <if test="queryParam.param.createdBy != null ">and created_by = #{queryParam.param.createdBy}</if>
+
+            <if test="queryParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{queryParam.param.lastModifiedBy}
+            </if>
+
+        </where>
+    </select>
+
+
+</mapper>

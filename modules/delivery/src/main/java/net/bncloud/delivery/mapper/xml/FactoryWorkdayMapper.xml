@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.FactoryWorkdayMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.FactoryWorkday">
+        <id column="id" property="id"/>
+        <result column="belong_type" property="belongType"/>
+        <result column="belong_code" property="belongCode"/>
+        <result column="belong_name" property="belongName"/>
+        <result column="week_start_num" property="weekStartNum"/>
+        <result column="week_end_num" property="weekEndNum"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="factory_name" property="factoryName"/>
+    </resultMap>
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_factory_workday
+        <where>1=1 and is_deleted = 0
+              <if test="pageParam.searchValue != null and pageParam.searchValue!= '' ">
+                  and factory_name like CONCAT('%',#{pageParam.searchValue},'%')
+            </if>
+
+             <if test="pageParam.param!=null">
+                 <if test="pageParam.param.belongType != null and pageParam.param.belongType != '' ">
+                     and belong_type = #{pageParam.param.belongType}
+                 </if>
+                 <if test="pageParam.param.belongCode != null and pageParam.param.belongCode != '' ">
+                     and belong_code = #{pageParam.param.belongCode}
+                 </if>
+
+             </if>
+         </where>
+
+     </select>
+
+
+    <delete id="deleteAllWorkDayFromFactoryId">
+        delete from t_factory_workday
+        where factory_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+    </delete>
+    <delete id="deleteAllByWorkdayIds">
+        delete from t_factory_workday
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+    </delete>
+
+    <select id="supplierPage" resultType="net.bncloud.delivery.vo.FactoryWorkdayVo">
+       select * from t_factory_workday
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null and pageParam.searchValue!= '' ">
+                and factory_name like CONCAT('%',#{pageParam.searchValue},'%')
+            </if>
+
+            <if test="pageParam.param!=null">
+               <!-- <if test="pageParam.param.belongType != null and pageParam.param.belongType != '' ">
+                    and belong_type = #{pageParam.param.belongType}
+                </if>-->
+                <if test="pageParam.param.belongCode != null and pageParam.param.belongCode != '' ">
+                    and belong_code = #{pageParam.param.belongCode}
+                </if>
+
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

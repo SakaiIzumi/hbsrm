@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.information.mapper.ZcInformationTagMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.information.entity.ZcInformationTag">
+        <id column="id" property="id" />
+        <result column="tag" property="tag" />
+        <result column="name" property="name" />
+        <result column="status" property="status" />
+        <result column="roles" property="roles" />
+        <result column="msg_id_prefix" property="msgIdPrefix" />
+        <result column="source" property="source" />
+        <result column="terminal_type" property="terminalType" />
+        <result column="pr_route" property="prRoute" />
+        <result column="dd_route" property="ddRoute" />
+        <result column="wx_template" property="wxTemplate" />
+        <result column="msg_template" property="msgTemplate" />
+        <result column="msg_type" property="msgType" />
+        <result column="system_type" property="systemType" />
+        <result column="msg_type" property="msgType" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="send_type" property="sendType" />
+        <result column="receiver_type" property="receiverType"/>
+
+    </resultMap>
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from zc_information_tag
+        <where> 1=1 and is_deleted = 0
+        <if test="queryParam.param.tag != null and queryParam.param.tag != '' ">and  tag like CONCAT('%',#{queryParam.param.tag},'%') </if>
+        <if test="queryParam.param.name != null and queryParam.param.name != ''">and  name like CONCAT('%',#{queryParam.param.name},'%') </if>
+        <if test="queryParam.param.status != null and queryParam.param.status != ''">and  status = #{queryParam.param.status} </if>
+        <if test="queryParam.param.roles != null and queryParam.param.roles != ''">and  roles like CONCAT('%',#{queryParam.param.roles},'%') </if>
+        <if test="queryParam.param.msgIdPrefix != null and queryParam.param.msgIdPrefix != ''">and  msg_id_prefix like CONCAT('%',#{queryParam.param.msgIdPrefix},'%') </if>
+        <if test="queryParam.param.source != null and queryParam.param.source != ''">and  source like CONCAT('%',#{queryParam.param.source},'%') </if>
+        <if test="queryParam.param.terminalType != null and queryParam.param.terminalType != ''">and  terminal_type like CONCAT('%',#{queryParam.param.terminalType},'%') </if>
+        <if test="queryParam.param.prRoute != null and queryParam.param.prRoute != ''">and  p_route like CONCAT('%',#{queryParam.param.prRoute},'%') </if>
+        <if test="queryParam.param.ddRoute != null and queryParam.param.ddRoute != ''">and  dd_route like CONCAT('%',#{queryParam.param.ddRoute},'%') </if>
+        <if test="queryParam.param.wxTemplate != null and queryParam.param.wxTemplate != ''">and  wx_template like CONCAT('%',#{queryParam.param.wxTemplate},'%') </if>
+        <if test="queryParam.param.msgTemplate != null and queryParam.param.msgTemplate != ''">and  msg_template like CONCAT('%',#{queryParam.param.msgTemplate},'%') </if>
+        <if test="queryParam.param.msgType != null and queryParam.param.msgType != ''">and  msg_type = #{queryParam.param.msgType} </if>
+        <if test="queryParam.param.receiverType != null and queryParam.param.receiverType != ''">and  receiver_type = #{queryParam.param.receiverType} </if>
+        <if test="queryParam.param.sendType != null and queryParam.param.sendType != ''">and  send_type = #{queryParam.param.sendType} </if>
+        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+          and  name like CONCAT('%',#{queryParam.searchValue},'%')
+        </if>
+        </where>
+        order by module_type asc
+    </select>
+</mapper>

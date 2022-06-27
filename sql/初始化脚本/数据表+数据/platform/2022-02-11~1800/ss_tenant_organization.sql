@@ -1,0 +1,1 @@
+INSERT INTO `ss_tenant_organization` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `description`, `name`, `org_type`, `company_id`, `root_dept_id`, `zlt_id`, `code`) VALUES (112, b'0', 751, '2022-01-24 12:07:08.073000', 751, '2022-01-24 12:07:08.073000', NULL, '美尚组织', 'INTERNAL', 2, NULL, NULL, NULL);

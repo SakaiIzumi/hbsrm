@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.financial.mapper.FinancialSettlementPoolMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.financial.entity.FinancialSettlementPool">
+        <id column="id" property="id"/>
+        <result column="bill_id" property="billId"/>
+        <result column="bill_no" property="billNo"/>
+        <result column="bill_type" property="billType"/>
+        <result column="customer_code" property="customerCode"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="amount" property="amount"/>
+        <result column="delivery_date" property="deliveryDate"/>
+        <result column="delivery_num" property="deliveryNum"/>
+        <result column="have_tax" property="haveTax"/>
+        <result column="tax_rate" property="taxRate"/>
+        <result column="confirm_time" property="confirmTime"/>
+        <result column="collaboration_code" property="collaborationCode"/>
+        <result column="statement_created" property="statementCreated"/>
+        <result column="erp_bill_id" property="erpBillId"/>
+        <result column="erp_bill_no" property="erpBillNo"/>
+        <result column="erp_bill_type" property="erpBillType"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_financial_settlement_pool
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                and (
+                (erp_bill_no like CONCAT('%',#{pageParam.searchValue},'%'))or
+                ( bill_no like CONCAT('%',#{pageParam.searchValue},'%'))
+                )
+            </if>
+            <if test="pageParam.param.supplierSearch != null ">
+                and (
+                supplier_code like CONCAT('%',#{pageParam.param.supplierSearch},'%')
+                or supplier_name like CONCAT('%',#{pageParam.param.supplierSearch},'%')
+                )
+            </if>
+            <if test="pageParam.param.customerSearch != null ">
+                and (
+                customer_code like CONCAT('%',#{pageParam.param.customerSearch},'%')
+                or customer_name like CONCAT('%',#{pageParam.param.customerSearch},'%')
+                )
+            </if>
+            <if test="pageParam.param.confirmTimeStart != null and pageParam.param.confirmTimeStart != '' ">
+                and confirm_time <![CDATA[  >= ]]> CONCAT(#{pageParam.param.confirmTimeStart},' 00:00:00')
+            </if>
+            <if test="pageParam.param.confirmTimeEnd != null and pageParam.param.confirmTimeEnd != '' ">
+                and confirm_time <![CDATA[ <= ]]>  CONCAT(#{pageParam.param.confirmTimeEnd},' 23:59:59')
+            </if>
+            <if test="pageParam.param.billNo != null ">
+                and bill_no like CONCAT('%',#{pageParam.param.billNo},'%')
+            </if>
+            <if test="pageParam.param.billType != null ">
+                and bill_type like CONCAT('%',#{pageParam.param.billType},'%')
+            </if>
+            <if test="pageParam.param.erpBillType != null ">
+                and erp_bill_type like CONCAT('%',#{pageParam.param.erpBillType},'%')
+            </if>
+            <if test="pageParam.param.customerCode != null ">
+                and customer_code like CONCAT('%',#{pageParam.param.customerCode},'%')
+            </if>
+            <if test="pageParam.param.customerName != null ">
+                and customer_name like CONCAT('%',#{pageParam.param.customerName},'%')
+            </if>
+            <if test="pageParam.param.supplierCode != null ">
+                and supplier_code like CONCAT('%',#{pageParam.param.supplierCode},'%')
+            </if>
+            <if test="pageParam.param.supplierName != null ">
+                and supplier_name like CONCAT('%',#{pageParam.param.supplierName},'%')
+            </if>
+            <if test="pageParam.param.amount != null ">
+                and amount = #{pageParam.param.amount}
+            </if>
+            <if test="pageParam.param.haveTax != null ">
+                and have_tax like CONCAT('%',#{pageParam.param.haveTax},'%')
+            </if>
+            <if test="pageParam.param.taxRate != null ">
+                and tax_rate = #{pageParam.param.taxRate}
+            </if>
+            <if test="pageParam.param.collaborationCode != null ">
+                and collaboration_code like CONCAT('%',#{pageParam.param.collaborationCode},'%')
+            </if>
+            <if test="pageParam.param.createdBy != null ">
+                and created_by = #{pageParam.param.createdBy}
+            </if>
+            <if test="pageParam.param.lastModifiedBy != null ">
+                and last_modified_by = #{pageParam.param.lastModifiedBy}
+            </if>
+
+            <if test="pageParam.param.statementCreated != null ">
+                and statement_created = #{pageParam.param.statementCreated}
+            </if>
+        </where>
+        order by created_date desc
+    </select>
+
+
+</mapper>

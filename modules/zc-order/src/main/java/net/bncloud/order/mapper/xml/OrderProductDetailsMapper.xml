@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.order.mapper.OrderProductDetailsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.order.entity.OrderProductDetails">
+        <id column="id" property="id" />
+        <result column="purchase_order_code" property="purchaseOrderCode" />
+        <result column="item_code" property="itemCode" />
+        <result column="product_code" property="productCode" />
+        <result column="product_name" property="productName" />
+        <result column="product_specs" property="productSpecs" />
+        <result column="take_over_department_name" property="takeOverDepartmentName" />
+        <result column="take_over_department_id" property="takeOverDepartmentId" />
+        <result column="take_over_warehouse" property="takeOverWarehouse" />
+        <result column="purchase_remarks" property="purchaseRemarks" />
+        <result column="delivery_time" property="deliveryTime" />
+        <result column="delivery_type" property="deliveryType" />
+        <result column="status" property="status" />
+        <result column="purchase_num" property="purchaseNum" />
+        <result column="purchase_unit" property="purchaseUnit" />
+        <result column="purchase_code" property="purchaseCode" />
+        <result column="send_num" property="sendNum" />
+        <result column="mark_down_num" property="markDownNum" />
+        <result column="unit_price" property="unitPrice" />
+        <result column="product_total_price" property="productTotalPrice" />
+        <result column="supplier_remarks" property="supplierRemarks" />
+        <result column="brand_remarks" property="brandRemarks" />
+        <result column="files" property="files" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+
+        <result column="tax_rate" property="taxRate" />
+        <result column="tax_price" property="taxPrice" />
+        <result column="tax_amount" property="taxAmount" />
+        <result column="change_code" property="changeCode" />
+        <result column="all_amount" property="allAmount" />
+    </resultMap>
+
+    <resultMap id="orderAsPlan" type="net.bncloud.order.vo.OrderAsPlanVo">
+        <id column="id" property="deliveryPlanDetailItemId"/>
+        <id column="id" property="id"/>
+        <id column="delivery_plan_id" property="deliveryPlanId"/>
+        <id column="delivery_plan_id" property="planDetailItemSourceId"/>
+        <result column="order_type" property="orderType"/>
+        <result column="plan_quantity" property="planQuantity"/>
+        <result column="plan_no" property="deliveryPlanNo"/>
+        <result column="product_code" property="productCode"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_specification" property="productSpecifications"/>
+        <result column="purchase_code" property="purchaseCode"/>
+        <result column="purchase_name" property="purchaseName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="bill_no" property="billNo"/>
+        <result column="delivery_date" property="deliveryDate"/>
+        <result column="plan_unit" property="planUnit"/>
+        <result column="delivery_address" property="deliveryAddress"/>
+        <result column="currency" property="currency"/>
+        <result column="warehouse" property="warehousing"/>
+        <result column="material_classification" property="materialClassification"/>
+        <result column="id" property="deliveryNoteId"/>
+        <result column="plan_source_id" property="planSourceId"/>
+        <result column="detail_plan_source_id" property="detailPlanSourceId"/>
+        <result column="purchaseOrderNo" property="purchaseOrderCode"/>
+        <result column="product_unit_price" property="productUnitPrice"/>
+        <result column="tax_unit_price" property="taxUnitPrice"/>
+        <result column="remaining_quantity" property="remainingQuantity"/>
+        <result column="merchant_code" property="merchantCode"/>
+    </resultMap>
+
+    <sql id="whereCondition">
+
+        <where>
+
+            1=1 and product.is_deleted = 0
+
+            <if test="pageParam.param.purchaseOrderCode != null and pageParam.param.purchaseOrderCode !='' ">
+                and product.purchase_order_code =#{pageParam.param.purchaseOrderCode}
+            </if>
+
+            <if test="pageParam.param.itemCode != null and pageParam.param.itemCode !='' ">
+                and product.item_code =#{pageParam.param.itemCode}
+            </if>
+
+            <if test="pageParam.param.productCode != null and pageParam.param.productCode !='' ">
+                and product.product_code =#{pageParam.param.productCode}
+            </if>
+
+            <if test="pageParam.param.productName != null and pageParam.param.productName !='' ">
+                and product.product_name =#{pageParam.param.productName}
+            </if>
+
+            <if test="pageParam.param.productSpecs != null ">
+                and  product.product_specs like CONCAT('%',#{pageParam.param.productSpecs},'%')
+            </if>
+            <if test="pageParam.param.takeOverDepartmentName != null ">
+                and  product.take_over_department_name like CONCAT('%',#{pageParam.param.takeOverDepartmentName},'%')
+            </if>
+            <if test="pageParam.param.takeOverDepartmentId != null ">
+                and  product.take_over_department_id = #{pageParam.param.takeOverDepartmentId}
+            </if>
+            <if test="pageParam.param.takeOverWarehouse != null ">
+                and  product.take_over_warehouse like CONCAT('%',#{pageParam.param.takeOverWarehouse},'%')
+            </if>
+            <if test="pageParam.param.purchaseRemarks != null ">
+                and  product.purchase_remarks like CONCAT('%',#{pageParam.param.purchaseRemarks},'%')
+            </if>
+
+            <if test="pageParam.param.deliveryType != null ">
+                and  product.delivery_type like CONCAT('%',#{pageParam.param.deliveryType},'%')
+            </if>
+            <if test="pageParam.param.status != null ">
+                and  product.status = #{pageParam.param.status}
+            </if>
+            <if test="pageParam.param.purchaseNum != null ">
+                and  product.purchase_num = #{pageParam.param.purchaseNum}
+            </if>
+            <if test="pageParam.param.purchaseUnit != null ">
+                and  product.purchase_unit like CONCAT('%',#{pageParam.param.purchaseUnit},'%')
+            </if>
+            <if test="pageParam.param.purchaseCode != null ">
+                and  product.purchase_code like CONCAT('%',#{pageParam.param.purchaseCode},'%')
+            </if>
+            <if test="pageParam.param.sendNum != null ">
+                and  product.send_num = #{pageParam.param.sendNum}
+            </if>
+            <if test="pageParam.param.markDownNum != null ">
+                and  product.mark_down_num = #{pageParam.param.markDownNum}
+            </if>
+            <if test="pageParam.param.unitPrice != null ">
+                and  product.unit_price = #{pageParam.param.unitPrice}
+            </if>
+            <if test="pageParam.param.productTotalPrice != null ">
+                and  product.product_total_price = #{pageParam.param.productTotalPrice}
+            </if>
+            <if test="pageParam.param.supplierRemarks != null ">
+                and  product.supplier_remarks like CONCAT('%',#{pageParam.param.supplierRemarks},'%')
+            </if>
+            <if test="pageParam.param.brandRemarks != null ">
+                and  product.brand_remarks like CONCAT('%',#{pageParam.param.brandRemarks},'%')
+            </if>
+            <if test="pageParam.param.files != null ">
+                and  product.files like CONCAT('%',#{pageParam.param.files},'%')
+            </if>
+            <if test="pageParam.param.createdBy != null ">
+                and  product.created_by = #{pageParam.param.createdBy}
+            </if>
+            <if test="pageParam.param.lastModifiedBy != null ">
+                and  product.last_modified_by = #{pageParam.param.lastModifiedBy}
+            </if>
+
+            <if test="pageParam.param.existChange">
+                and exists (
+                    select 1 from t_order_communicate_log log where product.purchase_order_code = log.purchase_order_code
+                    and product.id = log.order_product_details_id
+                    and log.type in('1','3')
+                )
+            </if>
+
+            <if test="pageParam.param.existDifference">
+                and exists (
+                    select 1 from t_order_communicate_log log where product.purchase_order_code = log.purchase_order_code
+                    and product.id = log.order_product_details_id
+                    and log.type = '2'
+                )
+            </if>
+
+        </where>
+
+        order by product.created_date desc
+    </sql>
+
+
+    <update id="addProductStock" >
+        UPDATE t_order_product_details
+        SET send_num =  #{sendNum}
+        WHERE id = #{communicateId}
+    </update>
+
+
+    <update id="subtractionProductStock" >
+        UPDATE t_order_product_details
+        SET send_num =  #{sendNum}
+        WHERE id = #{communicateId}
+    </update>
+
+
+
+    <select id="checkProductStock" resultType="double">
+        SELECT
+            t2.purchase_num-(t2.send_num + #{sendNum})
+        FROM
+            t_order t1,
+            t_order_product_details t2,
+            t_order_communicate_log t3
+        WHERE
+            1=1
+            and t1.purchase_order_code = t2.purchase_order_code
+            and t2.id = t3.order_product_details_id
+            and t3.id = #{communicateId}
+    </select>
+
+
+    <select id="checkProductStatus" resultType="int">
+SELECT
+	count( * )
+FROM
+	t_order t1,
+	t_order_product_details t2,
+	t_order_communicate_log t3
+WHERE
+	t1.order_status = 7
+	AND t1.purchase_order_code = t2.purchase_order_code
+	AND t2.id = t3.order_product_details_id
+	AND t3.`status` = 1
+	AND ( t3.take_over_status IS NULL OR t3.take_over_status != 3 )
+            and t3.id = #{communicateId}
+    </select>
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_order_product_details product
+        <include refid="whereCondition"/>
+    </select>
+
+    <select id="orderAsPlan" resultMap="orderAsPlan">
+        select
+            o.id as delivery_plan_id,
+            o.purchase_code,
+            o.purchase_name,
+            o.purchase_order_code as bill_no,
+            o.order_type,
+            o.order_no as purchaseOrderNo ,
+            o.currency ,
+            o.item_class as material_classification,
+            o.source_id as plan_source_id,
+            o.supplier_code,
+            o.supplier_name,
+            o.receiving_address as delivery_address,
+
+            od.id,
+            od.source_id as detail_plan_source_id,
+            od.merchant_code ,
+            od.mark_down_num as product_unit_price,
+            od.tax_price as tax_unit_price,
+            od.product_code,
+            od.product_name,
+            od.product_specs as product_specification,
+            od.purchase_num as plan_quantity,
+
+            od.delivery_time as delivery_date,
+            od.take_over_warehouse as warehouse,
+            od.plan_unit,
+            od.remaining_quantity,
+            od.delivery_quantity AS plan_quantity ,
+            od.mrp_status,
+            od.plan_no,
+            od.source_id as detail_plan_source_id
+
+        from t_order_product_details od   LEFT JOIN   t_order o
+        on  o.purchase_order_code = od.purchase_order_code
+        <where>
+            o.is_deleted=0 and od.is_deleted=0 <!--and p.org_id IS NOT NULL and pdi.remaining_quantity > 0-->
+            <!--当前登录的供应商是排程供应商 只可以查询属于自己的订单计划-->
+            <!--and product_code
+            in (
+                select material_code as product_code from bncloud_quotation.t_material_info where material_group_id
+                in (
+                     select material_erp_id
+                     from delivery.t_order_delivery_supplier ods
+                     where ods.supplier_code=#{queryParam.param.supplierCode}
+                   )
+            )-->
+
+            <if test="queryParam.param !=null">
+                <!--采购订单-->
+                <if test="queryParam.param.purchaseOrderCode !=null and queryParam.param.purchaseOrderCode !=''">
+                    and o.purchase_order_code like concat('%', #{queryParam.param.purchaseOrderCode}, '%')
+                </if>
+                <!--订单编号-->
+                <if test="queryParam.param.purchaseOrderNo !=null and queryParam.param.purchaseOrderNo !=''">
+                    and o.order_no like concat('%', #{queryParam.param.purchaseOrderNo}, '%')
+                </if>
+                <!--产品名称-->
+                <if test="queryParam.param.productName !=null and queryParam.param.productName !=''">
+                    and od.product_name like concat('%', #{queryParam.param.productName}, '%')
+                </if>
+                <!--产品编码-->
+                <if test="queryParam.param.purchaseCode !=null and queryParam.param.purchaseCode !=''">
+                    and o.purchase_code like concat('%', #{queryParam.param.purchaseCode}, '%')
+                </if>
+                <!--送货日期-->
+                <if test="queryParam.param.deliveryTimeStart !=null and queryParam.param.deliveryTimeStart !='' and queryParam.param.deliveryTimeEnd !=null and queryParam.param.deliveryTimeEnd !=''">
+                    and od.delivery_time between #{queryParam.param.deliveryTimeStart} and
+                    #{queryParam.param.deliveryTimeEnd}
+                </if>
+                <!--收货工厂-->
+                <if test="queryParam.param.warehouse !=null and queryParam.param.warehouse !='' ">
+                    and od.take_over_warehouse = #{queryParam.param.warehouse}
+                </if>
+            </if>
+
+            and od.product_code in
+            <foreach collection="productCodeList" open="(" close=")" separator="," item="code">
+                #{code}
+            </foreach>
+            <!--高级查询条件-->
+            <if test="queryParam.searchValue !=null and queryParam.searchValue !=''">
+                and (
+                (od.product_code like concat('%', #{queryParam.searchValue}, '%')) or
+                (od.product_name like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                (o.purchase_order_code like concat('%', #{queryParam.searchValue}, '%'))
+                )
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

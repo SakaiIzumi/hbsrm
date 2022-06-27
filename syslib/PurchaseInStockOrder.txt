@@ -1,0 +1,598 @@
+
+
+基本信息：FBillHead
+	 实体主键：FID 
+	 单据编号：FBillNo 
+	 单据状态：FDocumentStatus 
+	 收料组织：FStockOrgId  (必填项)
+	 入库日期：FDate  (必填项)
+	 单据类型：FBillTypeID  (必填项)
+	 货主类型：FOwnerTypeIdHead  (必填项)
+	 货主：FOwnerIdHead  (必填项)
+	 需求组织：FDemandOrgId 
+	 采购组织：FPurchaseOrgId  (必填项)
+	 供应商：FSupplierId  (必填项)
+	 库存组：FStockerGroupId 
+	 收料部门：FStockDeptId 
+	 仓管员：FStockerId 
+	 创建人：FCreatorId 
+	 创建日期：FCreateDate 
+	 最后修改人：FModifierId 
+	 最后修改日期：FModifyDate 
+	 审核人：FApproverId 
+	 作废日期：FCancelDate 
+	 送货单号：FDeliveryBill 
+	 提货单号：FTakeDeliveryBill 
+	 作废人：FCancellerId 
+	 审核日期：FApproveDate 
+	 作废状态：FCancelStatus 
+	 采购部门：FPurchaseDeptId 
+	 采购组：FPurchaserGroupId 
+	 采购员：FPurchaserId 
+	 供货方联系人(旧)：FSupplyContact 
+	 供货方：FSupplyId 
+	 结算方：FSettleId 
+	 收款方：FChargeId 
+	 业务类型：FBusinessType 
+	 供货方地址：FSupplyAddress 
+	 应付状态：FAPSTATUS 
+	 跨组织业务类型：FTransferBizType 
+	 对应组织：FCorrespondOrgId 
+	 组织间结算跨法人标识：FIsInterLegalPerson 
+	 序列号上传：FScanBox 
+	 创建日期偏移单位：FCDateOffsetUnit 
+	 创建日期偏移量：FCDateOffsetValue 
+	 拆单新单标识：FDisassemblyFlag 
+	 确认人：FConfirmerId 
+	 确认日期：FConfirmDate 
+	 确认状态：FConfirmStatus 
+	 供货方联系人：FProviderContactID 
+	 拆单类型：FSplitBillType 
+	 邮箱：FSupplyEMail 
+	 物料分类：F_MS_WLFL  (必填项)
+	 第三方单号：F_PAEZ_DSFDH 
+	 是否暂估价差：F_QH_ISPRICEGAPZG 
+	 是否可以生成凭证：F_QH_ISVOUCHER 
+	 PO与标准价差取值：F_QH_POANDSTDGAP 
+财务信息：FInStockFin 
+	 实体主键：FEntryId 
+	 付款组织：FPayOrgId 
+	 结算组织：FSettleOrgId  (必填项)
+	 结算币别：FSettleCurrId  (必填项)
+	 整单费用：FBillCost 
+	 税额：FBillTaxAmount 
+	 总成本：FBillCostAmount 
+	 价税合计：FBillAllAmount 
+	 结算方式：FSettleTypeId 
+	 汇率类型：FExchangeTypeId 
+	 付款条件：FPayConditionId 
+	 汇率：FExchangeRate 
+	 本位币：FLocalCurrId 
+	 税额(本位币)：FBillTaxAmount_LC 
+	 总成本(本位币)：FBilCostAmount_LC 
+	 价税合计(本位币)：FBillAllAmount_LC 
+	 折扣表：FDiscountListId 
+	 定价时点：FPriceTimePoint  (必填项)
+	 价目表：FPriceListId 
+	 金额(本位币)：FBillAmount_LC 
+	 金额：FBillAmount 
+	 含税：FIsIncludedTax 
+	 货主客户：FOwnerCustomerID 
+	 结算组织供应商：FSettleSupplierID 
+	 跨组织结算生成：FISGENFORIOS 
+	 价外税：FISPRICEEXCLUDETAX 
+	 先到票后入库：FISINVOICEARLIER 
+	 第三方来源：FTHIRDSRCTYPE 
+	 第三方单据ID：FTHIRDBILLID 
+	 第三方单据编号：FTHIRDBILLNO 
+	 整单折扣额：FAllDisCount 
+	 标准成本汇率：F_QH_STDCOSTRATE 
+	 标准成本版本：F_QH_COSTVERSION 
+明细信息：FInStockEntry 
+	 实体主键：FEntryID 
+	 物料编码：FMaterialId  (必填项)
+	 仓库：FStockId 
+	 生产日期：FProduceDate 
+	 备注：FNote 
+	 供应商批号：FSupplierLot 
+	 毛重：FGrossWeight 
+	 净重：FNetWeight 
+	 物料名称：FMaterialName 
+	 物料类别：FMaterialType 
+	 规格型号：FUOM 
+	 合同单号：FContractlNo 
+	 需求跟踪号：FReqTraceNo 
+	 应收数量：FMustQty 
+	 实收数量：FRealQty 
+	 数量（库存辅单位）：FAuxUnitQty 
+	 源单行内码：FSRCRowId 
+	 有效期至：FExpiryDate 
+	 免费：FIsFree 
+	 库存状态：FStockStatusId 
+	 BOM版本：FBOMId 
+	 含税单价：FTaxPrice 
+	 标准单价（原币）：FCostPrice 
+	 税率(%)：FEntryTaxRate 
+	 税额：FEntryTaxAmount 
+	 折扣率(%)：FDiscountRate 
+	 价格系数：FPriceCoefficient 
+	 计价数量：FPriceUnitQty 
+	 净价：FTaxNetPrice 
+	 标准成本（原币）：FEntryCostAmount 
+	 价税合计：FAllAmount 
+	 税额(本位币)：FTaxAmount_LC 
+	 标准成本(本位币)：FCostAmount_LC 
+	 价税合计(本位币)：FAllAmount_LC 
+	 入库库存更新标志：FStockFlag 
+	 基本单位单价：FBaseUnitPrice 
+	 库存单位：FUnitID  (必填项)
+	 基本单位：FBaseUnitID 
+	 库存基本数量：FBaseUnitQty 
+	 库存辅单位：FAuxUnitID 
+	 计价单位：FPriceUnitID  (必填项)
+	 关联数量(基本单位)：FBaseJoinQty 
+	 辅助属性：FAuxPropId 
+	 订单单号：FPOOrderNo 
+	 收货库存状态：FReceiveStockStatus 
+	 仓位：FStockLocId 
+	 保质期单位：FEXPUnit 
+	 保质期：FExpPeriod 
+	 源单类型：FSRCBILLTYPEID 
+	 源单编号：FSRCBillNo 
+	 保管者类型：FKeeperTypeId 
+	 保管者：FKeeperID 
+	 已开票数量：FINVOICEDQTY 
+	 关联应付数量（计价基本）：FBaseAPJoinQty 
+	 收货库存更新标志：FReceiveStockFlag 
+	 标准加工费：FProcessFee 
+	 标准材料成本：FMaterialCosts 
+	 货主类型：FOWNERTYPEID  (必填项)
+	 货主：FOWNERID  (必填项)
+	 已钩稽数量：FJOINEDQTY 
+	 未钩稽数量：FUNJOINQTY 
+	 已钩稽金额：FJOINEDAMOUNT 
+	 未钩稽金额：FUNJOINAMOUNT 
+	 完全钩稽：FFULLYJOINED 
+	 行钩稽状态：FJOINSTATUS 
+	 在架寿命期：FShelfLife 
+	 批号：FLot 
+	 收货货主类型：FReceiveOwnerTypeId 
+	 收货货主：FReceiveOwnerId 
+	 税组合：FTaxCombination 
+	 单价：FPrice 
+	 系统定价：FSysPrice 
+	 价格上限：FUpPrice 
+	 价格下限：FDownPrice 
+	 金额：FAmount 
+	 金额（本位币）：FAmount_LC 
+	 折扣额：FDiscount 
+	 退料关联数量(库存基本)：FBaseReturnJoinQty 
+	 退料关联数量：FReturnJoinQty 
+	 业务流程：FBFLowId 
+	 收货批号：FReceiveLot 
+	 收货仓库：FReceiveStockID 
+	 收货仓位：FReceiveStockLocId 
+	 收货辅助属性：FReceiveAuxPropId 
+	 计划跟踪号：FMtoNo 
+	 项目编号：FProjectNo 
+	 是否赠品：FGiveAway 
+	 序列号单位：FSNUnitID 
+	 序列号单位数量：FSNQty 
+	 辅助单位退料关联数量：FSECRETURNJOINQTY 
+	 样本破坏数量(计价单位)：FSampleDamageQty 
+	 样本破坏数量（计价基本）：FSampleDamageBaseQty 
+	 来料检验：FCheckInComing 
+	 收料更新库存：FIsReceiveUpdateStock 
+	 开票结束状态：FInvoicedStatus 
+	 已开票关联数量：FInvoicedJoinQty 
+	 辅单位：FExtAuxUnitId 
+	 实收数量(辅单位)：FExtAuxUnitQty 
+	 收货计划跟踪号：FReceiveMtoNo 
+	 入库类型：FWWInType 
+	 计价基本数量：FPriceBaseQty 
+	 定价单位：FSetPriceUnitID 
+	 采购单位：FRemainInStockUnitId  (必填项)
+	 采购数量：FRemainInStockQty 
+	 采购基本数量：FRemainInStockBaseQty 
+	 立账关闭：FBILLINGCLOSE 
+	 采购基本分子：FPURBASENUM 
+	 库存基本分母：FStockBaseDen 
+	 携带的主业务单位：FSRCBIZUNITID 
+	 退料关联数量(采购基本)：FRETURNSTOCKJNBASEQTY 
+	 关联应付数量（库存基本)：FStockBaseAPJoinQty 
+	 标准单价(本位币)：FCOSTPRICE_LC 
+	 采购订单分录内码：FPOORDERENTRYID 
+	 分录价目表：FPriceListEntry 
+	 未关联应付数量（计价单位）：FAPNotJoinQty 
+	 关联应付金额：FAPJoinAmount 
+	 应付关闭状态：FPayableCloseStatus 
+	 应付关闭日期：FPAYABLECLOSEDATE 
+	 拆单数量（计价）：FDisPriceQty 
+	 拆单前原计价数量：FBeforeDisPriceQty 
+	 收料辅序子单据体内码：FRECSUBENTRYID 
+	 产品类型：FRowType 
+	 父项产品：FParentMatId 
+	 行标识：FRowId 
+	 父行标识：FParentRowId 
+	 第三方单据分录ID：FTHIRDENTRYID 
+	 标准加工费(本位币)：FProcessFee_LC 
+	 标准材料成本(本位币)：FMaterialCosts_LC 
+	 单价折扣：FPriceDiscount 
+	 价目表分录id：FPriLstEntryId 
+	 零售条形码：FCMKBarCode 
+	 配货数量(基本单位)：FAllotBaseQty 
+	 是否扫描：FIsScanEntry 
+	 消耗汇总数量：FConsumeSumQty 
+	 消耗汇总基本单位数量：FBaseConsumeSumQty 
+	 不良品折让金额：FRejectsDiscountAmount 
+	 尾差处理标识：FTailDiffFlag 
+	 价税合计（折前）：FAllAmountExceptDisCount 
+	 是否有标准单价：F_QH_ISSTDCOST 
+	 单价差异（原币）：F_QH_ORIPRICEGAP 
+	 单价差异（本位币）：F_QH_PriceGap 
+	 成本差异（原币）：F_QH_ORIAmountGap 
+	 成本差异（本位币）：F_QH_AmountGap 
+	 成本差异-价格（本位币）：F_QH_AmountGap_Price 
+	 成本差异-汇率（本位币）：F_QH_AmountGap_rate 
+	 存货类别：F_QH_INVCATEGORY 
+	 凭证生成检查日志：F_QH_CHECKVOURCHERLOG 
+	 凭证生成检查结果：F_QH_CHECKVOURCHERTYPE 
+	 订单汇率：F_QH_POEXCHANGERATE 
+	 供应商订单号：F_QH_SUPPLYNO 
+	 标准材料单价（本位币）：F_QH_STDPRICE_MATERIAL 
+	 标准加工费单价（本位币）：F_QH_STDPRICE_PROCESS 
+	 成本调整差异：F_QH_STDAMOUNTADJ_GAP 
+	 结转差异：F_QH_GAPCOST 
+	 实际成本：F_QH_ACTCOST 
+采购成本明细：FEntryPruCost 
+	 实体主键：FDetailID 
+	 标准成本-原币：FCostAmount 
+	 备注：FCostNOTE 
+	 费用代码：FCostId 
+	 费用名称：FCostName 
+	 标准成本-本位币：F_QH_Amount_STD 
+	 标准单价-原币：F_QH_Price_STDORI 
+	 标准单价-本位币：F_QH_Price_STD 
+	 成本项目代码：F_QH_COSTITEM 
+	 成本项目名称：F_QH_COSTITEMNAME_C 
+	 费用类型：F_QH_EXPTYPE 
+税务明细：FTaxDetailSubEntity 
+	 实体主键：FDetailID 
+	 税率名称：FTaxRateId 
+	 税率%：FTaxRate 
+	 税额：FTaxAmount 
+	 计入成本比例%：FCostPercent 
+	 计入成本金额：FTaxCostAmount 
+	 增值税：FVAT 
+	 卖方代扣代缴：FSellerWithholding 
+	 买方代扣代缴：FBuyerWithholding 
+序列号子单据体：FSerialSubEntity 
+	 实体主键：FDetailID 
+	 序列号：FSerialNo 
+	 序列号：FSerialId 
+	 备注：FSerialNote 
+	 SN：FSN 
+	 IMEI1：FIMEI1 
+	 IMEI2：FIMEI2 
+	 MEID：FMEID 
+标准成本明细：F_QH_INSTOCK_STD 
+	 实体主键：FDetailID 
+	 费用项目编码：F_QH_EXPITEMID 
+	 费用项目名称：F_QH_EXPITEMNAME 
+	 成本项目代码：F_QH_COSTITEMID 
+	 成本项目名称：F_QH_COSTITEMNAME 
+	 费用类型：F_QH_EXPTYPEID 
+	 标准单价（本位币）：F_QH_STDPRICE_STD 
+	 标准成本（本位币）：F_QH_STDAMOUNT_STD 
+	 标准单价（原币）：F_QH_STDPRICE_ORI 
+	 标准成本（原币）：F_QH_STDAMOUNT_ORI 
+	 会计核算体系：F_QH_ACCTSYSTEMID 
+	 物料代码：F_QH_MATERIALID 
+差异结转：F_BCS_SubEntity 
+	 实体主键：FDetailID 
+	 差异类型代码：F_QH_GAPID 
+	 差异类型名称：F_QH_GAPNAME 
+	 差异结转金额：F_QH_GAPCOST_D 
+	 差异结转单价：F_QH_GAPPRICE_D 
+关联关系表：FInStockEntry_Link 
+	 实体主键：FLinkId 
+	 业务流程图：FInStockEntry_Link_FFlowId 
+	 推进路线：FInStockEntry_Link_FFlowLineId 
+	 转换规则：FInStockEntry_Link_FRuleId 
+	 源单表内码：FInStockEntry_Link_FSTableId 
+	 源单表：FInStockEntry_Link_FSTableName 
+	 源单内码：FInStockEntry_Link_FSBillId 
+	 源单分录内码：FInStockEntry_Link_FSId 
+	 原始携带量：FInStockEntry_Link_FRemainInStockBaseQtyOld 
+	 修改携带量：FInStockEntry_Link_FRemainInStockBaseQty 
+	 原始携带量：FInStockEntry_Link_FBaseUnitQtyOld 
+	 修改携带量：FInStockEntry_Link_FBaseUnitQty 
+	 迁移图：FInStockEntry_Link_FLnk1TrackerId 
+	 上游状态：FInStockEntry_Link_FLnk1SState 
+	 数量FLnk1：FInStockEntry_Link_FLnk1Amount 
+	 迁移图：FInStockEntry_Link_FLnkTrackerId 
+	 上游状态：FInStockEntry_Link_FLnkSState 
+	 数量FLnk：FInStockEntry_Link_FLnkAmount 
+	 迁移图：FInStockEntry_Link_FLnk2TrackerId 
+	 上游状态：FInStockEntry_Link_FLnk2SState 
+	 数量FLnk2：FInStockEntry_Link_FLnk2Amount 
+
+备注：错误代码MsgCode说明
+           0：默认
+           1：上下文丢失
+           2：没有权限
+           3：操作标识为空
+           4：异常
+           5：单据标识为空
+           6：数据库操作失败
+           7：许可错误
+           8：参数错误
+           9：指定字段/值不存在
+           10：未找到对应数据
+           11：验证失败
+           12：不可操作
+           13：网控冲突
+
+
+{
+    "FID": 0,
+    "FBillTypeID": {
+        "FNUMBER": ""
+    },
+    "FBillNo": "",
+    "FDate": "1900-01-01",
+    "FStockOrgId": {
+        "FNumber": ""
+    },
+    "FStockDeptId": {
+        "FNumber": ""
+    },
+    "FStockerGroupId": {
+        "FNumber": ""
+    },
+    "FStockerId": {
+        "FNumber": ""
+    },
+    "FDemandOrgId": {
+        "FNumber": ""
+    },
+    "FCorrespondOrgId": {
+        "FNumber": ""
+    },
+    "FPurchaseOrgId": {
+        "FNumber": ""
+    },
+    "FPurchaseDeptId": {
+        "FNumber": ""
+    },
+    "FPurchaserGroupId": {
+        "FNumber": ""
+    },
+    "FPurchaserId": {
+        "FNumber": ""
+    },
+    "FSupplierId": {
+        "FNumber": ""
+    },
+    "FSupplyId": {
+        "FNumber": ""
+    },
+    "FSupplyAddress": "",
+    "FSettleId": {
+        "FNumber": ""
+    },
+    "FChargeId": {
+        "FNumber": ""
+    },
+    "FOwnerTypeIdHead": "",
+    "FOwnerIdHead": {
+        "FNumber": ""
+    },
+    "F_MS_WLFL": {
+        "FNumber": ""
+    },
+    "FConfirmerId": {
+        "FUserID": ""
+    },
+    "FConfirmDate": "1900-01-01",
+    "FScanBox": "",
+    "FCDateOffsetUnit": "",
+    "FCDateOffsetValue": 0,
+    "FProviderContactID": {
+        "FCONTACTNUMBER": ""
+    },
+    "FSplitBillType": "",
+    "F_QH_ISPRICEGAPZG": "false",
+    "FSupplyEMail": "",
+    "F_QH_ISVOUCHER": "false",
+    "F_QH_POANDSTDGAP": "",
+    "F_PAEZ_DSFDH": "",
+    "FInStockFin": {
+        "FEntryId": 0,
+        "FSettleOrgId": {
+            "FNumber": ""
+        },
+        "FSettleTypeId": {
+            "FNumber": ""
+        },
+        "FPayConditionId": {
+            "FNumber": ""
+        },
+        "FSettleCurrId": {
+            "FNumber": ""
+        },
+        "FIsIncludedTax": "false",
+        "FPriceTimePoint": "",
+        "FPriceListId": {
+            "FNumber": ""
+        },
+        "FDiscountListId": {
+            "FNumber": ""
+        },
+        "FLocalCurrId": {
+            "FNumber": ""
+        },
+        "FExchangeTypeId": {
+            "FNumber": ""
+        },
+        "F_QH_STDCOSTRATE": 0,
+        "FExchangeRate": 0,
+        "FISPRICEEXCLUDETAX": "false",
+        "F_QH_COSTVERSION": {
+            "FNUMBER": ""
+        },
+        "FAllDisCount": 0
+    },
+    "FInStockEntry": [
+        {
+            "FEntryID": 0,
+            "FRowType": "",
+            "FWWInType": "",
+            "FMaterialId": {
+                "FNumber": ""
+            },
+            "FAuxPropId": {},
+            "FUnitID": {
+                "FNumber": ""
+            },
+            "FParentMatId": {
+                "FNUMBER": ""
+            },
+            "FRealQty": 0,
+            "FPriceUnitID": {
+                "FNumber": ""
+            },
+            "FPrice": 0,
+            "FLot": {
+                "FNumber": ""
+            },
+            "FTaxCombination": {
+                "FNumber": ""
+            },
+            "FStockId": {
+                "FNumber": ""
+            },
+            "FDisPriceQty": 0,
+            "FStockLocId": {},
+            "FStockStatusId": {
+                "FNumber": ""
+            },
+            "FMtoNo": "",
+            "FGiveAway": "false",
+            "FNote": "",
+            "FProduceDate": "1900-01-01",
+            "FOWNERTYPEID": "",
+            "FExtAuxUnitId": {
+                "FNumber": ""
+            },
+            "FExtAuxUnitQty": 0,
+            "FCheckInComing": "false",
+            "FProjectNo": "",
+            "FIsReceiveUpdateStock": "false",
+            "FInvoicedJoinQty": 0,
+            "FPriceBaseQty": 0,
+            "FSetPriceUnitID": {
+                "FNumber": ""
+            },
+            "FRemainInStockUnitId": {
+                "FNumber": ""
+            },
+            "FBILLINGCLOSE": "false",
+            "FRemainInStockQty": 0,
+            "FAPNotJoinQty": 0,
+            "FRemainInStockBaseQty": 0,
+            "FTaxPrice": 0,
+            "FEntryTaxRate": 0,
+            "FDiscountRate": 0,
+            "FBOMId": {
+                "FNumber": ""
+            },
+            "FSupplierLot": "",
+            "FExpiryDate": "1900-01-01",
+            "FAuxUnitQty": 0,
+            "FCostPrice": 0,
+            "FOWNERID": {
+                "FNumber": ""
+            },
+            "F_QH_ISSTDCOST": "false",
+            "F_QH_ORIPRICEGAP": 0,
+            "F_QH_ORIAmountGap": 0,
+            "F_QH_PriceGap": 0,
+            "F_QH_AmountGap": 0,
+            "F_QH_AmountGap_Price": 0,
+            "F_QH_AmountGap_rate": 0,
+            "FBeforeDisPriceQty": 0,
+            "F_QH_CHECKVOURCHERLOG": "",
+            "FAllAmountExceptDisCount": 0,
+            "F_QH_CHECKVOURCHERTYPE": "",
+            "FPriceDiscount": 0,
+            "F_QH_POEXCHANGERATE": 0,
+            "F_QH_SUPPLYNO": "",
+            "F_QH_STDPRICE_MATERIAL": 0,
+            "FConsumeSumQty": 0,
+            "F_QH_STDPRICE_PROCESS": 0,
+            "FBaseConsumeSumQty": 0,
+            "F_QH_STDAMOUNTADJ_GAP": 0,
+            "F_QH_GAPCOST": 0,
+            "F_QH_ACTCOST": 0,
+            "FRejectsDiscountAmount": 0,
+            "FEntryPruCost": [
+                {
+                    "FDetailID": 0,
+                    "F_QH_Amount_STD": 0,
+                    "F_QH_Price_STDORI": 0,
+                    "F_QH_Price_STD": 0,
+                    "F_QH_COSTITEM": {
+                        "FNUMBER": ""
+                    },
+                    "F_QH_EXPTYPE": ""
+                }
+            ],
+            "FTaxDetailSubEntity": [
+                {
+                    "FDetailID": 0,
+                    "FTaxRate": 0
+                }
+            ],
+            "FSerialSubEntity": [
+                {
+                    "FDetailID": 0,
+                    "FSerialNo": "",
+                    "FSerialNote": ""
+                }
+            ],
+            "F_QH_INSTOCK_STD": [
+                {
+                    "FDetailID": 0,
+                    "F_QH_EXPITEMID": {
+                        "FNUMBER": ""
+                    },
+                    "F_QH_COSTITEMID": {
+                        "FNUMBER": ""
+                    },
+                    "F_QH_EXPTYPEID": "",
+                    "F_QH_STDPRICE_STD": 0,
+                    "F_QH_STDAMOUNT_STD": 0,
+                    "F_QH_STDPRICE_ORI": 0,
+                    "F_QH_STDAMOUNT_ORI": 0,
+                    "F_QH_ACCTSYSTEMID": {
+                        "FNUMBER": ""
+                    },
+                    "F_QH_MATERIALID": {
+                        "FNUMBER": ""
+                    }
+                }
+            ],
+            "F_BCS_SubEntity": [
+                {
+                    "FDetailID": 0,
+                    "F_QH_GAPID": {
+                        "FNUMBER": ""
+                    },
+                    "F_QH_GAPCOST_D": 0,
+                    "F_QH_GAPPRICE_D": 0
+                }
+            ]
+        }
+    ]
+}

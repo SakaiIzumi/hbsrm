@@ -1,0 +1,1 @@
+INSERT INTO `ss_tenant_org_record` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `org_id`, `org_name`, `org_manager_record_id`) VALUES (71, b'0', 751, '2022-01-24 12:07:08.099000', 751, '2022-01-24 12:07:08.099000', 112, '商网云组织', 28);

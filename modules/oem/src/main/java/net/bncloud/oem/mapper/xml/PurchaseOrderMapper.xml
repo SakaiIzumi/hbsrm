@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.oem.mapper.PurchaseOrderMapper">
+    <resultMap id="BaseResultMap" type="net.bncloud.oem.domain.entity.PurchaseOrder">
+        <!--@mbg.generated-->
+        <!--@Table t_oem_purchase_order-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="purchase_order_code" jdbcType="VARCHAR" property="purchaseOrderCode"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="purchase_code" jdbcType="VARCHAR" property="purchaseCode"/>
+        <result column="purchase_name" jdbcType="VARCHAR" property="purchaseName"/>
+        <result column="supplier_code" jdbcType="VARCHAR" property="supplierCode"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="oem_supplier_code" jdbcType="VARCHAR" property="oemSupplierCode"/>
+        <result column="oem_supplier_name" jdbcType="VARCHAR" property="oemSupplierName"/>
+        <result column="confirm_date" jdbcType="TIMESTAMP" property="confirmDate"/>
+        <result column="purchase_date" jdbcType="TIMESTAMP" property="purchaseDate"/>
+        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy"/>
+        <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate"/>
+        <result column="is_deleted" jdbcType="BIT" property="isDeleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, purchase_order_code, order_no, purchase_code, purchase_name, supplier_code, supplier_name,
+        oem_supplier_code, oem_supplier_name, confirm_date, purchase_date, created_by, created_date,
+        last_modified_by, last_modified_date, is_deleted
+    </sql>
+
+    <resultMap id="selectPageMap" type="net.bncloud.oem.domain.vo.PurchaseOrderVo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="purchase_order_code" jdbcType="VARCHAR" property="purchaseOrderCode"/>
+        <result column="purchase_code" jdbcType="VARCHAR" property="purchaseCode"/>
+        <result column="purchase_name" jdbcType="VARCHAR" property="purchaseName"/>
+    </resultMap>
+    <select id="selectPage" resultMap="selectPageMap">
+        select distinct topo.*
+        from t_oem_purchase_order topo
+                     left join t_oem_purchase_order_material topom on topo.id = topom.purchase_order_id
+                where topo.is_deleted = 0
+        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+            and (
+                    (topo.supplier_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.supplier_name like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.purchase_order_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_name like CONCAT('%', #{queryParam.searchValue}, '%'))
+                    )
+        </if>
+        <if test="queryParam.param != null">
+            <if test="queryParam.param.supplier != null and queryParam.param.supplier != ''">
+                and (
+                        (topo.supplier_code like CONCAT('%', #{queryParam.param.supplier}, '%')) or
+                        (topo.supplier_name like CONCAT('%', #{queryParam.param.supplier}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.oemSupplier != null and queryParam.param.oemSupplier != ''">
+                and (
+                        (topo.oem_supplier_code like CONCAT('%', #{queryParam.param.oemSupplier}, '%')) or
+                        (topo.oem_supplier_name like CONCAT('%', #{queryParam.param.oemSupplier}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.purchaseOrderCode != null and queryParam.param.purchaseOrderCode != ''">
+                and topo.purchase_order_code like CONCAT('%', #{queryParam.param.purchaseOrderCode}, '%')
+            </if>
+            <if test="queryParam.param.material != null and queryParam.param.material != ''">
+                and (
+                        (topom.material_code like CONCAT('%', #{queryParam.param.material}, '%')) or
+                        (topom.material_name like CONCAT('%', #{queryParam.param.material}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.takeOverStatus != null and queryParam.param.takeOverStatus != ''">
+                and topo.take_over_status = #{queryParam.param.takeOverStatus}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectToBeConfirmList" resultType="net.bncloud.oem.domain.vo.ToBeConfirmVo">
+        SELECT *,r.id as rid
+        FROM t_oem_purchase_order topo
+                     INNER JOIN t_oem_purchase_order_material topom ON topo.id = topom.purchase_order_id
+                     INNER JOIN t_oem_purchase_order_receiving r ON topom.id = r.purchase_order_material_id
+                WHERE topo.is_deleted = '0'
+                  AND r.STATUS = '0'
+                  AND topom.is_deleted = '0'
+                  AND r.is_deleted = '0'
+
+        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+            and (
+                    (topo.supplier_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.supplier_name like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.purchase_order_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_name like CONCAT('%', #{queryParam.searchValue}, '%'))
+                    )
+        </if>
+        <if test="queryParam.param != null">
+            <if test="queryParam.param.supplier != null and queryParam.param.supplier != ''">
+                and (
+                        (topo.supplier_code like CONCAT('%', #{queryParam.param.supplier}, '%')) or
+                        (topo.supplier_name like CONCAT('%', #{queryParam.param.supplier}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.oemSupplier != null and queryParam.param.oemSupplier != ''">
+                and (
+                        (topo.oem_supplier_code like CONCAT('%', #{queryParam.param.oemSupplier}, '%')) or
+                        (topo.oem_supplier_name like CONCAT('%', #{queryParam.param.oemSupplier}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.purchaseOrderCode != null and queryParam.param.purchaseOrderCode != ''">
+                and topo.purchase_order_code like CONCAT('%', #{queryParam.param.purchaseOrderCode}, '%')
+            </if>
+            <if test="queryParam.param.material != null and queryParam.param.material != ''">
+                and (
+                        (topom.material_code like CONCAT('%', #{queryParam.param.material}, '%')) or
+                        (topom.material_name like CONCAT('%', #{queryParam.param.material}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.takeOverStatus != null and queryParam.param.takeOverStatus != ''">
+                and topom.take_over_status = #{queryParam.param.takeOverStatus}
+            </if>
+        </if>
+    </select>
+
+    <!--被退回的收货-->
+    <resultMap id="selectReturnedReceiptPageMap" type="net.bncloud.oem.domain.vo.ReturnedReceiptsVo">
+        <result property="purchaseOrderId" column="purchaseOrderId"/>
+        <result property="materialId" column="materialId"/>
+        <result property="receivingId" column="receivingId"/>
+        <result property="purchaseCode" column="purchase_code"/>
+        <result property="purchaseName" column="purchase_name"/>
+        <result property="purchaseOrderCode" column="purchase_order_code"/>
+        <result property="materialCode" column="material_code"/>
+        <result property="materialName" column="material_name"/>
+        <result property="deliveryNoteNo" column="delivery_note_no"/>
+        <result property="manufactureBatchNo" column="manufacture_batch_no"/>
+        <result property="receiveBatchNo" column="receive_batch_no"/>
+        <result property="receiveQuantity" column="receive_quantity"/>
+        <result property="receiveDate" column="receive_date"/>
+        <result property="status" column="status"/>
+        <result property="oemSupplierRemark" column="oem_supplier_remark"/>
+        <result property="brandRemark" column="brand_remark"/>
+        <result property="remainingQuantity" column="remaining_quantity"/>
+    </resultMap>
+    <select id="selectReturnedReceiptPage" resultMap="selectReturnedReceiptPageMap">
+        select topo.id  as purchaseOrderId,
+               topom.id as materialId,
+               topor.id as receivingId,
+               topo.purchase_code,
+               topo.purchase_name,
+               topo.purchase_order_code,
+               topom.material_code,
+               topom.material_name,
+               topor.delivery_note_no,
+               topor.manufacture_batch_no,
+               topor.receive_batch_no,
+               topor.receive_quantity,
+               topor.receive_date,
+               topor.status,
+               topor.oem_supplier_remark,
+               topor.brand_remark,
+               topom.remaining_quantity
+         from t_oem_purchase_order_receiving topor
+         left join t_oem_purchase_order_material topom on topor.purchase_order_material_id = topom.id
+         left join t_oem_purchase_order topo on topom.purchase_order_id = topo.id
+         where topor.is_deleted = 0
+         and topor.status = '2'
+        and topo.oem_supplier_code like CONCAT('%', #{queryParam.param.oemSupplier}, '%')
+        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+            and (
+                    (topo.purchase_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.purchase_name like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.purchase_order_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_name like CONCAT('%', #{queryParam.searchValue}, '%'))
+                    )
+        </if>
+        <if test="queryParam.param != null">
+            <if test="queryParam.param.purchaser != null and queryParam.param.purchaser != ''">
+                and (
+                        (topo.purchase_code like CONCAT('%', #{queryParam.param.purchaser}, '%')) or
+                        (topo.purchase_name like CONCAT('%', #{queryParam.param.purchaser}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.purchaseOrderCode != null and queryParam.param.purchaseOrderCode != ''">
+                and topo.purchase_order_code like CONCAT('%', #{queryParam.param.purchaseOrderCode}, '%')
+            </if>
+            <if test="queryParam.param.material != null and queryParam.param.material != ''">
+                and (
+                        (topom.material_code like CONCAT('%', #{queryParam.param.material}, '%')) or
+                        (topom.material_name like CONCAT('%', #{queryParam.param.material}, '%'))
+                        )
+            </if>
+        </if>
+    </select>
+
+    <select id="getReturnedReceiptById" resultMap="selectReturnedReceiptPageMap">
+        select topo.id  as purchaseOrderId,
+               topom.id as materialId,
+               topor.id as receivingId,
+               topo.purchase_code,
+               topo.purchase_name,
+               topo.purchase_order_code,
+               topom.material_code,
+               topom.material_name,
+               topor.delivery_note_no,
+               topor.manufacture_batch_no,
+               topor.receive_batch_no,
+               topor.receive_quantity,
+               topor.receive_date,
+               topor.status,
+               topor.oem_supplier_remark,
+               topor.brand_remark
+        from t_oem_purchase_order_receiving topor
+                     left join t_oem_purchase_order_material topom on topor.purchase_order_material_id = topom.id
+                     left join t_oem_purchase_order topo on topom.purchase_order_id = topo.id
+                where topor.is_deleted = 0
+        <if test="id != null">
+            and topor.id = #{id}
+        </if>
+    </select>
+
+    <!--销售工作台的订单列表-->
+    <select id="selectOemSupplierPageList" resultMap="selectPageMap">
+        select distinct topo.*
+        from t_oem_purchase_order topo
+        left join t_oem_purchase_order_material topom on topo.id = topom.purchase_order_id
+        where topo.is_deleted = 0
+        and topo.oem_supplier_code like CONCAT('%', #{queryParam.param.oemSupplier}, '%')
+        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">
+            and (
+                    (topo.purchase_order_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topom.material_name like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.purchase_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                    (topo.purchase_name like CONCAT('%', #{queryParam.searchValue}, '%'))
+                    )
+        </if>
+        <if test="queryParam.param != null">
+            <if test="queryParam.param.purchaser != null and queryParam.param.purchaser != ''">
+                and (
+                        (topo.purchase_code like CONCAT('%', #{queryParam.param.purchaser}, '%')) or
+                        (topo.purchase_name like CONCAT('%', #{queryParam.param.purchaser}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.purchaseOrderCode != null and queryParam.param.purchaseOrderCode != ''">
+                and topo.purchase_order_code like CONCAT('%', #{queryParam.param.purchaseOrderCode}, '%')
+            </if>
+            <if test="queryParam.param.material != null and queryParam.param.material != ''">
+                and (
+                        (topom.material_code like CONCAT('%', #{queryParam.param.material}, '%')) or
+                        (topom.material_name like CONCAT('%', #{queryParam.param.material}, '%'))
+                        )
+            </if>
+            <if test="queryParam.param.takeOverStatus != null and queryParam.param.takeOverStatus != ''">
+                and topo.take_over_status = #{queryParam.param.takeOverStatus}
+            </if>
+        </if>
+    </select>
+</mapper>

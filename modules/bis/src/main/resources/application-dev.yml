@@ -1,0 +1,93 @@
+spring:
+  datasource:
+    dynamic:
+      # srm 数据源
+      primary: ms_oa #设置默认的数据源或者数据源组,默认值即为master
+      strict: true #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        # srm的数据库
+        bis:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://192.168.2.136:3306/bis?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          username: meishang
+          password: meishang@136
+        # 美尚 oa
+        ms_oa:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://192.168.2.136:3306/ecology?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          username: meishang
+          password: meishang@136
+        #......省略
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+  redis:
+    database: 0
+    host: 192.168.2.136
+    port: 6379
+    password: Aa931215
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: bis
+k3cloud:
+  lcId: 2052
+  password: "123321"
+  appId: "222301_Qfcrw7sJ1rm4x9xv6cxtSYwGTjRV2AOH"
+  serverUrl: "http://40.73.6.78:8099/k3cloud/"
+  acctId: "61b170a83a4984"
+  appSecret: "9baf91d1bd274c36976632e6d6c034b9"
+  userName: "SRM01"
+
+# xxl-job配置 -Dxxl.job.executor.ip=
+xxl:
+  job:
+    enable: true
+    admin:
+      addresses: http://192.168.2.136:7009/xxl-job-admin
+    executor:
+      appname: bis-test
+      address:
+      ip:
+      port: 10001
+#       是怎么配置日志的?
+      logpath: ./log/xxljob/${spring.application.name}
+#       执行器日志文件保存天数
+      logretentiondays: 15
+    accessToken:
+
+oa:
+  domain: http://oa-test.meishangcorp.com
+  proxy-server:
+    ip: 8.134.67.40
+    port: 3328
+
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  # 连接超时 2s
+  ConnectTimeout: 2000
+  # 读取超时 60s
+  ReadTimeout: 50000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            # 10s
+            timeoutInMilliseconds: 10000
+# 应用配置
+application:
+  schedulingTask:
+    taskDefaultSyncDateTimeMap:
+      orderSyncErpTask: "2022-01-01 00:00:00"
+      deliveryPlanSyncErpTask: "2022-01-01 00:00:00"
+      purchaseInStockOrderSyncErpTask: "2022-01-01 00:00:00"
+      syncMaterialInfoDateKey: "1980-01-01 00:00:00"
+      settlementPoolSyncErpTask: "2022-01-01 00:00:00"
+      contractDataSyncErpTask: "2022-01-01 00:00:00"
+

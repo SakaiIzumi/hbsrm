@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.financial.mapper.FinancialStatementMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.financial.entity.FinancialStatement">
+        <id column="id" property="id"/>
+        <result column="org_id" property="orgId"/>
+        <result column="org_name" property="orgName"/>
+        <result column="customer_code" property="customerCode"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="statement_no" property="statementNo"/>
+        <result column="audit_name" property="auditName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="taxpayer_id" property="taxpayerId"/>
+        <result column="bank_account" property="bankAccount"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="created_name" property="createdName"/>
+        <result column="bank_name" property="bankName"/>
+        <result column="period_start" property="periodStart"/>
+        <result column="period_end" property="periodEnd"/>
+        <result column="currency_code" property="currencyCode"/>
+        <result column="currency_name" property="currencyName"/>
+        <result column="payment_terms" property="paymentTerms"/>
+        <result column="account_due_date" property="accountDueDate"/>
+        <result column="pay_method_code" property="payMethodCode"/>
+        <result column="pay_method_name" property="payMethodName"/>
+        <result column="statement_status" property="statementStatus"/>
+        <result column="customer_marks" property="customerMarks"/>
+        <result column="supplier_marks" property="supplierMarks"/>
+        <result column="shipment_including_tax" property="shipmentIncludingTax"/>
+        <result column="shipment_not_tax" property="shipmentNotTax"/>
+        <result column="shipment_tax_amount" property="shipmentTaxAmount"/>
+        <result column="cost_including_tax" property="costIncludingTax"/>
+        <result column="cost_not_including_tax" property="costNotIncludingTax"/>
+        <result column="cost_tax_amount" property="costTaxAmount"/>
+        <result column="statement_including_tax" property="statementIncludingTax"/>
+        <result column="statement_not_tax" property="statementNotTax"/>
+        <result column="statement_tax_amount" property="statementTaxAmount"/>
+        <result column="check_shipment_amount" property="checkShipmentAmount"/>
+        <result column="check_cost_amount" property="checkCostAmount"/>
+        <result column="check_statement_including_tax" property="checkStatementIncludingTax"/>
+        <result column="check_statement_not_tax" property="checkStatementNotTax"/>
+        <result column="check_statement_tax_amount" property="checkStatementTaxAmount"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_financial_statement
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                and (
+                (supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                (supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                (customer_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                (customer_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                (statement_no like CONCAT('%',#{pageParam.searchValue},'%'))
+                )
+            </if>
+            <if test="pageParam.param.supplier != null">
+                and (
+                (supplier_name like CONCAT('%',#{pageParam.param.supplier},'%'))or
+                (supplier_code like CONCAT('%',#{pageParam.param.supplier},'%'))
+                )
+            </if>
+            <if test="pageParam.param.customer != null">
+                and (
+                (customer_code like CONCAT('%',#{pageParam.param.customer},'%'))or
+                (customer_name like CONCAT('%',#{pageParam.param.customer},'%'))
+                )
+            </if>
+            <if test="pageParam.param.orgId != null ">and org_id like CONCAT('%',#{pageParam.param.orgId},'%')</if>
+            <if test="pageParam.param.orgName != null ">and org_name like CONCAT('%',#{pageParam.param.orgName},'%')
+            </if>
+            <if test="pageParam.param.customerCode != null ">and customer_code like
+                CONCAT('%',#{pageParam.param.customerCode},'%')
+            </if>
+            <if test="pageParam.param.customerName != null ">and customer_name like
+                CONCAT('%',#{pageParam.param.customerName},'%')
+            </if>
+            <if test="pageParam.param.statementNo != null ">and statement_no like
+                CONCAT('%',#{pageParam.param.statementNo},'%')
+            </if>
+            <if test="pageParam.param.auditName != null ">and audit_name like
+                CONCAT('%',#{pageParam.param.auditName},'%')
+            </if>
+            <if test="pageParam.param.supplierCode != null ">and supplier_code like
+                CONCAT('%',#{pageParam.param.supplierCode},'%')
+            </if>
+            <if test="pageParam.param.supplierName != null ">and supplier_name like
+                CONCAT('%',#{pageParam.param.supplierName},'%')
+            </if>
+            <if test="pageParam.param.taxpayerId != null ">and taxpayer_id like
+                CONCAT('%',#{pageParam.param.taxpayerId},'%')
+            </if>
+            <if test="pageParam.param.bankAccount != null ">and bank_account like
+                CONCAT('%',#{pageParam.param.bankAccount},'%')
+            </if>
+            <if test="pageParam.param.createdName != null ">and created_name like
+                CONCAT('%',#{pageParam.param.createdName},'%')
+            </if>
+            <if test="pageParam.param.bankName != null ">and bank_name like
+                CONCAT('%',#{pageParam.param.bankName},'%')
+            </if>
+            <if test="pageParam.param.currencyCode != null ">and currency_code like
+                CONCAT('%',#{pageParam.param.currencyCode},'%')
+            </if>
+            <if test="pageParam.param.currencyName != null ">and currency_name like
+                CONCAT('%',#{pageParam.param.currencyName},'%')
+            </if>
+            <if test="pageParam.param.paymentTerms != null ">and payment_terms like
+                CONCAT('%',#{pageParam.param.paymentTerms},'%')
+            </if>
+            <if test="pageParam.param.payMethodCode != null ">and pay_method_code like
+                CONCAT('%',#{pageParam.param.payMethodCode},'%')
+            </if>
+            <if test="pageParam.param.payMethodName != null ">and pay_method_name like
+                CONCAT('%',#{pageParam.param.payMethodName},'%')
+            </if>
+            <if test="pageParam.param.sourceType != null ">and source_type like
+                CONCAT('%',#{pageParam.param.sourceType},'%')
+            </if>
+
+            <if test="pageParam.param.workBench != null and pageParam.param.workBench != '' and pageParam.param.workBench == 'supplier'">
+            and (source_type ='supplier' or (source_type = 'purchase' and statement_status not in('1')))
+            </if>
+            <if test="pageParam.param.workBench != null and pageParam.param.workBench != '' and pageParam.param.workBench == 'purchase'">
+                and (source_type ='purchase' or (source_type = 'supplier' and statement_status not in('1')))
+            </if>
+            <if test="pageParam.param.periodTimeStart != null and pageParam.param.periodTimeEnd != '' ">
+                and (
+                    period_start <![CDATA[  >= ]]> CONCAT(#{pageParam.param.periodTimeStart},' 00:00:00')
+                    or period_end <![CDATA[ <= ]]>  CONCAT(#{pageParam.param.periodTimeEnd},' 23:59:59')
+                )
+            </if>
+
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+            <if test="pageParam.param.statementStatusList !=null and pageParam.param.statementStatusList.size>0 ">
+                and statement_status in
+                <foreach collection="pageParam.param.statementStatusList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by created_date desc
+    </select>
+
+
+</mapper>

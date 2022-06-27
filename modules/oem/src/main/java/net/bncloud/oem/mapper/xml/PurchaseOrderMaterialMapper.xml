@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.oem.mapper.PurchaseOrderMaterialMapper">
+  <resultMap id="BaseResultMap" type="net.bncloud.oem.domain.entity.PurchaseOrderMaterial">
+    <!--@mbg.generated-->
+    <!--@Table t_oem_material-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="purchase_order_id" jdbcType="BIGINT" property="purchaseOrderId" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="delivery_date" jdbcType="TIMESTAMP" property="deliveryDate" />
+    <result column="delivery_type" jdbcType="VARCHAR" property="deliveryType" />
+    <result column="status" jdbcType="INTEGER" property="answerStatus" />
+    <result column="purchase_quantity" jdbcType="VARCHAR" property="purchaseQuantity" />
+    <result column="take_over_status" jdbcType="VARCHAR" property="takeOverStatus" />
+    <result column="created_by" jdbcType="BIGINT" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy" />
+    <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, purchase_order_id, material_code, material_name, delivery_date, delivery_type, 
+    `status`, purchase_quantity, take_over_status, created_by, created_date, last_modified_by, 
+    last_modified_date, is_deleted
+  </sql>
+</mapper>

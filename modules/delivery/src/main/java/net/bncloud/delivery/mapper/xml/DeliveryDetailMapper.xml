@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryDetail">
+        <id column="id" property="id"/>
+        <result column="delivery_id" property="deliveryId"/>
+        <result column="item_no" property="itemNo"/>
+        <result column="plan_no" property="planNo"/>
+        <result column="purchase_order_code" property="purchaseOrderCode"/>
+        <result column="product_code" property="productCode"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_specs" property="productSpecs"/>
+        <result column="plan_quantity" property="planQuantity"/>
+        <result column="real_delivery_quantity" property="realDeliveryQuantity"/>
+        <result column="bar_code" property="barCode"/>
+        <result column="batch_no" property="batchNo"/>
+        <result column="delivery_unit_code" property="deliveryUnitCode"/>
+        <result column="delivery_unit_name" property="deliveryUnitName"/>
+        <result column="receipt_quantity" property="receiptQuantity"/>
+        <result column="warehouse" property="warehouse"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="bill_no" property="billNo"/>
+        <result column="remaining_quantity" property="remainingQuantity"/>
+    </resultMap>
+    <update id="updateDetailErpId" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update t_delivery_detail
+            <set>
+                erp_id = #{item.erpId}
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_delivery_detail
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                -- and (
+                -- (t1.supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.purchase_order_code like CONCAT('%',#{pageParam.searchValue},'%'))
+                -- )
+            </if>
+            <if test="pageParam.param!=null">
+                <if test="pageParam.param.deliveryId != null ">
+                    and delivery_id = #{pageParam.param.deliveryId}
+                </if>
+                <if test="pageParam.param.billNo != null ">
+                    and bill_no = #{pageParam.param.billNo}
+                </if>
+
+                <if test="pageParam.param.itemNo != null ">and item_no = #{pageParam.param.itemNo}</if>
+                <if test="pageParam.param.planNo != null ">and plan_no like CONCAT('%',#{pageParam.param.planNo},'%')</if>
+                <if test="pageParam.param.purchaseOrderCode != null ">and purchase_order_code like
+                    CONCAT('%',#{pageParam.param.purchaseOrderCode},'%')
+                </if>
+                <if test="pageParam.param.productCode != null ">and product_code like
+                    CONCAT('%',#{pageParam.param.productCode},'%')
+                </if>
+                <if test="pageParam.param.productName != null ">and product_name like
+                    CONCAT('%',#{pageParam.param.productName},'%')
+                </if>
+                <if test="pageParam.param.productSpecs != null ">and product_specs like
+                    CONCAT('%',#{pageParam.param.productSpecs},'%')
+                </if>
+                <if test="pageParam.param.planQuantity != null ">and plan_quantity = #{pageParam.param.planQuantity}</if>
+                <if test="pageParam.param.realDeliveryQuantity != null ">and real_delivery_quantity =
+                    #{pageParam.param.realDeliveryQuantity}
+                </if>
+                <if test="pageParam.param.barCode != null ">and bar_code like CONCAT('%',#{pageParam.param.barCode},'%')
+                </if>
+                <if test="pageParam.param.batchNo != null ">and batch_no like CONCAT('%',#{pageParam.param.batchNo},'%')
+                </if>
+                <if test="pageParam.param.deliveryUnitCode != null ">and delivery_unit_code like
+                    CONCAT('%',#{pageParam.param.deliveryUnitCode},'%')
+                </if>
+                <if test="pageParam.param.deliveryUnitName != null ">and delivery_unit_name like
+                    CONCAT('%',#{pageParam.param.deliveryUnitName},'%')
+                </if>
+                <if test="pageParam.param.receiptQuantity != null ">and receipt_quantity =
+                    #{pageParam.param.receiptQuantity}
+                </if>
+                <if test="pageParam.param.warehouse != null ">and warehouse like
+                    CONCAT('%',#{pageParam.param.warehouse},'%')
+                </if>
+                <if test="pageParam.param.remark != null ">and remark like CONCAT('%',#{pageParam.param.remark},'%')</if>
+                <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+                <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                    #{pageParam.param.lastModifiedBy}
+                </if>
+
+            </if>
+
+
+
+        </where>
+
+    </select>
+    <select id="getDetailById" resultType="net.bncloud.delivery.entity.DeliveryDetail">
+        select * from t_delivery_detail
+        where id =#{id}
+    </select>
+    <select id="getMrpDetailById" resultType="net.bncloud.serivce.api.order.dto.OrderDetailDTO">
+        select * from order.t_order_product_details opd where opd.id =#{deliveryPlanDetailItemId}
+
+    </select>
+    <select id="queryInTransitQuantity" resultType="net.bncloud.delivery.vo.DeliveryDetailVo">
+        SELECT
+            dt.product_code,dt.real_delivery_quantity
+        FROM
+            t_delivery_detail dt
+                INNER JOIN t_delivery_note dn ON dt.delivery_id = dn.id and dn.supplier_code = #{supplierCode} and dn.customer_code = #{purchaseCode} and dn.erp_signing_status = 'not_signed' and dn.is_deleted = 0
+        WHERE
+            dt.is_deleted = 0
+          and
+            dt.product_code in <foreach collection="materialCodeSet" separator="," open="(" close=")" item="materialCode" >#{materialCode}</foreach>
+    </select>
+
+
+</mapper>

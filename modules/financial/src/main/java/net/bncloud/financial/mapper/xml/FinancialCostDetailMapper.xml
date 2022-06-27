@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.financial.mapper.FinancialCostDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.financial.entity.FinancialCostDetail">
+        <id column="id" property="id"/>
+        <result column="cost_bill_id" property="costBillId"/>
+        <result column="bill_no" property="billNo"/>
+        <result column="erp_bill_id" property="erpBillId"/>
+        <result column="erp_bill_no" property="erpBillNo"/>
+        <result column="item_no" property="itemNo"/>
+        <result column="check_tax_amount" property="checkTaxAmount"/>
+        <result column="cost_remark" property="costRemark"/>
+        <result column="statement_id" property="statementId"/>
+        <result column="document_type_code" property="documentTypeCode"/>
+        <result column="document_type_name" property="documentTypeName"/>
+        <result column="cost_amount" property="costAmount"/>
+        <result column="check_include_tax" property="checkIncludeTax"/>
+        <result column="check_not_tax_amount" property="checkNotTaxAmount"/>
+        <result column="customer_confirm" property="customerConfirm"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_financial_cost_detail
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                and (
+                (erp_bill_no like CONCAT('%',#{pageParam.searchValue},'%'))or
+                ( bill_no like CONCAT('%',#{pageParam.searchValue},'%'))
+                )
+            </if>
+            <if test="pageParam.param.statementId != null ">and statement_id = #{pageParam.param.statementId}</if>
+            <if test="pageParam.param.documentTypeCode != null ">and document_type_code like
+                CONCAT('%',#{pageParam.param.documentTypeCode},'%')
+            </if>
+            <if test="pageParam.param.documentTypeName != null ">and document_type_name like
+                CONCAT('%',#{pageParam.param.documentTypeName},'%')
+            </if>
+            <if test="pageParam.param.costAmount != null ">and cost_amount = #{pageParam.param.costAmount}
+            </if>
+            <if test="pageParam.param.checkIncludeTax != null ">and check_include_tax =
+                #{pageParam.param.checkIncludeTax}
+            </if>
+            <if test="pageParam.param.checkNotTaxAmount != null ">and check_not_tax_amount =
+                #{pageParam.param.checkNotTaxAmount}
+            </if>
+            <if test="pageParam.param.customerConfirm != null ">and customer_confirm like
+                CONCAT('%',#{pageParam.param.customerConfirm},'%')
+            </if>
+            <if test="pageParam.param.remark != null ">and remark like CONCAT('%',#{pageParam.param.remark},'%')</if>
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+
+        </where>
+
+    </select>
+
+    <select id="querySummaryAmountByStatementId" resultType="net.bncloud.financial.entity.FinancialStatement">
+        SELECT
+            IFNULL( sum(check_include_tax)  ,0 ) AS cost_including_tax ,
+            IFNULL( sum(check_not_tax_amount) ,0 ) AS cost_not_including_tax,
+            IFNULL( sum(check_tax_amount) ,0 ) AS cost_tax_amount
+        FROM
+            t_financial_cost_detail
+        WHERE
+            is_deleted = '0'
+          AND statement_id = #{statementId}
+    </select>
+
+    <select id="queryNextItemNo" resultType="java.lang.String">
+        select IFNULL(max(item_no),0)+1 from t_financial_cost_detail
+        WHERE
+            is_deleted = '0'
+          AND statement_id = #{statementId}
+    </select>
+
+
+</mapper>

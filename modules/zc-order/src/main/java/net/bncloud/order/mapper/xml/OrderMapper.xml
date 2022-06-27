@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.order.mapper.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.order.entity.Order">
+        <id column="id" property="id"/>
+        <result column="order_price" property="orderPrice"/>
+        <result column="order_confirm_price" property="orderConfirmPrice"/>
+        <result column="confirm_user_id" property="confirmUserId"/>
+        <result column="confirm_user_name" property="confirmUserName"/>
+        <result column="trade_term" property="tradeTerm"/>
+        <result column="currency" property="currency"/>
+        <result column="tax_category" property="taxCategory"/>
+        <result column="payment_terms" property="paymentTerms"/>
+        <result column="confirm_time" property="confirmTime"/>
+        <result column="purchase_time" property="purchaseTime"/>
+        <result column="purchase_user_id" property="purchaseUserId"/>
+        <result column="purchase_user_name" property="purchaseUserName"/>
+        <result column="purchase_department" property="purchaseDepartment"/>
+        <result column="purchase_order_code" property="purchaseOrderCode"/>
+        <result column="purchase_code" property="purchaseCode"/>
+        <result column="purchase_name" property="purchaseName"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_files" property="supplierFiles"/>
+        <result column="side_letter" property="sideLetter"/>
+        <result column="logistics_mode" property="logisticsMode"/>
+        <result column="receiving_address" property="receivingAddress"/>
+        <result column="consignee" property="consignee"/>
+        <result column="order_remarks" property="orderRemarks"/>
+        <result column="msg_type" property="msgType"/>
+        <result column="change_status" property="changeStatus"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="order_type" property="orderType"/>
+        <result column="take_over_status" property="takeOverStatus"/>
+        <result column="difference_details" property="differenceDetails"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="org_id" property="orgId"/>
+
+        <result column="order_no" property="orderNo"/>
+        <result column="acceptance_method" property="acceptanceMethod"/>
+        <result column="payment_method" property="paymentMethod"/>
+        <result column="accounting_period" property="accountingPeriod"/>
+        <result column="item_class" property="itemClass"/>
+        <!--        <result column="shipping_type" property="shippingType" />-->
+        <result column="change_reason" property="changeReason"/>
+        <result column="change_order_status" property="changeOrderStatus"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        SELECT
+        distinct
+        t1.*
+        FROM
+        t_order t1
+        LEFT JOIN t_order_product_details t2 ON t1.purchase_order_code = t2.purchase_order_code
+        <where>1=1 and t1.is_deleted = 0 and t1.org_id is not null
+            <if test="queryParam.searchValue != null and queryParam.searchValue != '' ">
+                  and (
+                        (t1.supplier_name like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                        (t1.supplier_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                        (t1.purchase_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                        (t1.purchase_name like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                        (t1.purchase_order_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                        (t2.product_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                        (t2.product_name like CONCAT('%', #{queryParam.searchValue}, '%'))
+                    )
+            </if>
+            <if test="queryParam.param.orderPrice != null and queryParam.param.orderPrice != '' ">
+                  and  t1.order_price = #{queryParam.param.orderPrice} </if>
+            <if test="queryParam.param.orderConfirmPrice != null and queryParam.param.orderConfirmPrice != '' ">
+                  and  t1.order_confirm_price = #{queryParam.param.orderConfirmPrice} </if>
+            <if test="queryParam.param.confirmUserId != null and queryParam.param.confirmUserId != '' ">
+                  and  t1.confirm_user_id = #{queryParam.param.confirmUserId} </if>
+            <if test="queryParam.param.confirmUserName != null and queryParam.param.confirmUserName != '' ">
+                  and  t1.confirm_user_name like CONCAT('%', #{queryParam.param.confirmUserName}, '%') </if>
+            <if test="queryParam.param.tradeTerm != null and queryParam.param.tradeTerm != '' ">
+                  and  t1.trade_term like CONCAT('%', #{queryParam.param.tradeTerm}, '%') </if>
+            <if test="queryParam.param.currency != null and queryParam.param.currency != '' ">
+                  and  t1.currency like CONCAT('%', #{queryParam.param.currency}, '%') </if>
+            <if test="queryParam.param.taxCategory != null and queryParam.param.taxCategory != '' ">
+                  and  t1.tax_category like CONCAT('%', #{queryParam.param.taxCategory}, '%') </if>
+            <if test="queryParam.param.paymentTerms != null and queryParam.param.paymentTerms != '' ">
+                  and  t1.payment_terms like CONCAT('%', #{queryParam.param.paymentTerms}, '%') </if>
+            <if test="queryParam.param.confirmSource != null and queryParam.param.confirmSource != '' ">
+                  and  t1.confirm_source = #{queryParam.param.confirmSource} </if>
+            <if test="queryParam.param.purchaseUserId != null and queryParam.param.purchaseUserId != '' ">
+                  and  t1.purchase_user_id = #{queryParam.param.purchaseUserId} </if>
+            <if test="queryParam.param.purchaseUserName != null and queryParam.param.purchaseUserName != '' ">
+                  and  t1.purchase_user_name like CONCAT('%', #{queryParam.param.purchaseUserName}, '%') </if>
+            <if test="queryParam.param.purchaseDepartment != null and queryParam.param.purchaseDepartment != '' ">
+                  and  t1.purchase_department like CONCAT('%', #{queryParam.param.purchaseDepartment}, '%') </if>
+            <if test="queryParam.param.purchaseOrderCode != null and queryParam.param.purchaseOrderCode != '' ">
+                  and  t1.purchase_order_code like CONCAT('%', #{queryParam.param.purchaseOrderCode}, '%') </if>
+            <if test="queryParam.param.purchaseCode != null and queryParam.param.purchaseCode != '' ">
+                  and  t1.purchase_code like CONCAT('%', #{queryParam.param.purchaseCode}, '%') </if>
+            <if test="queryParam.param.purchaseName != null and queryParam.param.purchaseName != '' ">
+                  and  t1.purchase_name like CONCAT('%', #{queryParam.param.purchaseName}, '%') </if>
+            <if test="queryParam.param.supplierName != null and queryParam.param.supplierName != '' ">
+                  and  (t1.supplier_name like CONCAT('%', #{queryParam.param.supplierName}, '%') or
+                        t1.supplier_code like CONCAT('%', #{queryParam.param.supplierName}, '%'))</if>
+            <if test="queryParam.param.supplierCode != null and queryParam.param.supplierCode != '' ">
+                  and  t1.supplier_code like CONCAT('%', #{queryParam.param.supplierCode}, '%') </if>
+            <if test="queryParam.param.supplierFiles != null and queryParam.param.supplierFiles != '' ">
+                  and  t1.supplier_files like CONCAT('%', #{queryParam.param.supplierFiles}, '%') </if>
+            <if test="queryParam.param.sideLetter != null and queryParam.param.sideLetter != '' ">
+                  and  t1.side_letter like CONCAT('%', #{queryParam.param.sideLetter}, '%') </if>
+            <if test="queryParam.param.logisticsMode != null and queryParam.param.logisticsMode != '' ">
+                  and  t1.logistics_mode like CONCAT('%', #{queryParam.param.logisticsMode}, '%') </if>
+            <if test="queryParam.param.receivingAddress != null and queryParam.param.receivingAddress != '' ">
+                  and  t1.receiving_address like CONCAT('%', #{queryParam.param.receivingAddress}, '%') </if>
+            <if test="queryParam.param.consignee != null and queryParam.param.consignee != '' ">
+                  and  t1.consignee like CONCAT('%', #{queryParam.param.consignee}, '%') </if>
+            <if test="queryParam.param.orderRemarks != null and queryParam.param.orderRemarks != '' ">
+                  and  t1.order_remarks like CONCAT('%', #{queryParam.param.orderRemarks}, '%') </if>
+            <if test="queryParam.param.msgType != null and queryParam.param.msgType != '' ">
+                  and  t1.msg_type = #{queryParam.param.msgType} </if>
+            <if test="queryParam.param.changeStatus != null and queryParam.param.changeStatus != '' ">
+                  and  t1.change_status like CONCAT('%', #{queryParam.param.changeStatus}, '%') </if>
+            <if test="queryParam.param.beforeOrderStatus != null and queryParam.param.beforeOrderStatus != '' ">
+                  and  t1.before_order_status = #{queryParam.param.beforeOrderStatus} </if>
+            <if test="queryParam.param.orderStatus != null and queryParam.param.orderStatus != 9 and queryParam.param.orderStatus != '' ">
+                  and  t1.order_status = #{queryParam.param.orderStatus} </if>
+
+            <if test="queryParam.param.orderStatus != null and queryParam.param.orderStatus == 9 and queryParam.param.orderStatus != '' ">
+                  and  t1.order_status != 8 </if>
+
+
+            <if test="queryParam.param.orderType != null and queryParam.param.orderType != '' ">
+                  and  t1.order_type like CONCAT('%', #{queryParam.param.orderType}, '%') </if>
+            <if test="queryParam.param.takeOverStatus != null and queryParam.param.takeOverStatus != '' ">
+                  and  t1.take_over_status like CONCAT('%', #{queryParam.param.takeOverStatus}, '%') </if>
+            <if test="queryParam.param.differenceDetails != null and queryParam.param.differenceDetails != '' ">
+                  and  t1.difference_details like CONCAT('%', #{queryParam.param.differenceDetails}, '%') </if>
+            <if test="queryParam.param.createdBy != null and queryParam.param.createdBy != '' ">
+                  and  t1.created_by = #{queryParam.param.createdBy} </if>
+            <if test="queryParam.param.lastModifiedBy != null and queryParam.param.lastModifiedBy != '' ">
+                  and  t1.last_modified_by = #{queryParam.param.lastModifiedBy} </if>
+
+            <if test="queryParam.param.purchaseTimeStart != null and queryParam.param.purchaseTimeStart != '' ">
+                  and  t1.purchase_time >= #{queryParam.param.purchaseTimeStart}
+            </if>
+            <if test="queryParam.param.purchaseTimeEnd != null and queryParam.param.purchaseTimeEnd != '' ">
+                  and  t1.purchase_time &lt;= #{queryParam.param.purchaseTimeEnd}
+            </if>
+
+            <if test="queryParam.param.purchaseTime!= null  ">
+
+                  and DATE_FORMAT(t1.purchase_time, '%Y-%m-%d') =
+                      DATE_FORMAT(#{queryParam.param.purchaseTime}, '%Y-%m-%d')
+            </if>
+
+
+            <if test="queryParam.param.changeOrderStatus != null and queryParam.param.changeOrderStatus != '' ">
+                  and t1.change_order_status = #{changeOrderStatus}
+            </if>
+
+            <if test="queryParam.param.confirmTimeStart != null and queryParam.param.confirmTimeStart != '' ">
+                  and  t1.confirm_time >= #{queryParam.param.confirmTimeStart}
+            </if>
+            <if test="queryParam.param.confirmTimeEnd != null and queryParam.param.confirmTimeEnd != '' ">
+                  and  t1.confirm_time &lt;= #{queryParam.param.confirmTimeEnd}
+            </if>
+
+            <if test="queryParam.param.confirmTime!= null  ">
+                  and DATE_FORMAT(t1.confirm_time, '%Y-%m-%d') =
+                      DATE_FORMAT(#{queryParam.param.confirmTime}, '%Y-%m-%d')
+            </if>
+
+            <if test="queryParam.param.orderPriceStart != null and queryParam.param.orderPriceStart != '' ">
+                  and  t1.order_price >= #{queryParam.param.orderPriceStart}
+            </if>
+            <if test="queryParam.param.orderPriceEnd != null and queryParam.param.orderPriceEnd != '' ">
+                  and t1.order_price &lt;= #{queryParam.param.orderPriceEnd}
+            </if>
+
+
+            <if test="queryParam.param.orderConfirmPriceStart != null and queryParam.param.orderConfirmPriceStart != '' ">
+                  and  t1.order_confirm_price >= #{queryParam.param.orderConfirmPriceStart}
+            </if>
+            <if test="queryParam.param.orderConfirmPriceEnd != null and queryParam.param.orderConfirmPriceEnd != '' ">
+                  and  t1.order_confirm_price &lt;= #{queryParam.param.orderConfirmPriceEnd}
+            </if>
+
+            <if test="queryParam.param.productName != null and queryParam.param.productName != '' ">
+                  and  t2.product_name like CONCAT('%', #{queryParam.param.productName}, '%')
+            </if>
+
+            <if test="queryParam.param.productCode != null and queryParam.param.productCode != '' ">
+                  and  t2.product_code like CONCAT('%', #{queryParam.param.productCode}, '%')
+            </if>
+
+
+        </where>
+        ORDER BY t1.created_date desc
+
+
+    </select>
+    <select id="getByPurchaseOrderCode" resultType="net.bncloud.order.entity.Order">
+        select *
+        from t_order
+        where purchase_order_code = #{code}
+    </select>
+
+    <update id="updateErpId">
+        update t_order
+        SET erp_id=#{fId},
+            f_number=#{fNumber},
+            erp_signing_status=#{code}
+        WHERE id = #{id}
+    </update>
+
+
+
+
+
+
+
+</mapper>

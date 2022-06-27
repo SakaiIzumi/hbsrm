@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.quotation.mapper.QuotationBaseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.quotation.entity.QuotationBase">
+        <id column="id" property="id"/>
+        <result column="quotation_no" property="quotationNo"/>
+        <result column="title" property="title"/>
+        <result column="customer_code" property="customerCode"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="quotation_type" property="quotationType" />
+        <result column="cut_off_time" property="cutOffTime"/>
+        <result column="delivery_time" property="deliveryTime"/>
+        <result column="round_number" property="roundNumber"/>
+        <result column="quotation_approve" property="quotationApprove"/>
+        <result column="bid_approve" property="bidApprove"/>
+        <result column="pricing_approve" property="pricingApprove"/>
+        <result column="quotation_scope" property="quotationScope"/>
+        <result column="view_price" property="viewPrice"/>
+        <result column="closing_quotation_early" property="closingQuotationEarly"/>
+        <result column="need_open_bid" property="needOpenBid"/>
+        <result column="purchase_user_id" property="purchaseUserId"/>
+        <result column="purchase_name" property="purchaseName"/>
+        <result column="financial_user_id" property="financialUserId"/>
+        <result column="financial_user_name" property="financialUserName"/>
+        <result column="audit_user_id" property="auditUserId"/>
+        <result column="audit_user_name" property="auditUserName"/>
+        <result column="response_num" property="responseNum" />
+        <result column="bidding_num" property="biddingNum" />
+        <result column="supplier_num" property="supplierNum" />
+        <result column="publish_time" property="publishTime" />
+        <result column="publisher" property="publisher" />
+        <result column="quotation_status" property="quotationStatus" />
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="source_quotation_base_id" property="sourceQuotationBaseId" />
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_rfq_quotation_base
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null and pageParam.searchValue != '' ">
+                and (
+                ( quotation_no like CONCAT('%',#{pageParam.searchValue},'%'))or
+                ( title like CONCAT('%',#{pageParam.searchValue},'%'))
+                )
+            </if>
+
+            <if test="pageParam.param.publishStartDate != null and pageParam.param.publishStartDate != '' ">
+                and <![CDATA[ publish_time   >= #{pageParam.param.publishStartDate} ]]>
+            </if>
+
+            <if test="pageParam.param.publishEndDate != null and pageParam.param.publishEndDate != '' ">
+                and <![CDATA[ publish_time   <= #{pageParam.param.publishEndDate} ]]>
+            </if>
+            <if test="pageParam.param.quotationNo != null ">and quotation_no like
+                CONCAT('%',#{pageParam.param.quotationNo},'%')
+            </if>
+            <if test="pageParam.param.title != null ">and title like CONCAT('%',#{pageParam.param.title},'%')</if>
+            <if test="pageParam.param.customerCode != null ">and customer_code like
+                CONCAT('%',#{pageParam.param.customerCode},'%')
+            </if>
+            <if test="pageParam.param.customerName != null ">and customer_name like
+                CONCAT('%',#{pageParam.param.customerName},'%')
+            </if>
+            <if test="pageParam.param.quotationType != null and pageParam.param.quotationType != '' ">
+                and quotation_type = #{pageParam.param.quotationType}
+            </if>
+
+
+            <if test="pageParam.param.roundNumber != null ">and round_number = #{pageParam.param.roundNumber}</if>
+            <if test="pageParam.param.quotationApprove != null ">and quotation_approve like
+                CONCAT('%',#{pageParam.param.quotationApprove},'%')
+            </if>
+            <if test="pageParam.param.bidApprove != null ">and bid_approve like
+                CONCAT('%',#{pageParam.param.bidApprove},'%')
+            </if>
+            <if test="pageParam.param.pricingApprove != null ">and pricing_approve like
+                CONCAT('%',#{pageParam.param.pricingApprove},'%')
+            </if>
+            <if test="pageParam.param.quotationScope != null ">and quotation_scope like
+                CONCAT('%',#{pageParam.param.quotationScope},'%')
+            </if>
+            <if test="pageParam.param.viewPrice != null ">and view_price like
+                CONCAT('%',#{pageParam.param.viewPrice},'%')
+            </if>
+            <if test="pageParam.param.closingQuotationEarly != null ">and closing_quotation_early like
+                CONCAT('%',#{pageParam.param.closingQuotationEarly},'%')
+            </if>
+            <if test="pageParam.param.needOpenBid != null ">and need_open_bid like
+                CONCAT('%',#{pageParam.param.needOpenBid},'%')
+            </if>
+            <if test="pageParam.param.purchaseUserId != null ">and purchase_user_id =
+                #{pageParam.param.purchaseUserId}
+            </if>
+            <if test="pageParam.param.purchaseName != null ">and purchase_name like
+                CONCAT('%',#{pageParam.param.purchaseName},'%')
+            </if>
+            <if test="pageParam.param.financialUserId != null ">and financial_user_id =
+                #{pageParam.param.financialUserId}
+            </if>
+            <if test="pageParam.param.financialUserName != null ">and financial_user_name like
+                CONCAT('%',#{pageParam.param.financialUserName},'%')
+            </if>
+            <if test="pageParam.param.auditUserId != null ">and audit_user_id = #{pageParam.param.auditUserId}</if>
+            <if test="pageParam.param.auditUserName != null ">and audit_user_name like
+                CONCAT('%',#{pageParam.param.auditUserName},'%')
+            </if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+
+            <if test="pageParam.param.publisher != null and pageParam.param.publisher != ''">
+                and publisher LIKE CONCAT('%',#{pageParam.param.publisher},'%')
+            </if>
+            <if test="pageParam.param.quotationStatus != null and pageParam.param.quotationStatus != ''">
+                and quotation_status = #{pageParam.param.quotationStatus}
+            </if>
+            <if test="pageParam.param.createdBy != null and pageParam.param.createdBy != '' ">
+                and created_by = #{pageParam.param.createdBy}
+            </if>
+
+            ORDER BY last_modified_date DESC
+
+        </where>
+
+    </select>
+
+    <select id="selectQuotationBaseSalePage" resultMap="BaseResultMap">
+        select t_rfq_quotation_base.* from t_rfq_quotation_base inner join t_rfq_quotation_supplier ON t_rfq_quotation_base.id = t_rfq_quotation_supplier.quotation_base_id
+        <where>
+            1 = 1 and t_rfq_quotation_base.is_deleted = 0
+            and t_rfq_quotation_supplier.supplier_id = #{pageParam.param.supplierId}
+
+            <if test="pageParam.searchValue != null and pageParam.searchValue != '' ">
+                and (
+                ( t_rfq_quotation_base.quotation_no like CONCAT('%',#{pageParam.searchValue},'%'))or
+                ( t_rfq_quotation_base.title like CONCAT('%',#{pageParam.searchValue},'%'))
+                )
+            </if>
+            <if test="pageParam.param.quotationStatus != null and pageParam.param.quotationStatus != ''">
+                and t_rfq_quotation_base.quotation_status = #{pageParam.param.quotationStatus}
+            </if>
+            <if test="pageParam.param.publisher != null and pageParam.param.publisher != ''">
+                and t_rfq_quotation_base.publisher LIKE CONCAT('%',#{pageParam.param.publisher},'%')
+            </if>
+            <if test="pageParam.param.custOffStartDate != null and pageParam.param.custOffStartDate != '' ">
+                and t_rfq_quotation_base.cut_off_time >= #{pageParam.param.custOffStartDate}
+            </if>
+            <if test="pageParam.param.custOffEndDate != null and pageParam.param.custOffEndDate != '' ">
+                and t_rfq_quotation_base.cut_off_time &lt;= #{pageParam.param.custOffEndDate}
+            </if>
+            <if test="pageParam.param.publishStartDate != null and pageParam.param.publishStartDate != '' ">
+                and t_rfq_quotation_base.publish_time >= #{pageParam.param.publishStartDate}
+            </if>
+            <if test="pageParam.param.publishEndDate != null and pageParam.param.publishEndDate != '' ">
+                and t_rfq_quotation_base.publish_time &lt;= #{pageParam.param.publishEndDate}
+            </if>
+            <if test="pageParam.param.quotationType != null and pageParam.param.quotationType != '' ">
+                and t_rfq_quotation_base.quotation_type = #{pageParam.param.quotationType}
+            </if>
+
+            and t_rfq_quotation_base.quotation_status != 'draft'
+            AND (t_rfq_quotation_base.draft_for_obsolete != '1' or t_rfq_quotation_base.draft_for_obsolete  is null)
+
+            ORDER BY t_rfq_quotation_base.last_modified_date DESC
+
+        </where>
+    </select>
+    <select id="queryQuotationStatusCount" resultType="int">
+        SELECT COUNT(*)
+        FROM t_rfq_quotation_base AS quotation_base
+            INNER JOIN t_rfq_quotation_supplier AS quotation_supplier
+        ON quotation_base.id = quotation_supplier.quotation_base_id
+        WHERE quotation_supplier.supplier_id = #{supplierId} AND quotation_base.quotation_status = #{quotationStatus}
+    </select>
+
+
+    <update id="responseNumIncrease">
+        UPDATE t_rfq_quotation_base
+        SET response_num = response_num + 1
+        WHERE
+            id = #{quotationBaseId}
+    </update>
+
+    <update id="updateCurrentRoundNumber">
+        UPDATE t_rfq_quotation_base
+            SET current_round_number = current_round_number + 1,
+            quotation_status = 'fresh'
+        WHERE
+            id = #{quotationBaseId}
+    </update>
+
+    <select id="draftForObsoleteCount" resultType="java.lang.Integer">
+      SELECT COUNT( 1 )
+        FROM t_rfq_quotation_base AS quotation_base
+        INNER JOIN t_rfq_quotation_supplier AS quotation_supplier
+        ON quotation_base.id = quotation_supplier.quotation_base_id
+        WHERE quotation_status = 'obsolete'
+	        AND draft_for_obsolete IS NULL
+	        AND quotation_base.is_deleted = 0
+	        AND quotation_supplier.supplier_id = #{supplierId}
+    </select>
+
+
+</mapper>

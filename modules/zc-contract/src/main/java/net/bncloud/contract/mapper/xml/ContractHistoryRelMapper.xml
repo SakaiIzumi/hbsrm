@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.contract.mapper.ContractHistoryRelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.contract.entity.ContractHistoryRel">
+        <id column="id" property="id" />
+        <result column="contract_id" property="contractId" />
+        <result column="history_contract_id" property="historyContractId" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_purchase_contract_history_rel
+             <where> 1=1 and is_deleted = 0
+         <if test="queryParam.searchValue != null">
+--              and (
+--              (t1.supplier_name like CONCAT('%',#{queryParam.searchValue},'%'))or
+--              ( t1.supplier_code like CONCAT('%',#{queryParam.searchValue},'%'))or
+--              ( t1.purchase_order_code like CONCAT('%',#{queryParam.searchValue},'%'))
+--              )
+         </if>
+        <if test="queryParam.param.contractId != null ">and  contract_id = #{queryParam.param.contractId} </if>
+                                                                    <if test="queryParam.param.historyContractId != null ">and  history_contract_id = #{queryParam.param.historyContractId} </if>
+                                                                    <if test="queryParam.param.createdBy != null ">and  created_by = #{queryParam.param.createdBy} </if>
+                                                            
+                                            <if test="queryParam.param.lastModifiedBy != null ">and  last_modified_by = #{queryParam.param.lastModifiedBy} </if>
+                                                            
+                                                          </where>
+
+            </select>
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

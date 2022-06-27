@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <title></title>
+  <script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.10.3/dingtalk.open.js"></script>
+  <script th:inline="javascript">
+      var corpId = [[${corpId}]];
+      var sourceUrl = [[${sourceUrl}]];
+      var baseUrl = [[${baseUrl}]]
+      var state = [[${state}]]
+      var url = baseUrl + "/api/sso/third/auth?corpId=" + corpId + "&sourceUrl=" + sourceUrl;
+      dd.ready(function() {
+          dd.runtime.permission.requestAuthCode({
+              corpId: corpId, // 企业id
+              onSuccess: function (info) {
+                  window.location.href = url + "&code=" + info.code + "&state=" + state;
+              },
+              onFail : function(err) {
+                  alert("错误。。");
+              }
+          });
+      });
+  </script>
+</head>
+<body>
+
+</body>
+</html>

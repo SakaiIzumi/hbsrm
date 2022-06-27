@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryPlanMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryPlan">
+        <id column="id" property="id"/>
+        <result column="plan_no" property="planNo"/>
+        <result column="purchase_order_no" property="purchaseOrderNo"/>
+        <result column="bill_no" property="billNo"/>
+        <result column="purchase_code" property="purchaseCode"/>
+        <result column="purchase_name" property="purchaseName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="publisher" property="publisher"/>
+        <result column="publish_date" property="publishDate"/>
+        <result column="plan_start_date" property="planStartDate"/>
+        <result column="plan_end_date" property="planEndDate"/>
+        <result column="plan_status" property="planStatus"/>
+        <result column="plan_description" property="planDescription"/>
+        <result column="source_id" property="sourceId"/>
+        <result column="source_type" property="sourceType"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <!--分页查询送货计划-->
+    <select id="selectListPage" resultMap="BaseResultMap">
+        with ids as (
+        select distinct
+        p.id
+        from t_delivery_plan p
+        inner join t_delivery_plan_detail pd on pd.delivery_plan_id=p.id
+        inner join t_delivery_plan_detail_item t on t.delivery_plan_detail_id=pd.id
+        <where>
+            p.is_deleted = 0 and p.org_id IS NOT NULL
+            <choose>
+                <!--供应方-->
+                <when test="workBench != null and workBench != '' and workBench=='supplier'">
+                    <if test="pageParam.param.tabCategory !=null and pageParam.param.tabCategory !=''">
+                        <if test=" pageParam.param.tabCategory == '0'.toString() ">
+                            and p.plan_status in ('1', '2','3')
+                        </if>
+                        <if test="pageParam.param.tabCategory == '1'.toString() ">
+                            and p.plan_status = '1'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '2'.toString() ">
+                            and p.plan_status = '2'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '3'.toString() ">
+                            and p.plan_status = '3'
+                        </if>
+                    </if>
+                </when>
+
+                <!--采购方-->
+                <when test="workBench != null and workBench != '' and workBench == 'purchase'">
+                    <if test="pageParam.param.tabCategory != null and pageParam.param.tabCategory != ''">
+                        <if test="pageParam.param.tabCategory == '1'.toString()">
+                            and p.plan_status = '1'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '2'.toString()">
+                            and p.plan_status = '2'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '3'.toString()">
+                            and p.plan_status = '3'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '4'.toString()">
+                            and p.plan_status = '0'
+                        </if>
+                    </if>
+                </when>
+            </choose>
+
+            <if test="pageParam.searchValue != null and pageParam.searchValue !=''">
+                and (
+                (p.purchase_code like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.purchase_name like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.bill_no like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.plan_no like CONCAT('%', #{pageParam.searchValue}, '%'))
+                )
+            </if>
+
+            <if test="pageParam.param != null">
+                <if test="pageParam.param.purchaseOrderNo !=null and pageParam.param.purchaseOrderNo !=''">
+                    and p.purchase_order_no like CONCAT('%', #{pageParam.param.purchaseOrderNo}, '%')
+                </if>
+                <if test="pageParam.param.planNo != null and pageParam.param.planNo !=''">
+                    and p.plan_no like CONCAT('%', #{pageParam.param.planNo}, '%')
+                </if>
+                <if test="pageParam.param.billNo != null and pageParam.param.billNo!=''">
+                    and p.bill_no like CONCAT('%', #{pageParam.param.billNo}, '%')
+                </if>
+                <if test="pageParam.param.purchaseCondition != null and pageParam.param.purchaseCondition!=''">
+                    and (
+                    p.purchase_code like CONCAT('%', #{pageParam.param.purchaseCondition}, '%')
+                    or p.purchase_name like CONCAT('%', #{pageParam.param.purchaseCondition}, '%')
+                    )
+                </if>
+
+                <if test="pageParam.param.publisher != null and pageParam.param.publisher !='' ">
+                    and p.publisher like CONCAT('%', #{pageParam.param.publisher}, '%')
+                </if>
+
+                <if test="pageParam.param.planStatus != null and pageParam.param.planStatus !=''">
+                    and p.plan_status like CONCAT('%', #{pageParam.param.planStatus}, '%')
+                </if>
+
+                <if test="pageParam.param.planStartDate != null and pageParam.param.planEndDate !=null">
+<!--                    and t.delivery_date between #{pageParam.param.planStartDate} and #{pageParam.param.planEndDate}-->
+                    and p.plan_start_date <![CDATA[ >= ]]>  #{pageParam.param.planStartDate} and p.plan_end_date <![CDATA[ <= ]]> #{pageParam.param.planEndDate}
+                </if>
+
+                <if test="pageParam.param.supplierCode !=null and pageParam.param.supplierCode !=''">
+                    and p.supplier_code like CONCAT('%', #{pageParam.param.supplierCode}, '%')
+                </if>
+
+                <if test="pageParam.param.sourceType !=null and  pageParam.param.sourceType !=''">
+                    and p.source_type =#{pageParam.param.sourceType}
+                </if>
+
+            </if>
+        </where>
+        )
+        select p.*
+        from t_delivery_plan p
+        inner join ids i on i.id=p.id
+        <where>
+            p.is_deleted = 0 and p.org_id IS NOT NULL
+            <choose>
+                <!--供应方-->
+                <when test="workBench != null and workBench != '' and workBench=='supplier'">
+                    <if test="pageParam.param.tabCategory !=null and pageParam.param.tabCategory !=''">
+                        <if test=" pageParam.param.tabCategory == '0'.toString() ">
+                            and p.plan_status in ('1', '2','3')
+                        </if>
+                        <if test="pageParam.param.tabCategory == '1'.toString() ">
+                            and p.plan_status = '1'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '2'.toString() ">
+                            and p.plan_status = '2'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '3'.toString() ">
+                            and p.plan_status = '3'
+                        </if>
+                    </if>
+                </when>
+
+                <!--采购方-->
+                <when test="workBench != null and workBench != '' and workBench == 'purchase'">
+                    <if test="pageParam.param.tabCategory != null and pageParam.param.tabCategory != ''">
+                        <if test="pageParam.param.tabCategory == '1'.toString()">
+                            and p.plan_status = '1'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '2'.toString()">
+                            and p.plan_status = '2'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '3'.toString()">
+                            and p.plan_status = '3'
+                        </if>
+                        <if test="pageParam.param.tabCategory == '4'.toString()">
+                            and p.plan_status = '0'
+                        </if>
+                    </if>
+                </when>
+            </choose>
+
+            <if test="pageParam.searchValue != null and pageParam.searchValue !=''">
+                and (
+                (p.purchase_code like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.purchase_name like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.bill_no like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.plan_no like CONCAT('%', #{pageParam.searchValue}, '%'))
+                )
+            </if>
+
+            <if test="pageParam.param != null">
+                <if test="pageParam.param.purchaseOrderNo !=null and pageParam.param.purchaseOrderNo !=''">
+                    and p.purchase_order_no like CONCAT('%', #{pageParam.param.purchaseOrderNo}, '%')
+                </if>
+                <if test="pageParam.param.planNo != null and pageParam.param.planNo !=''">
+                    and p.plan_no like CONCAT('%', #{pageParam.param.planNo}, '%')
+                </if>
+                <if test="pageParam.param.billNo != null and pageParam.param.billNo!=''">
+                    and p.bill_no like CONCAT('%', #{pageParam.param.billNo}, '%')
+                </if>
+                <if test="pageParam.param.purchaseCondition != null and pageParam.param.purchaseCondition!=''">
+                    and (
+                    p.purchase_code like CONCAT('%', #{pageParam.param.purchaseCondition}, '%')
+                    or p.purchase_name like CONCAT('%', #{pageParam.param.purchaseCondition}, '%')
+                    )
+                </if>
+
+                <if test="pageParam.param.publisher != null and pageParam.param.publisher !='' ">
+                    and p.publisher like CONCAT('%', #{pageParam.param.publisher}, '%')
+                </if>
+
+                <if test="pageParam.param.planStatus != null and pageParam.param.planStatus !=''">
+                    and p.plan_status like CONCAT('%', #{pageParam.param.planStatus}, '%')
+                </if>
+                <if test="pageParam.param.supplierCode !=null and pageParam.param.supplierCode !=''">
+                    and p.supplier_code like CONCAT('%', #{pageParam.param.supplierCode}, '%')
+                </if>
+                <if test="pageParam.param.sourceType !=null and  pageParam.param.sourceType !=''">
+                    and p.source_type =#{pageParam.param.sourceType}
+                </if>
+
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectOneBySourceId" resultMap="BaseResultMap">
+        select * from t_delivery_plan
+        <where>
+            is_deleted = 0
+            <if test=" sourceId!=null and sourceId !='' ">
+                and source_id = #{sourceId}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="DeliveryPlanDetailItemVoMap" type="net.bncloud.delivery.vo.DeliveryPlanDetailItemVo">
+        <id column="id" property="deliveryPlanDetailItemId"/>
+        <id column="delivery_plan_id" property="deliveryPlanId"/>
+        <id column="delivery_plan_id" property="planDetailItemSourceId"/>
+        <result column="order_type" property="orderType"/>
+        <result column="plan_quantity" property="planQuantity"/>
+        <result column="plan_no" property="deliveryPlanNo"/>
+        <result column="product_code" property="productCode"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_specification" property="productSpecifications"/>
+        <result column="purchase_code" property="purchaseCode"/>
+        <result column="purchase_name" property="purchaseName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="bill_no" property="billNo"/>
+        <result column="delivery_date" property="deliveryDate"/>
+        <result column="plan_unit" property="planUnit"/>
+        <result column="delivery_address" property="deliveryAddress"/>
+        <result column="currency" property="currency"/>
+        <result column="warehousing" property="warehousing"/>
+        <result column="material_classification" property="materialClassification"/>
+        <result column="delivery_note_id" property="deliveryNoteId"/>
+        <result column="delivery_note_no" property="deliveryNoteNo"/>
+        <result column="delivery_status" property="deliveryStatus"/>
+        <result column="totalNum" property="totalDeliveryQuantity"/>
+        <result column="plan_source_id" property="planSourceId"/>
+        <result column="detail_plan_source_id" property="detailPlanSourceId"/>
+        <result column="purchaseOrderNo" property="purchaseOrderCode"/>
+        <result column="purchaseOrderNo" property="purchaseOrderNo"/>
+        <result column="product_unit_price" property="productUnitPrice"/>
+        <result column="tax_unit_price" property="taxUnitPrice"/>
+        <result column="remaining_quantity" property="remainingQuantity"/>
+        <result column="merchant_code" property="merchantCode"/>
+    </resultMap>
+    <!--计划看板详情-->
+    <select id="selectDeliveryPlanBoardDetail" resultMap="DeliveryPlanDetailItemVoMap">
+        with numTable as(
+        select
+        sum(pdi.delivery_quantity) totalNum
+        from t_delivery_plan p
+        inner join t_delivery_plan_detail pd on p.id = pd.delivery_plan_id and pd.source_type = 'purchaseOrder'
+        inner join t_delivery_plan_detail_item pdi on pd.id = pdi.delivery_plan_detail_id and pdi.source_type = 'purchaseOrder'
+        <where>
+            p.is_deleted=0 and p.plan_status='2' and p.org_id IS NOT NULL and p.source_type = 'purchaseOrder'
+            <if test="pageParam.searchValue != null and pageParam.searchValue != ''">
+                and (
+                (p.plan_no like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.bill_no like CONCAT('%', #{pageParam.searchValue}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.productCondition !=null and pageParam.param.productCondition != ''">
+                and (
+                (pd.product_code like concat('%', #{pageParam.param.productCondition}, '%')) or
+                (pd.product_name like concat('%', #{pageParam.param.productCondition}, '%')) or
+                (pd.product_specification like concat('%', #{pageParam.param.productCondition}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.supplierCondition !=null and pageParam.param.supplierCondition!=''">
+                and (
+                (pd.supplier_code like concat('%', #{pageParam.param.supplierCondition}, '%')) or
+                (pd.supplier_name like concat('%', #{pageParam.param.supplierCondition}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.customerCondition !=null and pageParam.param.customerCondition !=''">
+                and (
+                (p.purchase_code like concat('%', #{pageParam.param.customerCondition}, '%')) or
+                (p.purchase_name like concat('%', #{pageParam.param.customerCondition}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.planNo!=null and pageParam.param.planNo!=''">
+                and p.plan_no like concat('%', #{pageParam.param.planNo}, '%')
+            </if>
+            <if test="pageParam.param.billNo!=null and pageParam.param.billNo!=''">
+                and p.bill_no like concat('%', #{pageParam.param.billNo}, '%')
+            </if>
+            <if test="pageParam.param.deliveryAddress!=null and pageParam.param.deliveryAddress!=''">
+                and pdi.delivery_address like concat('%', #{pageParam.param.deliveryAddress}, '%')
+            </if>
+            <if test="pageParam.param.date !=null and pageParam.param.date !=''">
+                and pdi.delivery_date like concat('%', #{pageParam.param.date}, '%')
+            </if>
+            <if test="pageParam.param.orderType !=null and pageParam.param.orderType !=''">
+                and p.order_type like concat('%', #{pageParam.param.orderType}, '%')
+            </if>
+            <if test="pageParam.param.purchaseOrderNo !=null and pageParam.param.purchaseOrderNo !=''">
+                and p.purchase_order_no like concat('%', #{pageParam.param.purchaseOrderNo}, '%')
+            </if>
+
+        </where>
+        GROUP BY p.org_id
+        )
+        select
+        pd.merchant_code,
+        pd.tax_unit_price,
+        p.order_type,
+        p.purchase_order_no as purchaseOrderNo,
+        dn.delivery_no as delivery_note_no,
+        nt.totalNum,
+        pdi.id,
+        p.id as delivery_plan_id,
+        pd.product_code,
+        pd.product_name,
+        pd.product_specification,
+        p.purchase_code,
+        p.purchase_name,
+        pd.supplier_code,
+        pd.supplier_name,
+        p.plan_no,
+        p.bill_no,
+        pdi.delivery_note_id,
+        dn.delivery_status_code as delivery_status,
+        pdi.delivery_date,
+        pdi.delivery_quantity,
+        pd.plan_unit,
+        pdi.delivery_address,
+        p.currency,
+        pdi.warehousing,
+        p.material_classification,
+        pd.product_unit_price
+        from t_delivery_plan p
+        inner join t_delivery_plan_detail pd on p.id = pd.delivery_plan_id and pd.source_type = 'purchaseOrder'
+        inner join t_delivery_plan_detail_item pdi on pd.id = pdi.delivery_plan_detail_id and pdi.source_type = 'purchaseOrder'
+        left join t_delivery_note dn on dn.id=pdi.delivery_note_id
+        left join numTable nt on 1=1
+        <where>
+            p.is_deleted=0 and p.plan_status='2' and p.org_id IS NOT NULL and p.source_type = 'purchaseOrder'
+            <if test="pageParam.searchValue != null and pageParam.searchValue != ''">
+                and (
+                (p.plan_no like CONCAT('%', #{pageParam.searchValue}, '%')) or
+                (p.bill_no like CONCAT('%', #{pageParam.searchValue}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.productCondition !=null and pageParam.param.productCondition != ''">
+                and (
+                (pd.product_code like concat('%', #{pageParam.param.productCondition}, '%')) or
+                (pd.product_name like concat('%', #{pageParam.param.productCondition}, '%')) or
+                (pd.product_specification like concat('%', #{pageParam.param.productCondition}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.supplierCondition !=null and pageParam.param.supplierCondition!=''">
+                and (
+                (pd.supplier_code like concat('%', #{pageParam.param.supplierCondition}, '%')) or
+                (pd.supplier_name like concat('%', #{pageParam.param.supplierCondition}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.customerCondition !=null and pageParam.param.customerCondition !=''">
+                and (
+                (p.purchase_code like concat('%', #{pageParam.param.customerCondition}, '%')) or
+                (p.purchase_name like concat('%', #{pageParam.param.customerCondition}, '%'))
+                )
+            </if>
+            <if test="pageParam.param.planNo!=null and pageParam.param.planNo!=''">
+                and p.plan_no like concat('%', #{pageParam.param.planNo}, '%')
+            </if>
+            <if test="pageParam.param.billNo!=null and pageParam.param.billNo!=''">
+                and p.bill_no like concat('%', #{pageParam.param.billNo}, '%')
+            </if>
+            <if test="pageParam.param.deliveryAddress!=null and pageParam.param.deliveryAddress!=''">
+                and pdi.delivery_address like concat('%', #{pageParam.param.deliveryAddress}, '%')
+            </if>
+            <if test="pageParam.param.date !=null and pageParam.param.date !=''">
+                and pdi.delivery_date like concat('%', #{pageParam.param.date}, '%')
+            </if>
+            <if test="pageParam.param.purchaseOrderNo !=null and pageParam.param.purchaseOrderNo !=''">
+                and p.purchase_order_no like concat('%', #{pageParam.param.purchaseOrderNo}, '%')
+            </if>
+            <if test="pageParam.param.orderType !=null and pageParam.param.orderType !=''">
+                and p.order_type like concat('%', #{pageParam.param.orderType}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--送货单-按计划送货-->
+    <select id="selectDeliveryAsPlan" resultMap="DeliveryPlanDetailItemVoMap">
+        select
+        pd.merchant_code,
+        pdi.remaining_quantity,
+        pd.product_unit_price,
+        pd.tax_unit_price,
+        pd.product_code,
+        pd.product_name,
+        pd.product_specification,
+        pd.plan_quantity,
+        p.id as delivery_plan_id,
+        p.purchase_code,
+        p.purchase_name,
+        pd.supplier_code,
+        pd.supplier_name,
+        p.plan_no,
+        p.bill_no,
+        p.order_type,
+        p.purchase_order_no as purchaseOrderNo,
+        pdi.delivery_date,
+        pdi.delivery_quantity,
+        pdi.id ,
+        pdi.delivery_note_id,
+        pd.plan_unit,
+        pdi.delivery_address,
+        p.currency,
+        pdi.warehousing,
+        p.material_classification,
+        p.source_id as plan_source_id,
+        pd.source_id as detail_plan_source_id
+        from t_delivery_plan p
+        inner join t_delivery_plan_detail pd on p.id = pd.delivery_plan_id and pd.source_type = 'purchaseOrder'
+        inner join t_delivery_plan_detail_item pdi on pd.id = pdi.delivery_plan_detail_id and pdi.source_type = 'purchaseOrder'
+        <where>
+            p.is_deleted=0 and p.plan_status='2' and p.org_id IS NOT NULL and pdi.remaining_quantity > 0 and p.source_type = 'purchaseOrder'
+            <if test="queryParam.searchValue !=null and queryParam.searchValue !=''">
+                  and (
+                        (p.plan_no like concat('%', #{queryParam.searchValue}, '%')) or
+                        (p.purchase_order_no like CONCAT('%', #{queryParam.searchValue}, '%')) or
+                        (p.bill_no like concat('%', #{queryParam.searchValue}, '%'))
+                    )
+            </if>
+            <if test="queryParam.param !=null">
+                <if test="queryParam.param.supplierCode !=null and queryParam.param.supplierCode !=''">
+                    and p.supplier_code like concat('%', #{queryParam.param.supplierCode}, '%')
+                </if>
+                <if test="queryParam.param.planNo !=null and queryParam.param.planNo !=''">
+                    and p.plan_no like concat('%', #{queryParam.param.planNo}, '%')
+                </if>
+                <if test="queryParam.param.billNo !=null and queryParam.param.billNo !=''">
+                    and p.bill_no like concat('%', #{queryParam.param.billNo}, '%')
+                </if>
+                <if test="queryParam.param.deliveryTimeStart !=null and queryParam.param.deliveryTimeStart !='' and queryParam.param.deliveryTimeEnd !=null and queryParam.param.deliveryTimeEnd !=''">
+                    and pdi.delivery_date between #{queryParam.param.deliveryTimeStart} and
+                    #{queryParam.param.deliveryTimeEnd}
+                </if>
+                <if test="queryParam.param.productName !=null and queryParam.param.productName !=''">
+                    and pd.product_name like concat('%', #{queryParam.param.productName}, '%')
+                </if>
+                <if test="queryParam.param.purchaseCode !=null and queryParam.param.purchaseCode !=''">
+                    and p.purchase_code like concat('%', #{queryParam.param.purchaseCode}, '%')
+                </if>
+                <if test="queryParam.param.orderType !=null  and queryParam.param.orderType !=''">
+                    and p.order_type like concat('%', #{queryParam.param.orderType}, '%')
+                </if>
+                <if test="queryParam.param.purchaseOrderNo !=null and queryParam.param.purchaseOrderNo !=''">
+                    and p.purchase_order_no like concat('%', #{queryParam.param.purchaseOrderNo}, '%')
+                </if>
+                <if test="queryParam.param.purchaseOrderCode !=null and queryParam.param.purchaseOrderCode !=''">
+                    and p.purchase_order_no like concat('%', #{queryParam.param.purchaseOrderCode}, '%')
+                </if>
+                <if test="queryParam.param.id !=null and queryParam.param.id !=''">
+                    and pdi.id = #{queryParam.param.id}
+                </if>
+                <if test="queryParam.param.merchantCode !=null and queryParam.param.merchantCode !=''">
+                    and pd.merchant_code  like concat('%', #{queryParam.param.merchantCode}, '%')
+                </if>
+
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="DeliveryPlanBoardMap" type="net.bncloud.delivery.entity.DeliveryPlanBoard">
+        <result column="product_code" property="productCode" javaType="string" jdbcType="VARCHAR"/>
+        <result column="product_name" property="productName" javaType="string" jdbcType="VARCHAR"/>
+        <result column="delivery_quantity" property="deliveryQuantity" javaType="string" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <!--计划看板-->
+    <select id="selectPlanBoard" resultMap="DeliveryPlanBoardMap">
+        select
+        pd.product_code,
+        pd.product_name,
+        pdi.delivery_quantity
+        from t_delivery_plan p
+        inner join t_delivery_plan_detail pd on p.id = pd.delivery_plan_id and pd.source_type = 'purchaseOrder'
+        inner join t_delivery_plan_detail_item pdi on pd.id = pdi.delivery_plan_detail_id and pdi.source_type = 'purchaseOrder'
+        <where>
+            p.is_deleted=0 and p.plan_status='2' and p.org_id IS NOT NULL and p.source_type = 'purchaseOrder'
+            <if test="date != null">
+                and pdi.delivery_date like concat('%', #{date}, '%')
+            </if>
+            <if test="queryParam.searchValue!=null and queryParam.searchValue!=''">
+                and (
+                p.purchase_code like concat('%', #{queryParam.searchValue}, '%')
+                or p.purchase_name like concat('%', #{queryParam.searchValue}, '%')
+                or pd.product_code like concat('%', #{queryParam.searchValue}, '%')
+                or pd.product_name like concat('%', #{queryParam.searchValue}, '%')
+                or pd.supplier_code like concat('%', #{queryParam.searchValue}, '%')
+                or pd.supplier_name like concat('%', #{queryParam.searchValue}, '%')
+                )
+            </if>
+            <if test="queryParam.param.productCondition !=null and queryParam.param.productCondition!=''">
+                and (
+                pd.product_code like concat('%', #{queryParam.param.productCondition}, '%')
+                or pd.product_name like concat('%', #{queryParam.param.productCondition}, '%')
+                or pd.product_specification like concat('%', #{queryParam.param.productCondition}, '%')
+                )
+            </if>
+            <if test="queryParam.param.customerCondition!=null and queryParam.param.customerCondition!=''">
+                and (
+                p.purchase_code like concat('%', #{queryParam.param.customerCondition}, '%')
+                or p.purchase_name like concat('%', #{queryParam.param.customerCondition}, '%')
+                )
+            </if>
+            <if test="queryParam.param.supplierCondition!=null and queryParam.param.supplierCondition!=''">
+                and (
+                pd.supplier_code like concat('%', #{queryParam.param.supplierCondition}, '%')
+                or pd.supplier_name like concat('%', #{queryParam.param.supplierCondition}, '%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <!--根据id查询看板详情-->
+    <select id="getPlanBoardDetailById" resultMap="DeliveryPlanDetailItemVoMap">
+        select
+        pdi.id,
+        pd.product_code,
+        pd.product_name,
+        pd.product_specification,
+        p.purchase_code,
+        p.purchase_name,
+        pd.supplier_code,
+        pd.supplier_name,
+        pdi.delivery_note_id,
+        pdi.delivery_note_no,
+        pdi.delivery_status,
+        p.plan_no,
+        p.bill_no,
+        pdi.delivery_date,
+        pdi.delivery_quantity,
+        pd.plan_unit,
+        pdi.delivery_address,
+        p.currency,
+        pdi.warehousing,
+        p.material_classification
+        from t_delivery_plan p
+        inner join t_delivery_plan_detail pd on p.id = pd.delivery_plan_id
+        inner join t_delivery_plan_detail_item pdi on pd.id = pdi.delivery_plan_detail_id
+        <where>
+            p.is_deleted=0 and p.plan_status='2' and p.org_id IS NOT NULL
+            <if test="id != null and id != ''">
+                and pdi.id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <!--根据计划id查询计划明细项次-->
+    <select id="getPlanDetailItemByPlanId" resultType="net.bncloud.delivery.entity.DeliveryPlanDetailItem">
+        select
+        pdi.*
+        from t_delivery_plan p
+        inner join t_delivery_plan_detail pd on p.id = pd.delivery_plan_id
+        inner join t_delivery_plan_detail_item pdi on pd.id = pdi.delivery_plan_detail_id
+        <where>
+            p.is_deleted='0' and p.org_id IS NOT NULL
+            <if test="planId != null">
+                and p.id = #{planId}
+            </if>
+        </where>
+    </select>
+
+
+    <resultMap id="getItemByDetailIdMap" type="net.bncloud.delivery.entity.DeliveryPlanDetailItem">
+        <id column="id" property="id"/>
+        <result column="delivery_date" property="deliveryDate"/>
+        <result column="delivery_quantity" property="deliveryQuantity"/>
+        <result column="confirm_date" property="confirmDate"/>
+        <result column="confirm_quantity" property="confirmQuantity"/>
+        <result column="delivery_note_id" property="deliveryNoteId"/>
+        <result column="delivery_no" property="deliveryNoteNo"/>
+        <result column="delivery_status_code" property="deliveryStatus"/>
+        <result column="warehousing" property="warehousing"/>
+        <result column="suggested_delivery_date" property="suggestedDeliveryDate"/>
+        <result column="confirm_suggested_delivery_date" property="confirmSuggestedDeliveryDate"/>
+        <result column="difference_reason" property="differenceReason"/>
+        <result column="variance_number" property="varianceNumber"/>
+        <result column="previous_edition_plan_quantity" property="previousEditionPlanQuantity"/>
+    </resultMap>
+
+    <select id="getItemByDetailId" resultMap="getItemByDetailIdMap">
+        select
+        t.id,
+        t.delivery_date,
+        t.delivery_quantity,
+        t.confirm_date,
+        t.confirm_quantity,
+        t.delivery_note_id,
+        n.delivery_no,
+        n.delivery_status_code,
+        t.warehousing,
+        t.suggested_delivery_date,
+        t.confirm_suggested_delivery_date,
+        t.difference_reason,
+        t.variance_number,
+        t.previous_edition_plan_quantity
+        from t_delivery_plan_detail_item t
+        left join t_delivery_note n on t.delivery_note_id=n.id
+        <where>
+            t.is_deleted=0
+            <if test="id != null and id !=''">
+                and t.delivery_plan_detail_id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryDeliveryPlanDetailListWithShippableBySupplierCodeAndCustomerCode"
+            resultType="net.bncloud.delivery.vo.ShippableDeliveryPlanDetailVo">
+        SELECT dpd.id delivery_plan_detail_id,
+        dp.id delivery_plan_id,
+        temp.remainingQuantityTotal,
+        dpd.product_code,
+        dpd.merchant_code,
+        dp.material_classification materialType,
+        dp.order_type
+        FROM t_delivery_plan_detail dpd
+        INNER JOIN t_delivery_plan dp
+        ON (dp.id = dpd.delivery_plan_id AND dp.supplier_code = #{supplierCode} AND
+        dp.purchase_code = #{customerCode} and dp.is_deleted = 0)
+        INNER JOIN (
+        SELECT dpdi.delivery_plan_detail_id,
+        IFNULL(sum(remaining_quantity), 0) remainingQuantityTotal
+        FROM t_delivery_plan_detail_item dpdi
+        WHERE dpdi.is_deleted = 0
+        and dpdi.remaining_quantity > 0
+        GROUP BY dpdi.delivery_plan_detail_id
+        ) temp ON (temp.delivery_plan_detail_id = dpd.id AND temp.remainingQuantityTotal > 0)
+        WHERE dpd.is_deleted = 0
+        and dpd.supplier_code = #{supplierCode}
+    </select>
+    <select id="listAllGroupByMaterialTypeAndOrderType" resultType="net.bncloud.delivery.entity.DeliveryPlan">
+        select order_type, material_classification
+        from t_delivery_plan
+        where is_deleted = 0
+        GROUP BY order_type, material_classification
+    </select>
+
+    <select id="selectDeliveryPlanLatestVersion" resultType="java.lang.String">
+        select
+        tdc.value as mrpComputerNo
+        from t_data_config tdc where tdc.is_deleted=0 and tdc.code='currentPlanOrderComputerNo'
+    </select>
+
+    <resultMap id="selectPreVersionItemMap" type="net.bncloud.delivery.vo.PreVersionDeliveryPlanDetailItemVo">
+        <result column="purchase_code" property="purchaseCode"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="product_code" property="productCode"/>
+        <result column="delivery_date" property="deliveryDate"/>
+        <result column="suggested_delivery_date" property="suggestedDeliveryDate"/>
+        <result column="delivery_quantity" property="deliveryQuantity"/>
+    </resultMap>
+    <select id="selectPreVersionItem" resultMap="selectPreVersionItemMap">
+    select
+        dp.purchase_code,
+        dp.supplier_code,
+        tdpd.product_code,
+        tdpdi.delivery_date,
+        tdpdi.suggested_delivery_date,
+        tdpdi.delivery_quantity
+    from t_delivery_plan_detail_item tdpdi
+        left join t_delivery_plan_detail tdpd on tdpd.id = tdpdi.delivery_plan_detail_id
+        left join t_delivery_plan dp on dp.id = tdpd.delivery_plan_id
+        where dp.is_deleted = 0 and dp.mrp_computer_no=#{mrpComputerNo}
+    </select>
+</mapper>

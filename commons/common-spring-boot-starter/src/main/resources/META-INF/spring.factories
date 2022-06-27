@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  net.bncloud.common.config.BncConfigProperties,\
+  net.bncloud.common.config.CommonUtilConfiguration,\
+  net.bncloud.common.config.ErrorHandlerAutoConfiguration,\
+  net.bncloud.common.config.WebConfigurer,\
+  net.bncloud.common.pageable.BncSpringDataWebAutoConfiguration,\
+  net.bncloud.common.config.JacksonConfiguration

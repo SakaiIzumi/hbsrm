@@ -1,0 +1,494 @@
+
+eg:
+
+
+{
+    "FID": 0,
+    "FBillTypeID": {
+        "FNumber": "SLD01_SYS"
+    },
+    "FDate": "2022-01-21 00:00:00",
+    "FStockOrgId": {
+        "FNumber": "100"
+    },
+    "FDemandOrgId": {
+        "FNumber": "100"
+    },
+    "FPurOrgId": {
+        "FNumber": "100"
+    },
+    "FSupplierId": {
+        "FNumber": "00013"
+    },
+    "FSupplyId": {
+        "FNumber": "00013"
+    },
+    "FSettleId": {
+        "FNumber": "00013"
+    },
+    "FChargeId": {
+        "FNumber": "00013"
+    },
+    "F_PAEZ_sfdj": "1",
+    "FOwnerTypeIdHead": "BD_Supplier",
+    "FOwnerIdHead": {
+        "FNumber": "00013"
+    },
+    "F_MS_WLFL": {
+        "FNumber": "001"
+    },
+    "FIsInsideBill": false,
+    "FIsMobile": false,
+    "FIsChangeQty": false,
+    "FACCTYPE": "Q",
+    "FinanceEntity": {
+        "FSettleOrgId": {
+            "FNumber": "100"
+        },
+        "FSettleCurrId": {
+            "FNumber": "PRE001"
+        },
+        "FIsIncludedTax": true,
+        "FPricePoint": "1",
+        "FLocalCurrId": {
+            "FNumber": "PRE001"
+        },
+        "FExchangeTypeId": {
+            "FNumber": "HLTX01_SYS"
+        },
+        "FExchangeRate": 1,
+        "FISPRICEEXCLUDETAX": true
+    },
+    "FDetailEntity": [
+        {
+            "FMaterialId": {
+                "FNumber": "010006"
+            },
+            "FMaterialDesc": "1分钱链接",
+            "FUnitId": {
+                "FNumber": "Pcs"
+            },
+            "FActReceiveQty": 100,
+            "FPreDeliveryDate": "2022-01-21 00:00:00",
+            "FSUPDELQTY": 100,
+            "FPriceUnitId": {
+                "FNumber": "Pcs"
+            },
+            "FStockID": {
+                "FNumber": "0002"
+            },
+            "FStockStatusId": {
+                "FNumber": "KCZT02_SYS"
+            },
+            "FGiveAway": false,
+            "FCtrlStockInPercent": true,
+            "FCheckInComing": false,
+            "FIsReceiveUpdateStock": false,
+            "FStockInMaxQty": 103,
+            "FStockInMinQty": 100,
+            "FEntryTaxRate": 6,
+            "FPriceBaseQty": 100,
+            "FStockUnitID": {
+                "FNumber": "Pcs"
+            },
+            "FStockQty": 100,
+            "FStockBaseQty": 100,
+            "FActlandQty": 100
+        }
+    ]
+}
+
+
+
+FBillHead
+	 实体主键：FID
+	 单据编号：FBillNo
+	 单据状态：FDocumentStatus
+	 收料组织：FStockOrgId  (必填项)
+	 收料日期：FDate  (必填项)
+	 单据类型：FBillTypeID  (必填项)
+	 货主类型：FOwnerTypeIdHead  (必填项)
+	 货主：FOwnerIdHead  (必填项)
+	 供应商：FSupplierId  (必填项)
+	 送货单号：FSendBillNo
+	 提货单号：FLadBillNo
+	 承运商：FCarrierId
+	 收料部门：FReceiveDeptId
+	 库存组：FStockGroupId
+	 收料员：FReceiverId
+	 采购组织：FPurOrgId  (必填项)
+	 采购部门：FPurDeptId
+	 采购组：FPurGroupId
+	 采购员：FPurchaserId
+	 备注：FNote
+	 创建人：FCreatorId
+	 创建日期：FCreateDate
+	 最后修改人：FModifierId
+	 最后修改日期：FModifyDate
+	 审核日期：FApproveDate
+	 审核人：FApproverId
+	 作废人：FCancellerId
+	 作废日期：FCancelDate
+	 作废状态：FCancelStatus
+	 供货方联系人(旧)：FSupplyContact
+	 结算方：FSettleId
+	 供货方：FSupplyId
+	 收款方：FChargeId
+	 整单关闭状态：FCloseStatus
+	 业务类型：FBusinessType
+	 需要检验：FNeedCheck
+	 需求组织：FDemandOrgId
+	 供货方地址：FSupplyAddress
+	 对应组织：FCorrespondOrgId
+	 确认状态：FConfirmStatus
+	 确认人：FConfirmerId
+	 确认日期：FConfirmDate
+	 序列号上传：FScanBox
+	 外部单据：FIsInsideBill
+	 供货方联系人：FProviderContactId
+	 来自移动：FIsMobile
+	 变更数量操作：FIsChangeQty
+	 验收方式：FACCTYPE
+	 物料分类：F_MS_WLFL  (必填项)
+	 是否已同步：F_PAEZ_sfytb
+	 是否对接：F_PAEZ_sfdj
+	 第三方单号：F_PAEZ_DSFDH
+财务信息：FinanceEntity
+	 实体主键：FEntryId
+	 付款组织：FPayOrgId
+	 结算组织：FSettleOrgId  (必填项)
+	 结算方式：FSettleModeId
+	 付款条件：FPayConditionId
+	 税额：FBillTaxAmount
+	 金额：FBillAmount
+	 价税合计：FBillAllAmount
+	 价目表：FPriceListId
+	 折扣表：FDiscountListId
+	 定价时点：FPricePoint  (必填项)
+	 结算币别：FSettleCurrId  (必填项)
+	 汇率类型：FExchangeTypeId
+	 汇率：FExchangeRate
+	 本位币：FLocalCurrId
+	 税额(本位币)：FBillTaxAmount_LC
+	 价税合计(本位币)：FBillAllAmount_LC
+	 金额(本位币)：FBillAmount_LC
+	 含税：FIsIncludedTax
+	 价外税：FISPRICEEXCLUDETAX
+明细信息：FDetailEntity
+	 实体主键：FEntryID
+	 物料编码：FMaterialId  (必填项)
+	 物料名称：FMaterialName
+	 规格型号：FMateriaModel
+	 辅助属性：FAuxPropId
+	 物料类别：FMateriaType
+	 实到数量：FActlandQty
+	 交货数量：FActReceiveQty
+	 仓库：FStockID  (必填项)
+	 库存状态：FStockStatusId
+	 BOM版本：FBomId
+	 供应商批号：FSupplierLot
+	 生产日期：FProduceDate
+	 有效期至：FExpiryDate
+	 库存辅单位数量：FAuxUnitQty
+	 需求部门：FDemandDeptId
+	 控制入库数量：FCtrlStockInPercent
+	 入库上限：FStockInMaxQty
+	 入库下限：FStockInMinQty
+	 合格入库关联数量：FInStockJoinQty
+	 入库数量：FInStockQty
+	 免费：FIsFree
+	 计价数量：FPriceUnitQty
+	 折扣率%：FDiscountRate
+	 净价：FTaxNetPrice
+	 金额：FAmount
+	 税率%：FEntryTaxRate
+	 单价：FPrice
+	 税额：FEntryTaxAmount
+	 价税合计：FAllAmount
+	 需求跟踪号：FReqTraceNo
+	 订单单号：FOrderBillNo
+	 含税单价：FTaxPrice
+	 价格下限：FMinPrice
+	 价格上限：FMaxPrice
+	 备注：FDescription
+	 金额(本位币)：FAmount_LC
+	 税额(本位币)：FTaxAmount_LC
+	 价税合计(本位币)：FAllAmount_LC
+	 需求人：FDemanderId
+	 价格系数：FPriceCoefficient
+	 系统定价：FSysPrice
+	 拒收数量：FRejectQty
+	 拒收原因：FRejectReason
+	 库存更新标志：FStockFlag
+	 货主类型：FOwnerTypeId
+	 货主：FOwnerId
+	 保管者类型：FKeeperTypeId
+	 保管者：FKeeperId
+	 采购基本数量：FBaseUnitQty
+	 退料关联数量(基本单位)：FReturnJoinBaseQty
+	 退料数量(基本单位)：FReturnBaseQty
+	 合格入库关联数量(基本单位)：FInStockJoinBaseQty
+	 入库数量(基本单位)：FInStockBaseQty
+	 退料数量：FReturnQty
+	 退料关联数量：FReturnJoinQty
+	 基本单位：FBaseUnitId
+	 收料单位：FUnitId  (必填项)
+	 计价单位：FPriceUnitId  (必填项)
+	 库存辅单位：FAuxUnitId
+	 合同单号：FContactNo
+	 交货地址：FDeliveryAddress
+	 基本单位关联数量(组)：FJoinBaseQty
+	 仓位：FStockLocId
+	 源单内码：FSrcId
+	 源单分录内码：FSrcEntryId
+	 保质期：FExpPeriod
+	 保质期单位：FExpUnit
+	 分录关闭状态：FMRPCloseStatus
+	 源单类型：FSrcFormId
+	 源单单号：FSrcBillNo
+	 在架寿命期：FShelfLife
+	 批号：FLot
+	 交货地点(2.0删除)：FDeliverySite
+	 税组合：FTaxCombination
+	 折扣额：FDiscount
+	 物料说明：FMaterialDesc
+	 关联应付数量(计价基本)：FBaseAPJoinQty
+	 入库上限(基本单位数量)：FBaseStockInMaxQty
+	 入库下限(基本单位数量)：FBaseStockInMinQty
+	 业务流程：FBFLowId
+	 实收数量：FMustQty
+	 计划跟踪号：FMtoNo
+	 项目编号：FProjectNo
+	 是否赠品：FGiveAway
+	 费用项目：FChargeProjectID
+	 合格入库关联数量（辅单位）：FINSTOCKJOINSECQTY
+	 退货关联数量（辅单位）：FRETURNJOINSECQTY
+	 紧急放行：FEmergencyRelease
+	 检验关联数量（基本单位）：FCheckJoinBaseQty
+	 合格数量（基本单位）：FReceiveBaseQty
+	 判退数量（基本单位）：FRefuseBaseQty
+	 样本破坏数量（基本单位）：FSampleDamageBaseQty
+	 检验关联数量：FCheckJoinQty
+	 合格数量：FReceiveQty
+	 判退数量：FRefuseQty
+	 样本破坏数量：FSampleDamageQty
+	 来料检验：FCheckInComing
+	 卡片关联数量：FCardJoinQty
+	 卡片数量：FCardQty
+	 卡片数量(基本单位)：FCardBaseQty
+	 卡片关联数量(基本单位)：FCardJoinBaseQty
+	 检验数量（基本单位）：FCheckBaseQty
+	 检验数量：FCheckQty
+	 累计调拨数量(基本单位)：FTransferBaseQty
+	 累计调拨数量：FTransferQty
+	 收料更新库存(废弃)：FIsReceiveUpdateStock
+	 辅单位：FExtAuxUnitId
+	 实收数量(辅单位)：FExtAuxUnitQty
+	 工废数量(基本单位)：FProcScrapBaseQty
+	 工废数量：FProcScrapQty
+	 料废数量(基本单位)：FMtrlScrapBaseQty
+	 料废数量：FMtrlScrapQty
+	 工废关联数量(基本单位)：FProcScrapJoinBaseQty
+	 工废关联数量：FProcScrapJoinQty
+	 料废关联数量(基本单位)：FMtrlScrapJoinBaseQty
+	 料废关联数量：FMtrlScrapJoinQty
+	 预计到货日期：FPreDeliveryDate
+	 让步接收数量(基本单位)：FCsnReceiveBaseQty
+	 让步接收数量：FCsnReceiveQty
+	 不合格关联数量(基本单位)：FRefuseJoinBaseQty
+	 不合格关联数量：FRefuseJoinQty
+	 让步接收关联数量(基本单位)：FCsnReceiveJoinBaseQty
+	 让步接收关联数量：FCsnReceiveJoinQty
+	 计价基本数量：FPriceBaseQty
+	 定价单位：FSetPriceUnitID
+	 库存单位：FStockUnitID  (必填项)
+	 库存单位数量：FStockQty
+	 库存基本数量：FStockBaseQty
+	 采购基本分子：FPurBaseNum
+	 库存基本分母：FStockBaseDen
+	 携带的主业务单位：FSRCBIZUNITID
+	 合格入库库存关联数量(基本单位)：FSTOCKJOINBASEQTY
+	 退料库存关联数量(基本单位)：FRETURNSTKJNBASTQTY
+	 关联应付数量(库存基本)：FStockBaseAPJoinQty
+	 供应商交货数量：FSUPDELQTY
+	 执行人：FEXECUTEID
+	 执行日期：FEXECUTEDATE
+	 行状态：FENTRYSTATUS
+	 分录价目表：FPriceListEntry
+	 采购订单分录内码：FPOORDERENTRYID
+	 确认交货数量：FConfirmDeliQty
+	 确认到货日期：FConfirmDeliDate
+	 确认意见：FConfirmInfo
+	 序列号单位：FSNUNITID
+	 序列号单位数量：FSNQTY
+	 是否同步第三方(GY)：FISSYNTOTHIRD
+	 产品类型：FRowType
+	 父项产品：FPARENTMATID
+	 单价折扣：FPriceDiscount
+	 价目表分录id：FPriLstEntryId
+	 样本破坏入库关联数量（基本单位）：FSDJNBASEQTY
+	 供应商承担样本破坏基本数量：FJYSUPSAMDANQTY
+	 验收比例%：FACCRATE
+	 订单数量：FPOQTY
+	 商家编码：F_MS_SJBM
+税务明细：FTaxDetailSubEntity
+	 实体主键：FDetailID
+	 税率名称：FTaxRateId
+	 税率%：FTaxRate
+	 税额：FTaxAmount
+	 计入成本比例%：FCostPercent
+	 计入成本金额：FCostAmount
+	 增值税：FVAT
+	 卖方代扣代缴：FSellerWithholding
+	 买方代扣代缴：FBuyerWithholding
+辅助属性|序列号：FSerialSubEntity
+	 实体主键：FDetailID
+	 序列号：FSerialNo
+	 序列号：FSerialId
+	 备注：FSerialNote
+	 物料：FSRMATERIALID
+	 数量(辅序)：FSRQTY
+	 基本单位数量(辅序)：FSRBASEQTY
+	 入库关联数量(辅序)：FSRJOINQTY
+	 入库关联基本数量(辅序)：FSRJOINBASEQTY
+	 检验结果：FSRINSPECTRESULT
+	 退料关联基本数量(辅序)：FSRMRBJOINBASEQTY
+	 退料关联数量(辅序)：FSRMRBJOINQTY
+	 使用决策：FUSEPOLICY
+	 辅助属性(辅序)：FSRAUXPROPID
+	 供应商批号(辅序)：FSRSUPPLYLOT
+	 生产日期(辅序)：FSRPRODUCEDATE
+	 有效期至(辅序)：FSREXPIRYDATE
+	 批号(辅序)：FSRLOT
+物流跟踪：FReceiveTrace
+	 实体主键：FEntryID
+	 物流公司：FLogComId
+	 物流单号：FCarryBillNo
+物流详情：FTraceDetail
+	 实体主键：FDetailID
+	 物流时间：FTdTime
+	 物流详情：FTdContent
+关联关系表：FDetailEntity_Link
+	 实体主键：FLinkId
+	 业务流程图：FDetailEntity_Link_FFlowId
+	 推进路线：FDetailEntity_Link_FFlowLineId
+	 转换规则：FDetailEntity_Link_FRuleId
+	 源单表内码：FDetailEntity_Link_FSTableId
+	 源单表：FDetailEntity_Link_FSTableName
+	 源单内码：FDetailEntity_Link_FSBillId
+	 源单分录内码：FDetailEntity_Link_FSId
+	 原始携带量：FDetailEntity_Link_FBaseUnitQtyOld
+	 修改携带量：FDetailEntity_Link_FBaseUnitQty
+	 原始携带量：FDetailEntity_Link_FStockBaseQtyOld
+	 修改携带量：FDetailEntity_Link_FStockBaseQty
+	 迁移图：FDetailEntity_Link_FLnkTrackerId
+	 上游状态：FDetailEntity_Link_FLnkSState
+	 数量FLnk：FDetailEntity_Link_FLnkAmount
+
+{
+    "NeedUpDateFields": [],
+    "NeedReturnFields": [],
+    "IsDeleteEntry": "true",
+    "SubSystemId": "",
+    "IsVerifyBaseDataField": "false",
+    "IsEntryBatchFill": "true",
+    "ValidateFlag": "true",
+    "NumberSearch": "true",
+    "InterationFlags": "",
+    "Model": {
+        "FID": 0,
+        "FBillTypeID": {
+            "FNumber": "SLD01_SYS"
+        },
+        "FDate": "2022-01-21 00:00:00",
+        "FStockOrgId": {
+            "FNumber": "100"
+        },
+        "FDemandOrgId": {
+            "FNumber": "100"
+        },
+        "FPurOrgId": {
+            "FNumber": "100"
+        },
+        "FSupplierId": {
+            "FNumber": "00013"
+        },
+        "FSupplyId": {
+            "FNumber": "00013"
+        },
+        "FSettleId": {
+            "FNumber": "00013"
+        },
+        "FChargeId": {
+            "FNumber": "00013"
+        },
+        "F_PAEZ_sfdj": "1",
+        "FOwnerTypeIdHead": "BD_Supplier",
+        "FOwnerIdHead": {
+            "FNumber": "00013"
+        },
+        "F_MS_WLFL": {
+            "FNumber": "001"
+        },
+        "FIsInsideBill": false,
+        "FIsMobile": false,
+        "FIsChangeQty": false,
+        "FACCTYPE": "Q",
+        "FinanceEntity": {
+            "FSettleOrgId": {
+                "FNumber": "100"
+            },
+            "FSettleCurrId": {
+                "FNumber": "PRE001"
+            },
+            "FIsIncludedTax": true,
+            "FPricePoint": "1",
+            "FLocalCurrId": {
+                "FNumber": "PRE001"
+            },
+            "FExchangeTypeId": {
+                "FNumber": "HLTX01_SYS"
+            },
+            "FExchangeRate": 1,
+            "FISPRICEEXCLUDETAX": true
+        },
+        "FDetailEntity": [
+            {
+                "FMaterialId": {
+                    "FNumber": "010006"
+                },
+                "FMaterialDesc": "1分钱链接",
+                "FUnitId": {
+                    "FNumber": "Pcs"
+                },
+                "FActReceiveQty": 100,
+                "FPreDeliveryDate": "2022-01-21 00:00:00",
+                "FSUPDELQTY": 100,
+                "FPriceUnitId": {
+                    "FNumber": "Pcs"
+                },
+                "FStockID": {
+                    "FNumber": "0002"
+                },
+                "FStockStatusId": {
+                    "FNumber": "KCZT02_SYS"
+                },
+                "FGiveAway": false,
+                "FCtrlStockInPercent": true,
+                "FCheckInComing": false,
+                "FIsReceiveUpdateStock": false,
+                "FStockInMaxQty": 103,
+                "FStockInMinQty": 100,
+                "FEntryTaxRate": 6,
+                "FPriceBaseQty": 100,
+                "FStockUnitID": {
+                    "FNumber": "Pcs"
+                },
+                "FStockQty": 100,
+                "FStockBaseQty": 100,
+                "FActlandQty": 100
+            }
+        ]
+    }
+}
+

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.SupplyDemandBalanceMapper">
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.SupplyDemandBalance">
+        <id column="id" property="id"/>
+        <result column="item_no" property="itemNo"/>
+        <result column="product_code" property="productCode"/>
+        <result column="product_name" property="productName"/>
+        <result column="merchant_code" property="merchantCode"/>
+        <result column="date" property="date"/>
+        <result column="order_demand_quantity" property="orderDemandQuantity"/>
+        <result column="plan_delivery_quantity" property="planDeliveryQuantity"/>
+        <result column="confirmed_undelivery_quantity" property="confirmedUndeliveryQuantity"/>
+        <result column="confirmed_undelivery_quantity_show" property="confirmedUndeliveryQuantityShow"/>
+        <result column="estimated_arrival_quantity" property="estimatedArrivalQuantity"/>
+        <result column="receipt_quantity" property="receiptQuantity"/>
+        <result column="balance_quantity" property="balanceQuantity"/>
+        <result column="outstanding_orders_quantity" property="outstandingOrdersQuantity"/>
+    </resultMap>
+    <select id="selectReportPage" resultMap="BaseResultMap">
+        select tsdb.id,
+               tsdb.item_no,
+               tsdb.product_code,
+               tsdb.product_name,
+               tsdb.merchant_code,
+               tsdb.date,
+               tsdb.order_demand_quantity,
+               tsdb.plan_delivery_quantity,
+               tsdb.confirmed_undelivery_quantity,
+               tsdb.confirmed_undelivery_quantity_show,
+               tsdb.estimated_arrival_quantity,
+               tsdb.receipt_quantity,
+               tsdb.balance_quantity,
+               tsdb.outstanding_orders_quantity
+        from delivery.t_supply_demand_balance tsdb
+                where 1 = 1
+<!--        <if test="queryParam.searchValue != null and queryParam.searchValue != ''">-->
+<!--            and (-->
+<!--                    (tsdb.product_code like concat('%', #{queryParam.searchValue}, '%')) or-->
+<!--                    (tsdb.product_name like concat('%', #{queryParam.searchValue}, '%'))-->
+<!--                    )-->
+<!--        </if>-->
+        <if test="queryParam.param != null">
+            <if test="queryParam.param.merchantCode != null and queryParam.param.merchantCode != ''">
+                and tsdb.merchant_code like concat('%', #{queryParam.param.merchantCode}, '%')
+            </if>
+            <if test="queryParam.param.product != null and queryParam.param.product != ''">
+                and (
+                        (tsdb.product_code like concat('%', #{queryParam.param.product}, '%')) or
+                        (tsdb.product_name like concat('%', #{queryParam.param.product}, '%'))
+                        )
+            </if>
+            <choose>
+                <when test="queryParam.param.risk == '0'.toString()">
+                    and tsdb.balance_quantity <![CDATA[ >= ]]> 0.0
+                </when>
+                <when test="queryParam.param.risk == '1'.toString()">
+                    and tsdb.balance_quantity <![CDATA[ < ]]> 0.0
+                </when>
+            </choose>
+        </if>
+        order by tsdb.product_code,tsdb.date
+    </select>
+</mapper>

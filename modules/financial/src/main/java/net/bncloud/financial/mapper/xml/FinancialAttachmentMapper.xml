@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.financial.mapper.FinancialAttachmentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.financial.entity.FinancialAttachment">
+        <id column="id" property="id"/>
+        <result column="business_form_id" property="businessFormId"/>
+        <result column="attachment_id" property="attachmentId"/>
+        <result column="attachment_name" property="attachmentName"/>
+        <result column="attachment_url" property="attachmentUrl"/>
+        <result column="business_code" property="businessCode"/>
+        <result column="business_name" property="businessName"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_financial_attachment
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                -- and (
+                -- (t1.supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.purchase_order_code like CONCAT('%',#{pageParam.searchValue},'%'))
+                -- )
+            </if>
+            <if test="pageParam.param.businessFormId != null ">and business_form_id like
+                CONCAT('%',#{pageParam.param.businessFormId},'%')
+            </if>
+            <if test="pageParam.param.attachmentId != null ">and attachment_id like
+                CONCAT('%',#{pageParam.param.attachmentId},'%')
+            </if>
+            <if test="pageParam.param.attachmentName != null ">and attachment_name like
+                CONCAT('%',#{pageParam.param.attachmentName},'%')
+            </if>
+            <if test="pageParam.param.attachmentUrl != null ">and attachment_url like
+                CONCAT('%',#{pageParam.param.attachmentUrl},'%')
+            </if>
+            <if test="pageParam.param.businessCode != null ">and business_code like
+                CONCAT('%',#{pageParam.param.businessCode},'%')
+            </if>
+            <if test="pageParam.param.businessName != null ">and business_name like
+                CONCAT('%',#{pageParam.param.businessName},'%')
+            </if>
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+
+        </where>
+
+    </select>
+
+
+</mapper>

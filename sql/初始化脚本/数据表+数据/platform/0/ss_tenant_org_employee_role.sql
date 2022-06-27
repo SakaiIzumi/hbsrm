@@ -1,0 +1,16 @@
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (300, 61);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (300, 102);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (301, 48);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (301, 61);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (302, 48);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (302, 61);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (304, 61);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (304, 102);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (317, 12);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (317, 48);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (317, 104);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (324, 104);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (330, 104);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (295, 104);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (331, 12);
+INSERT INTO `ss_tenant_org_employee_role` (`employee_id`, `role_id`) VALUES (331, 48);

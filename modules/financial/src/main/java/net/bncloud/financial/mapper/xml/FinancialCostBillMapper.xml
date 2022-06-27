@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.financial.mapper.FinancialCostBillMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.financial.entity.FinancialCostBill">
+        <id column="id" property="id"/>
+        <result column="org_id" property="orgId"/>
+        <result column="customer_code" property="customerCode"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="supplier_code" property="supplierCode"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="publisher" property="publisher"/>
+        <result column="cost_bill_no" property="costBillNo"/>
+        <result column="currency_code" property="currencyCode"/>
+        <result column="currency_name" property="currencyName"/>
+        <result column="cost_bill_type" property="costBillType"/>
+        <result column="all_amount" property="allAmount"/>
+        <result column="source_type" property="sourceType"/>
+        <result column="settlement_pool_sync_status" property="settlementPoolSyncStatus"/>
+        <result column="confirm_time" property="confirmTime"/>
+        <result column="confirm_name" property="confirmName"/>
+        <result column="erp_bill_id" property="erpBillId"/>
+        <result column="erp_bill_no" property="erpBillNo"/>
+        <result column="erp_bill_type" property="erpBillType"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_financial_cost_bill
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null and pageParam.searchValue != ''">
+                and (
+                (customer_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                ( customer_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                ( cost_bill_no like CONCAT('%',#{pageParam.searchValue},'%'))
+                )
+            </if>
+            <if test="pageParam.param.customerCode != null ">and customer_code like
+                CONCAT('%',#{pageParam.param.customerCode},'%')
+            </if>
+            <if test="pageParam.param.customerName != null ">and customer_name like
+                CONCAT('%',#{pageParam.param.customerName},'%')
+            </if>
+            <if test="pageParam.param.costBillNo != null ">and cost_bill_no like
+                CONCAT('%',#{pageParam.param.costBillNo},'%')
+            </if>
+            <if test="pageParam.param.currencyCode != null ">and currency_code like
+                CONCAT('%',#{pageParam.param.currencyCode},'%')
+            </if>
+            <if test="pageParam.param.currencyName != null ">and currency_name like
+                CONCAT('%',#{pageParam.param.currencyName},'%')
+            </if>
+            <if test="pageParam.param.costBillType != null ">and cost_bill_type like
+                CONCAT('%',#{pageParam.param.costBillType},'%')
+            </if>
+            <if test="pageParam.param.sourceType != null ">and source_type like
+                CONCAT('%',#{pageParam.param.sourceType},'%')
+            </if>
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+        </where>
+
+    </select>
+
+
+</mapper>

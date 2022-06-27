@@ -1,0 +1,3 @@
+INSERT INTO `t_type_config` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `company_id`, `group_name`, `org_id`) VALUES (1, b'0', 1, '2021-04-20 06:44:36.154000', 1, '2021-05-07 08:51:49.632000', 2, '可信维度', 65);
+INSERT INTO `t_type_config` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `company_id`, `group_name`, `org_id`) VALUES (5, b'0', 1, '2021-04-23 05:49:28.626000', 1, '2021-05-07 08:27:53.123000', 2, '实力维度', 65);
+INSERT INTO `t_type_config` (`id`, `is_deleted`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`, `company_id`, `group_name`, `org_id`) VALUES (9, b'0', 1, '2021-05-07 08:19:45.111000', 1, '2021-05-07 08:19:45.111000', 2, '服务商类型', 65);

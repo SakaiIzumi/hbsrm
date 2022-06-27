@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryPlanDetailItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryPlanDetailItem">
+        <result column="id" property="id" />
+        <result column="delivery_plan_detail_id" property="deliveryPlanDetailId" />
+        <result column="delivery_date" property="deliveryDate" />
+        <result column="delivery_quantity" property="deliveryQuantity" />
+        <result column="confirm_date" property="confirmDate" />
+        <result column="confirm_quantity" property="confirmQuantity" />
+        <result column="delivery_note_id" property="deliveryNoteId" />
+        <result column="delivery_note_no" property="deliveryNoteNo" />
+        <result column="delivery_status" property="deliveryStatus" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_date" property="createdDate" />
+        <result column="last_modified_by" property="lastModifiedBy" />
+        <result column="last_modified_date" property="lastModifiedDate" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="remaining_quantity" property="remainingQuantity" />
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_delivery_plan_detail_item
+             <where> 1=1 and is_deleted = 0
+         <if test="pageParam.searchValue != null">
+              and (
+              (supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+              (supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+              (purchase_order_no like CONCAT('%',#{pageParam.searchValue},'%'))
+              )
+         </if>
+        <if test="pageParam.param.id != null ">and  id = #{pageParam.param.id} </if>
+                                                                    <if test="pageParam.param.deliveryPlanDetailId != null ">and  delivery_plan_detail_id = #{pageParam.param.deliveryPlanDetailId} </if>
+
+                                            <if test="pageParam.param.deliveryQuantity != null ">and  delivery_quantity like CONCAT('%',#{pageParam.param.deliveryQuantity},'%') </if>
+
+                                            <if test="pageParam.param.confirmQuantity != null ">and  confirm_quantity like CONCAT('%',#{pageParam.param.confirmQuantity},'%') </if>
+                                            <if test="pageParam.param.deliveryNoteId != null ">and  delivery_note_id = #{pageParam.param.deliveryNoteId} </if>
+                                                                    <if test="pageParam.param.deliveryNoteNo != null ">and  delivery_note_no like CONCAT('%',#{pageParam.param.deliveryNoteNo},'%') </if>
+                                            <if test="pageParam.param.deliveryStatus != null ">and  delivery_status like CONCAT('%',#{pageParam.param.deliveryStatus},'%') </if>
+                                            <if test="pageParam.param.createdBy != null ">and  created_by = #{pageParam.param.createdBy} </if>
+
+                                            <if test="pageParam.param.lastModifiedBy != null ">and  last_modified_by = #{pageParam.param.lastModifiedBy} </if>
+
+                                                          </where>
+
+            </select>
+
+    <select id="queryOneBySourceId" resultMap="BaseResultMap">
+        select * from t_delivery_plan_detail_item
+        <where>
+                is_deleted = 0
+            <if test="sourceId != null and sourceId != '' ">
+                and  source_id = #{sourceId}
+            </if>
+        </where>
+    </select>
+    <select id="queryShippableList" resultType="net.bncloud.delivery.vo.ShippableDeliveryPlanDetailItemVo">
+        SELECT
+            dpdi.*,dpd.product_code
+        FROM
+            t_delivery_plan_detail_item dpdi
+            INNER JOIN t_delivery_plan_detail dpd ON
+            ( dpd.id IN
+               <foreach collection="deliveryPlanDetailIdSet" open="(" close=")" item="deliveryPlanDetailId" separator=",">
+                   #{deliveryPlanDetailId}
+               </foreach>
+               AND dpd.id = dpdi.delivery_plan_detail_id AND dpd.is_deleted = 0
+               and dpd.product_code in
+               <foreach collection="productCodeSet" open="(" close=")" item="productCode" separator=",">
+                   #{productCode}
+               </foreach>
+             )
+            LEFT JOIN t_delivery_plan dp ON ( dp.id = dpd.delivery_plan_id )
+        WHERE
+            dpdi.is_deleted = 0
+            and dpdi.remaining_quantity > 0
+        order by DATE_FORMAT(dp.purchase_time,"%Y-%m-%d") asc, dpdi.delivery_date asc
+    </select>
+    <select id="getShippableDeliveryPlanDetailItemList"
+            resultType="net.bncloud.delivery.vo.ShippableDeliveryPlanDetailItemVo">
+        SELECT
+            dpdi.*,dpd.product_code,dp.plan_no,dp.bill_no purchaseOrderCode,dpd.product_name,dpd.product_specification,
+            dpd.plan_quantity,dpd.plan_unit,dp.currency,dp.bill_no,dpd.product_unit_price,dpd.tax_unit_price
+        FROM
+            t_delivery_plan_detail_item dpdi
+            inner join t_delivery_plan_detail dpd ON ( dpd.id = dpdi.delivery_plan_detail_id AND dpd.is_deleted = 0 and dpd.product_code = #{productCode} and dpd.supplier_code = #{supplierCode} )
+            inner join t_delivery_plan dp ON ( dp.id = dpd.delivery_plan_id and dp.material_classification = #{materialType} and dp.order_type  = #{orderType} and dp.supplier_code = #{supplierCode} and dp.purchase_code = #{customerCode} and dp.plan_status = '2' )
+        WHERE
+            dpdi.is_deleted = 0
+            AND dpdi.remaining_quantity > 0
+            and dpdi.warehousing = #{warehouse}
+        ORDER BY
+            DATE_FORMAT( dp.purchase_time, "%Y-%m-%d" ) ASC,
+            dpdi.delivery_date ASC
+    </select>
+    <select id="getAllWarehouse" resultType="java.lang.String">
+        SELECT DISTINCT(warehousing) from t_delivery_plan_detail_item where is_deleted = 0 and warehousing != ""
+    </select>
+
+    <update id="updatePlanDeliveryStatus" parameterType="String">
+        update t_delivery_plan_detail_item
+        set delivery_status=#{deliveryStatusCode}
+        where id=#{1}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.oem.mapper.OperationLogMapper">
+  <resultMap id="BaseResultMap" type="net.bncloud.oem.domain.entity.OperationLog">
+    <!--@mbg.generated-->
+    <!--@Table t_oem_operation_log-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="bill_id" jdbcType="BIGINT" property="billId" />
+    <result column="operator_no" jdbcType="VARCHAR" property="operatorNo" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="operator_content" jdbcType="VARCHAR" property="operatorContent" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="created_by" jdbcType="BIGINT" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy" />
+    <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, bill_id, operator_no, operator_name, operator_content, remark, created_by, created_date, 
+    last_modified_by, last_modified_date, is_deleted
+  </sql>
+
+  <select id="selectPageList" resultMap="BaseResultMap">
+    select * from t_oem_operation_log
+    where is_deleted=0
+    and (
+    operator_content = '1' or operator_content='2' or operator_content='3'
+    )
+    <!--<if test="createContent != null and createContent != ''">
+      and operator_content not like concat('%',#{createContent},'%')
+    </if>
+    <if test="editContent != null  and editContent != ''">
+      and operator_content not like concat('%',#{editContent},'%')
+    </if>-->
+
+    <!--高级查询条件-->
+    <if test="queryParam.searchValue != null  and queryParam.searchValue != ''">
+      and (
+      (purchase_order_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+      (material_code like CONCAT('%', #{queryParam.searchValue}, '%')) or
+      (material_name like CONCAT('%', #{queryParam.searchValue}, '%'))
+      )
+    </if>
+    <if test="queryParam.param.purchaseOrderCode != null  and queryParam.param.purchaseOrderCode !='' ">
+      and purchase_order_code like CONCAT('%', #{queryParam.param.purchaseOrderCode}, '%')
+    </if>
+    <if test="queryParam.param.materialName != null  and queryParam.param.materialName !=''">
+      and ( material_name like CONCAT('%', #{queryParam.param.materialName}, '%') or
+            material_code like CONCAT('%', #{queryParam.param.materialName}, '%')
+      )
+    </if>
+    <if test="queryParam.param.operatorContent != null  and queryParam.param.operatorContent != ''">
+      and operator_content like CONCAT('%', #{queryParam.param.operatorContent}, '%')
+    </if>
+    <if test="queryParam.param.startDate != null  and queryParam.param.startDate != '' and queryParam.param.endDate != null and queryParam.param.endDate != '' ">
+      and ( last_modified_date &gt;= #{queryParam.param.startDate} and
+            last_modified_date &lt;= #{queryParam.param.endDate}
+      )
+    </if>
+    order by created_date desc
+  </select>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.delivery.mapper.DeliveryCustomsInformationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.delivery.entity.DeliveryCustomsInformation">
+        <id column="id" property="id"/>
+        <result column="delivery_id" property="deliveryId"/>
+        <result column="delivery_no" property="deliveryNo"/>
+        <result column="inner_order_no" property="innerOrderNo"/>
+        <result column="tracking_number" property="trackingNumber"/>
+        <result column="customs_type" property="customsType"/>
+        <result column="destination_harbor" property="destinationHarbor"/>
+        <result column="shipment_harbor" property="shipmentHarbor"/>
+        <result column="origin_country" property="originCountry"/>
+        <result column="invoice_number" property="invoiceNumber"/>
+        <result column="invoice_date" property="invoiceDate"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="undefined" resultMap="BaseResultMap">
+        select * from t_delivery_customs_information
+        <where>1=1 and is_deleted = 0
+            <if test="deliveryId != null ">and delivery_id = #{param.deliveryId}</if>
+            <if test="deliveryNo != null ">and delivery_no like CONCAT('%',#{param.deliveryNo},'%')</if>
+            <if test="innerOrderNo != null ">and inner_order_no like CONCAT('%',#{param.innerOrderNo},'%')</if>
+            <if test="trackingNumber != null ">and tracking_number like CONCAT('%',#{param.trackingNumber},'%')</if>
+            <if test="customsType != null ">and customs_type like CONCAT('%',#{param.customsType},'%')</if>
+            <if test="destinationHarbor != null ">and destination_harbor like
+                CONCAT('%',#{param.destinationHarbor},'%')
+            </if>
+            <if test="shipmentHarbor != null ">and shipment_harbor like CONCAT('%',#{param.shipmentHarbor},'%')</if>
+            <if test="originCountry != null ">and origin_country like CONCAT('%',#{param.originCountry},'%')</if>
+            <if test="invoiceNumber != null ">and invoice_number like CONCAT('%',#{param.invoiceNumber},'%')</if>
+            <if test="createdBy != null ">and created_by = #{param.createdBy}</if>
+            <if test="lastModifiedBy != null ">and last_modified_by = #{param.lastModifiedBy}</if>
+        </where>
+    </select>
+
+
+</mapper>

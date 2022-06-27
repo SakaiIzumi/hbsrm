@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.bncloud.quotation.mapper.QuotationLineExtMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.bncloud.quotation.entity.QuotationLineExt">
+        <id column="id" property="id"/>
+        <result column="line_id" property="lineId"/>
+        <result column="quotation_base_id" property="quotationBaseId"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="field" property="field"/>
+        <result column="value" property="value"/>
+        <result column="required" property="required"/>
+        <result column="order_value" property="orderValue"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_modified_by" property="lastModifiedBy"/>
+        <result column="last_modified_date" property="lastModifiedDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListPage" resultMap="BaseResultMap">
+        select * from t_rfq_quotation_line_ext
+        <where>1=1 and is_deleted = 0
+            <if test="pageParam.searchValue != null">
+                -- and (
+                -- (t1.supplier_name like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.supplier_code like CONCAT('%',#{pageParam.searchValue},'%'))or
+                -- ( t1.purchase_order_code like CONCAT('%',#{pageParam.searchValue},'%'))
+                -- )
+            </if>
+            <if test="pageParam.param.lineId != null ">and line_id = #{pageParam.param.lineId}</if>
+            <if test="pageParam.param.quotationBaseId != null ">and quotation_base_id =
+                #{pageParam.param.quotationBaseId}
+            </if>
+            <if test="pageParam.param.type != null ">and type like CONCAT('%',#{pageParam.param.type},'%')</if>
+            <if test="pageParam.param.title != null ">and title like CONCAT('%',#{pageParam.param.title},'%')</if>
+            <if test="pageParam.param.field != null ">and field like CONCAT('%',#{pageParam.param.field},'%')</if>
+            <if test="pageParam.param.value != null ">and value like CONCAT('%',#{pageParam.param.value},'%')</if>
+            <if test="pageParam.param.required != null ">and required like CONCAT('%',#{pageParam.param.required},'%')
+            </if>
+            <if test="pageParam.param.orderValue != null ">and order_value like
+                CONCAT('%',#{pageParam.param.orderValue},'%')
+            </if>
+            <if test="pageParam.param.createdBy != null ">and created_by = #{pageParam.param.createdBy}</if>
+
+            <if test="pageParam.param.lastModifiedBy != null ">and last_modified_by =
+                #{pageParam.param.lastModifiedBy}
+            </if>
+
+        </where>
+
+    </select>
+
+    <delete id="deleteByQuotationBaseId">
+        delete
+        from t_rfq_quotation_line_ext
+        where quotation_base_id = #{quotationBaseId}
+    </delete>
+
+    <select id="selectQuotationLineExtlist" resultType="net.bncloud.quotation.vo.QuotationLineExtVo">
+        SELECT `VALUE`,
+        order_value,
+        formula,
+        data_type,
+        field
+        FROM t_rfq_quotation_line_ext
+        <where>
+            is_deleted = 0
+            <if test="quotationLineExt.quotationBaseId !=null">
+                AND quotation_base_id = #{quotationLineExt.quotationBaseId}
+            </if>
+            <if test="quotationLineExt.dataType !=null">
+                AND data_type = #{quotationLineExt.dataType}
+            </if>
+        </where>
+    </select>
+
+</mapper>
